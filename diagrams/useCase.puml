@@ -1,0 +1,48 @@
+@startuml
+left to right direction
+actor Visitor as V
+actor User as U
+actor Admin as A
+
+package system{
+    usecase "See items" as SI
+    usecase "See details of item" as SD
+    usecase "Filter items" as FI
+    usecase "Add to shoppingcart" as AtS
+    usecase "Remove from Shoppingcart" as RfS
+    usecase "View shoppingcart" as VS
+    usecase "Purchase shoppingcart" as PS
+    usecase "Register" as R
+    usecase "Login" as L
+    usecase "Set preference" as SP
+    usecase "View purchase history" as VPH
+    usecase "Add items" as AI
+    usecase "Remove items" as RI
+    usecase "Edit Items" as EI
+    usecase "See order overview" as SOO
+}
+V ---> SI
+V ---> SD
+V ---> FI
+V ---> AtS
+V ---> RfS
+V ---> VS
+V ---> PS
+V ---> R
+V ---> L
+
+U --> SI
+U --> SD
+U --> FI
+U --> AtS
+U --> RfS
+U --> VS
+U --> PS
+U --> SP
+U --> VPH
+
+A --> AI
+A --> RI
+A --> EI
+A --> SOO
+@enduml
