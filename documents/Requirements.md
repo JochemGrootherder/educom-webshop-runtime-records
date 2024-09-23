@@ -8,9 +8,9 @@ This document contains the requirements for the Runtime Records website. The doc
 The user requirements are described as a unique id for the requirement. Then the different actors and their action they would like to perform on the website. For this website there are three different actors; A visitor, user and admin. A visitor is somebody who visits the website, without being registered. A user is somebody who is registered. An admin is someone is responsible for maintaining the website.
 |Id|Actor|Action description|
 ---|---|:---:
-|UR-1|Visitor, user | As an Actor I want to be able to see an overview of all the items  |
+|UR-1|Visitor, user, Admin| As an Actor I want to be able to see an overview of all the items  |
 |UR-2|Visitor, User| As an Actor I want to be able to filter the items by title, artist, genre, description and year|
-|UR-3|Visitor, User| As an Actor I want to be able to see the details of an item|
+|UR-3|Visitor, User, Admin| As an Actor I want to be able to see the details of an item|
 |UR-4|Visitor, User| As an Actor I want to be able to add an item to my shopping cart|
 |UR-5|Visitor, User| As an Actor I want to be able to view my shopping cart|
 |UR-6|Visitor, User| As an Actor I want to be able to remove an item from my shopping cart|
