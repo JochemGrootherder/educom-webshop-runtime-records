@@ -1,0 +1,122 @@
+title "Runtime records"
+Actor User
+Actor Admin
+participant "Front end" as FE
+participant "Back end" as BE
+database "Database" as DB
+
+activate User
+activate Admin
+activate FE
+activate BE
+activate DB
+
+==Transaction: Show Item==
+User -> FE: Click on Item
+FE -> BE: GetItem(selectedItem)
+BE -> DB: GetItem(selectedItem)
+DB --> BE: Item
+BE --> FE: Item
+FE -> FE: ShowItem(Item)
+==Transaction: Add items to shopping cart==
+User -> FE: Click on Item
+FE -> BE: GetItem(selectedItem)
+BE -> DB: GetItem(selectedItem)
+DB --> BE: Item
+BE --> FE: Item
+FE -> FE: ShowItem(Item)
+User -> FE: Click on add Item to shopping cart
+FE -> BE: Add Item to shopping cart
+BE -> BE: SetReserved()
+FE -> BE: GetShoppingCartCount()
+FE -> FE: ShowShoppingCartCount()
+==Transaction: View shopping cart==
+User -> FE: Click on shopping cart
+FE -> BE: GetPage(shoppingCart)
+FE -> BE: GetShoppingCartItems()
+FE -> FE: ShowShoppingCartItems()
+==Transaction: Delete item from shopping cart==
+User -> FE: Click on remove item
+FE -> BE: RemoveItem(selectedItem)
+==Transaction: Register==
+User -> FE: Click register button
+FE -> BE: GetForm(Register)
+FE -> FE: ShowForm(Register)
+User -> FE: Fill in form
+User -> FE: Send form
+FE -> BE: Post form
+BE -> BE: ValidateForm
+alt Form has errors
+    BE -> FE: ShowForm(FormResults)
+else Form has no errors
+    BE -> DB: AddUser(user)
+    BE -> FE: ShowPage(Home)
+end
+==Transaction: Login==
+User -> FE: Fill in login form
+User -> FE: Send login form
+FE -> BE: Post form
+BE -> BE: ValidateForm
+activate BE
+BE -> DB: GetUser(email)
+DB --> BE: User
+deactivate BE
+
+alt Form has errors
+    BE -> FE: ShowForm(FormResults)
+else Form has no errors
+    BE -> BE: SetSessionUser
+    BE -> FE: ShowPage(Home)
+end
+
+==Transaction: View Profile==
+note left FE: User has to be logged in
+User -> FE: Press "view profile" button
+FE -> BE: GetProfile()
+BE -> DB: GetProfile(email)
+DB --> BE: Profile
+BE --> FE: Profile
+
+==Transaction: Edit search criteria==
+note left FE: User has to be on profile page
+User -> FE: Press "edit search criteria" button
+FE -> BE: GetSearchCriteria()
+BE --> FE: SeachCriteria
+FE -> FE: ShowSearchCriteriaPage
+User -> FE: Edit search criteria
+FE -> BE: UpdateSearchCriteria(newCriteria)
+BE -> DB: UpdateSearchCriteria(newCriteria)
+
+==Transaction: View purchase history==
+note left FE: User has to be on profile page
+User -> FE: Press "Purchase history" button
+FE -> BE: GetPurchaseHistory()
+BE -> DB: GetPurchaseHistory(email)
+DB --> BE: PurchaseHistory
+BE --> FE: PurchaseHistory
+FE -> FE: ShowPurchaseHistory()
+
+==Transaction: AddItem==
+Admin -> FE: Press "Add Item" button
+FE -> FE: show Add Item form
+Admin -> FE: Fill in Add item form
+FE -> BE: AddItem(Item)
+BE -> DB: AddItem(Item)
+==Transaction: EditItem==
+Admin -> FE: Click on Item
+FE -> BE: GetItem(selectedItem)
+BE -> DB: GetItem(selectedItem)
+DB --> BE: Item
+BE --> FE: Item
+FE -> FE: ShowItem(Item)
+Admin -> FE: Click on Edit item
+FE -> FE: ShowEditScreen()
+Admin -> FE: Edit item
+FE -> BE: UpdateItem(Item)
+BE -> DB: UpdateItem(Item)
+
+deactivate User
+deactivate Admin
+deactivate FE
+deactivate BE
+deactivate DB
