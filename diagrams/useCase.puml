@@ -21,6 +21,7 @@ package system{
     usecase "Edit Items" as EI
     usecase "See order overview" as SOO
 }
+V <|-- U
 V ---> SI
 V ---> SD
 V ---> FI
@@ -31,13 +32,6 @@ V ---> PS
 V ---> R
 V ---> L
 
-U --> SI
-U --> SD
-U --> FI
-U --> AtS
-U --> RfS
-U --> VS
-U --> PS
 U --> SP
 U --> VPH
 

@@ -33,3 +33,7 @@ The user requirements are described as a unique id for the requirement. Then the
 |NFR-2|When an item isn't available anymore it is marked as "SOLD OUT"|
 |NFR-3|When an order or item is cancelled, the stock will be updated again|
 |NFR-4|When an item is sent, the status will be set to "SHIPPED"|
+NEw in collection
+
+## Educational requirement
+The application must be object orientated

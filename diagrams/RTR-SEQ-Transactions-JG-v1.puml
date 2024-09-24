@@ -12,19 +12,25 @@ activate BE
 activate DB
 
 ==Transaction: Show Item==
+FE -> BE: GetItems()
+BE -> DB: GetItems()
+DB --> BE: Items
+BE --> FE: Items
 User -> FE: Click on Item
-FE -> BE: GetItem(selectedItem)
-BE -> DB: GetItem(selectedItem)
-DB --> BE: Item
+FE -> BE: GetItem(ItemId)
 BE --> FE: Item
 FE -> FE: ShowItem(Item)
 ==Transaction: Add items to shopping cart==
+FE -> BE: GetItems()
+BE -> DB: GetItems()
+DB --> BE: Items
+BE --> FE: Items
 User -> FE: Click on Item
-FE -> BE: GetItem(selectedItem)
-BE -> DB: GetItem(selectedItem)
-DB --> BE: Item
-BE --> FE: Item
 FE -> FE: ShowItem(Item)
+activate FE
+FE -> BE: GetItem(ItemId)
+BE --> FE: Item
+deactivate FE
 User -> FE: Click on add Item to shopping cart
 FE -> BE: Add Item to shopping cart
 BE -> BE: SetReserved()
@@ -36,44 +42,40 @@ FE -> BE: GetPage(shoppingCart)
 FE -> BE: GetShoppingCartItems()
 FE -> FE: ShowShoppingCartItems()
 ==Transaction: Delete item from shopping cart==
+note left FE: User has to be on shopping cart page
 User -> FE: Click on remove item
-FE -> BE: RemoveItem(selectedItem)
+FE -> BE: RemoveItem(ItemId)
 ==Transaction: Register==
 User -> FE: Click register button
-FE -> BE: GetForm(Register)
-FE -> FE: ShowForm(Register)
-User -> FE: Fill in form
-User -> FE: Send form
-FE -> BE: Post form
-BE -> BE: ValidateForm
-alt Form has errors
-    BE -> FE: ShowForm(FormResults)
-else Form has no errors
-    BE -> DB: AddUser(user)
-    BE -> FE: ShowPage(Home)
+loop While form has errors
+    FE -> BE: GetForm(Register)
+    FE -> FE: ShowForm(FormResults)
+    User -> FE: Fill in form
+    User -> FE: Send form
+    FE -> BE: Post form
+    BE -> BE: ValidateForm
 end
+BE -> DB: CreateUser(user)
+BE -> FE: ShowPage(Home)
 ==Transaction: Login==
+loop While form has errors
 User -> FE: Fill in login form
 User -> FE: Send login form
 FE -> BE: Post form
 BE -> BE: ValidateForm
 activate BE
-BE -> DB: GetUser(email)
+BE -> DB: GetUser(UserId)
 DB --> BE: User
 deactivate BE
-
-alt Form has errors
-    BE -> FE: ShowForm(FormResults)
-else Form has no errors
-    BE -> BE: SetSessionUser
-    BE -> FE: ShowPage(Home)
 end
+BE -> BE: SetSessionUser
+BE -> FE: ShowPage(Home)
 
 ==Transaction: View Profile==
 note left FE: User has to be logged in
 User -> FE: Press "view profile" button
 FE -> BE: GetProfile()
-BE -> DB: GetProfile(email)
+BE -> DB: GetProfile(UserId)
 DB --> BE: Profile
 BE --> FE: Profile
 
@@ -91,7 +93,7 @@ BE -> DB: UpdateSearchCriteria(newCriteria)
 note left FE: User has to be on profile page
 User -> FE: Press "Purchase history" button
 FE -> BE: GetPurchaseHistory()
-BE -> DB: GetPurchaseHistory(email)
+BE -> DB: GetPurchaseHistory(UserId)
 DB --> BE: PurchaseHistory
 BE --> FE: PurchaseHistory
 FE -> FE: ShowPurchaseHistory()
@@ -104,8 +106,8 @@ FE -> BE: AddItem(Item)
 BE -> DB: AddItem(Item)
 ==Transaction: EditItem==
 Admin -> FE: Click on Item
-FE -> BE: GetItem(selectedItem)
-BE -> DB: GetItem(selectedItem)
+FE -> BE: GetItem(ItemId)
+BE -> DB: GetItem(ItemId)
 DB --> BE: Item
 BE --> FE: Item
 FE -> FE: ShowItem(Item)
