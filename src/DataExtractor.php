@@ -11,10 +11,6 @@ class DataExtractor
             $formResult = ['value' => $value, 'error' => ''];
             $formResults[$key] = $formResult;
         }
-        foreach($metaArray as $key => $metaData)
-        {
-            $formResult = validateField($key, $metaData, $formResults);
-        }
         return $formResults;
     }
 

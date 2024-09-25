@@ -1,6 +1,6 @@
 <?php
 include_once 'FormPage.php';
-class Home extends FormPage
+class Home extends Page
 {
     function showTitle()
     {

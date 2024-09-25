@@ -2,6 +2,19 @@
 include_once 'FormPage.php';
 class Login extends FormPage
 {
+    private $formResults;
+
+    public function __construct()
+    {
+        $this->formResults = $this->CreateEmptyFormResults(LOGINFORMDATA);
+    }
+
+    public static function WithResults($formResults)
+    {
+        $instance = new self();
+        $instance->formResults = $formResults;
+        return $instance;
+    }
     function showTitle()
     {
         echo "Login";
@@ -9,15 +22,6 @@ class Login extends FormPage
     }
     function showBody()
     {
-        $emptyFormResults = $this->createEmptyFormResults($this->formData);
-        $this->showForm($this->formData, $emptyFormResults, 'test', 'Login', 'test', 'yeet');
+        $this->showForm(LOGINFORMDATA, $this->formResults, 'Login', 'Login', 'Login', 'Login');
     }
-
-    
-
-    private $formData = [
-        'Email' => ['label' => 'Email', 'type' => 'text', 'placeholder' => 'Example@example.com', 'validations' => ["notEmpty", "loginValid", "toLowerCase", "emailExists"]],
-        'Password' => ['label' => 'Password', 'type' => 'password', 'placeholder' => 'Password', 'validations' => []]
-    ];
-
 }

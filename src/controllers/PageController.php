@@ -1,5 +1,6 @@
 <?php
 include 'DataExtractor.php';
+include 'InputValidator.php';
 
 //include all files in pages directory
 foreach (glob("views/*.php") as $filename)
@@ -9,33 +10,26 @@ foreach (glob("views/*.php") as $filename)
 
 Class PageController
 {
-    private $dataExtractor;
+    private $dataExtractor = NULL;
+    private $inputValidator = NULL;
+    private $currentPage = NULL;
 
-    function __construct()
+    public function __construct()
     {
         $this->dataExtractor = new DataExtractor();
+        $this->inputValidator = new InputValidator($this->dataExtractor);
     }
 
     public function ExecuteAction()
     {
         $requestedPage = $this->GetRequestedPage();
-        $pageName = $this->HandlePageRequest($requestedPage);
-        $this->ShowPage($pageName);
+        $this->HandlePageRequest($requestedPage);
+        $this->ShowPage();
     }
 
-    private function ShowPage($pageName)
+    private function ShowPage()
     {
-        $currentPage = NULL;
-        if(!in_array($pageName, $_SESSION['allowedPages']))
-        {
-            echo '<script>alert("Invalid page requested, redirecting to homepage");</script>';
-            $currentPage = new Home();
-        }
-        else
-        {
-            $currentPage = new $pageName();
-        }
-        $currentPage->showBodySection();
+        $this->currentPage->showBodySection();
     }
 
     private function GetRequestedPage()
@@ -54,36 +48,80 @@ Class PageController
 
     private function HandlePageRequest($page)
     {
+        if(!in_array($page, $_SESSION['allowedPages']))
+        {
+            echo '<script>alert("Invalid page requested, redirecting to homepage");</script>';
+            $this->currentPage = new Home();
+            return false;
+        }
         switch($page)
         {
-            /*case 'register.php':
-                if(validateInput("register"))
+            case 'Register':
+                if($this->dataExtractor->getPostVar('formDataName') === 'Register')
                 {
-                    $email = getPostVar('Email');
-                    $name = getPostVar('Name');
-                    $password = getPostVar('Password');
-                    writeUserToFile($email, $name, $password);
-                    return "login.php";
+                    $validatedInput = $this->inputValidator->validateInput(REGISTERFORMDATA);
+                    if(!$this->containsErrors($validatedInput))
+                    {
+                        $email = $this->dataExtractor->getPostVar('Email');
+                        $name = $this->dataExtractor->getPostVar('Name');
+                        $password = $this->dataExtractor->getPostVar('Password');
+                        //writeUserToFile($email, $name, $password);
+                        $this->currentPage = new Login();
+                    }
+                    else
+                    {
+                        $this->currentPage = Register::WithResults($validatedInput);
+                    }
+                }
+                else
+                {
+                    $this->currentPage = new Register();
                 }
                 break;
-            case 'login.php':
-                if(validateInput("login"))
+            case 'Login':
+                if($this->dataExtractor->getPostVar('formDataName') === 'Login')
                 {
-                    $email = getPostVar('Email');
-                    $_SESSION['user'] = getUserFromFile($email);
-                    updateAllowedPages();
-                    return  "home.php";
+                    $validatedInput = $this->inputValidator->validateInput(LOGINFORMDATA);
+                    if(!$this->containsErrors($validatedInput))
+                    {
+                        $email = $this->dataExtractor->getPostVar('Email');
+                        $_SESSION['user'] = getUserFromFile($email);
+                        updateAllowedPages();
+                        $this->currentPage = new Home();
+                    }
+                    else
+                    {
+                        $this->currentPage = Login::WithResults($validatedInput);
+                    }
+                }
+                else
+                {
+                    $this->currentPage = new Login();
                 }
                 break;
-                case 'logout.php':
+                case 'Logout':
                     session_unset();
                     updateAllowedPages();
-                    return 'home.php';
-                    break;*/
+                    $this->currentPage = new Home();
+                    break;
             default:
+                $this->currentPage = new $page();
                 break;
         }
         return $page;
+    }
+    private function containsErrors($formResults)
+    {
+        $containsErrors = false;
+        foreach($formResults as $key => $formResult)
+        {
+            if(!empty($formResult['error']))
+
+            {
+                return true;
+            }
+        }
+        return $containsErrors;
     }
 
 }
