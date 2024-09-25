@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="4tGuhvQuRg-FYeB0noHa" name="Page-1">
-        <mxGraphModel dx="832" dy="471" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="744" dy="471" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -47,13 +47,16 @@
                 <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=15;" parent="1" source="8" target="18" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="20" style="edgeStyle=none;html=1;dashed=1;" edge="1" parent="1" source="21">
+                <mxCell id="20" style="edgeStyle=none;html=1;dashed=1;" parent="1" source="21" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="209.00000000000023" y="160" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="21" value="Go to shopping cart page" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" vertex="1" parent="1">
+                <mxCell id="21" value="Go to shopping cart page" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="1" vertex="1">
                     <mxGeometry x="30" y="40" width="110.00000000000001" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Cart is right now seen as session variable. Might change later" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="10" width="110.00000000000001" height="80" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
