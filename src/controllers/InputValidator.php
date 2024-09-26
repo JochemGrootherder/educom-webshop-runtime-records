@@ -8,7 +8,7 @@ class InputValidator
         $this->dataExtractor = $dataExtractor;
     }
     
-    public function validateField($key, $metaData, &$formResults)
+    private function validateField($key, $metaData, &$formResults)
     {
         foreach($metaData['validations'] as $validation)
         {
