@@ -1,6 +1,7 @@
 <?php
 include 'DataExtractor.php';
 include 'InputValidator.php';
+include 'models/DatabaseHandler.php';
 
 //include all files in pages directory
 foreach (glob("views/*.php") as $filename)

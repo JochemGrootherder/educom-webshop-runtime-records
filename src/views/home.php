@@ -9,6 +9,7 @@ class Home extends Page
     }
     function showBody()
     {
+        $database = DatabaseHandler::connect();
     }
 
 }
