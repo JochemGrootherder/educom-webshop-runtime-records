@@ -67,22 +67,21 @@ class DatabaseHandler implements DataHandlerInterface
     
     private function CreateDatabase()
     {
-        $connection = $this->GetConnection();
         $sql = "CREATE DATABASE IF NOT EXISTS ". $this->dbName;
-        if($connection->query($sql) === FALSE)
+        if($this->connection->query($sql) === FALSE)
         {
             echo "Error creating database: ". $this->connection->error;
         }
-        $connection->close();
+        $this->connection->close();
         $this->CreateTables();
     }
 
     private function CreateTables()
     {
-        $connection = new mysqli($this->host, $this->username, $this->password, $this->dbName);
-        if($connection->connect_error)
+        $this->connection = new mysqli($this->host, $this->username, $this->password, $this->dbName);
+        if($this->connection->connect_error)
         {
-            die("Connection failed: ". $connection->connect_error);
+            die("Connection failed: ". $this->connection->connect_error);
         }
         foreach(TABLES as $tableKey => $tableValue)
         {
@@ -94,12 +93,12 @@ class DatabaseHandler implements DataHandlerInterface
             $sql = rtrim($sql, ",");
             $sql.= ")";
 
-            if($connection->query($sql) === FALSE)
+            if($this->connection->query($sql) === FALSE)
             {
                 echo "Error creating table: ". $this->connection->error;
             }
         }
-        $connection->close();
+        $this->connection->close();
     }
 
     public static function Connect()
@@ -113,7 +112,7 @@ class DatabaseHandler implements DataHandlerInterface
 
     public function GetConnection()
     {
-      return $this->connection;
+      return new mysqli($this->host, $this->username, $this->password, $this->dbName);
     }
 
     public function CloseConnection() {
