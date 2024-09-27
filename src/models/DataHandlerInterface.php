@@ -1,27 +1,27 @@
 <?php
-
+include 'DataTypes.php';
 interface DataHandlerInterface
 {
-    function CreateUser($user);
-    function UpdateUser($user);
-    function DeleteUser($id);
-    function GetUserById($id);
-    function GetUserByEmail($email);
+    function CreateUser(User $user);
+    function UpdateUser(User $user);
+    function DeleteUser(int $id);
+    function GetUserById(int $id);
+    function GetUserByEmail(string $email);
 
-    function CreateItem($user);
-    function UpdateItem($user);
-    function DeleteItem($id);
-    function GetItem($id);
+    function CreateItem(Item $item);
+    function UpdateItem(Item $item);
+    function DeleteItem(int $id);
+    function GetItem(int $id);
     function GetItems();
-    function GetItemsByFilter($filter);
+    function GetItemsByFilter(string $filter);
 
-    function CreateOrder($order);
-    function UpdateOrder($order);
-    function DeleteOrder($id);
-    function GetOrder($id);
+    function CreateOrder(Order $order);
+    function UpdateOrder(Order $order);
+    function DeleteOrder(int $id);
+    function GetOrder(int $id);
 
-    function CreateOrderLine($orderLine);
-    function UpdateOrderLine($orderLine);
-    function DeleteOrderLine($id);
-    function GetOrderLine($id);
+    function CreateOrderLine(OrderLine $orderLine);
+    function UpdateOrderLine(OrderLine $orderLine);
+    function DeleteOrderLine(int $id);
+    function GetOrderLine(int $id);
 }

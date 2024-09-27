@@ -1,5 +1,6 @@
 <?php
 include_once 'FormPage.php';
+include_once 'Models/DataTypes.php';
 class Home extends Page
 {
     function showTitle()
@@ -9,7 +10,16 @@ class Home extends Page
     }
     function showBody()
     {
+        $date = date_create("1999-12-20");
+        $date = date_format($date,"Y/m/d");
+        $user = new User(0, "test", "test@test.com", "test", $date, "male", "", true);
         $database = DatabaseHandler::connect();
+        $database->CreateUser($user);
+        $order = new Order(0,0,$date);
+        $database->CreateOrder($order);
+
+        $users = $database->GetUsers();
+        var_dump($users);
     }
 
 }

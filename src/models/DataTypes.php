@@ -11,105 +11,105 @@ class Item
     public function __construct(int $id = 0
                             , string $title, string $description
                             , int $year, float $price
-                            , TYPES $type, int $stock, Date $dateAdded = new Date('Y-m-j'))
+                            , TYPES $type, int $stock, Date $date_added = new Date('Y-m-j'))
     {
-        $this->Id = $id;
-        $this->Title = $title;
-        $this->Description = $desription;
-        $this->Year = $year;
-        $this->Price = $price;
-        $this->Type = $type;
+        $this->id = $id;
+        $this->title = $title;
+        $this->description = $desription;
+        $this->year = $year;
+        $this->price = $price;
+        $this->type = $type;
         $this->Stock = $stock;
-        $this->DateAdded = $dateAdded;
+        $this->date_added = $date_added;
     }
-    public $Id;
-    public $Title;
-    public $Description;
-    public $Year;
-    public $Price;
-    public $Type;
-    public $Stock;
-    public $DateAdded;
+    public $id;
+    public $title;
+    public $description;
+    public $year;
+    public $price;
+    public $type;
+    public $stock;
+    public $date_added;
 }
 
 class User
 {
     public function __construct(int $id = 0
                             , string $name, string $email
-                            , string $password, Date $dateOfBirth
-                            , string $gender, string $searchCriteria, bool $admin)
+                            , string $password, string $date_of_birth
+                            , string $gender, string $search_criteria, bool $admin)
     {
-        $this->Id = $id;
-        $this->Name = $name;
-        $this->Email = $email;
-        $this->Password = $password;
-        $this->DateOfBirth = $dateOfBirth;
-        $this->Gender = $gender;
-        $this->SearchCriteria = $searchCriteria;
-        $this->Admin = $admin;
+        $this->id = $id;
+        $this->name = $name;
+        $this->email = $email;
+        $this->password = $password;
+        $this->date_of_birth = $date_of_birth;
+        $this->gender = $gender;
+        $this->search_criteria = $search_criteria;
+        $this->admin = $admin;
     }
-    public $Id;
-    public $Name;
-    public $Email;
-    public $Password;
-    public $DateOfBirth;
-    public $Gender;
-    public $SearchCriteria;
-    public $Admin;
+    public $id;
+    public $name;
+    public $email;
+    public $password;
+    public $date_of_birth;
+    public $gender;
+    public $search_criteria;
+    public $admin;
 
 }
 
 class Order
 {
-    public function __construct(int $id, int $userId, Date $date)
+    public function __construct(int $id, int $user_id, string $date)
     {
-        $this->Id = $id;
-        $this->UserId = $userId;
-        $this->Date = $date;
+        $this->id = $id;
+        $this->user_id = $user_id;
+        $this->date = $date;
     }
 
-    public $Id;
-    public $UserId;
-    public $Date;
+    public $id;
+    public $user_id;
+    public $date;
 
 }
 
 class OrderLine
 {
-    public function __construct(int $id, int $orderId, int $itemId, int $amount)
+    public function __construct(int $id, int $order_id, int $item_id, int $amount)
     {
-        $this->Id = $id;
-        $this->OrderId = $orderId;
-        $this->ItemId = $itemId;
-        $this->Amount = $amount;
+        $this->id = $id;
+        $this->order_id = $order_id;
+        $this->item_id = $item_id;
+        $this->amount = $amount;
     }
 
-    public $Id;
-    public $OrderId;
-    public $ItemId;
-    public $Amount;
+    public $id;
+    public $order_id;
+    public $item_id;
+    public $amount;
 }
 
 class Genre
 {
-    public function __construct(string $name, int $itemId)
+    public function __construct(string $name, int $item_id)
     {
-        $this->Name = $name;
-        $this->ItemId = $itemId;
+        $this->name = $name;
+        $this->item_id = $item_id;
     }
 
-    public $Name;
-    public $ItemId;
+    public $name;
+    public $item_id;
 }
 
 class Artist
 {
-    public function __construct(string $name, int $itemId)
+    public function __construct(string $name, int $item_id)
     {
-        $this->Name = $name;
-        $this->ItemId = $itemId;
+        $this->name = $name;
+        $this->item_id = $item_id;
     }
 
-    public $Name;
-    public $ItemId;
+    public $name;
+    public $itemid;
 }
