@@ -14,12 +14,9 @@ class Home extends Page
         $date = date_format($date,"Y/m/d");
         $user = new User(0, "test", "test@test.com", "test", $date, "male", "", true);
         $database = DatabaseHandler::connect();
-        $database->CreateUser($user);
+        //$database->CreateUser($user);
         $order = new Order(0,0,$date);
         $database->CreateOrder($order);
-
-        $users = $database->GetUsers();
-        var_dump($users);
     }
 
 }

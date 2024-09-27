@@ -19,7 +19,7 @@ define('TABLES', [
                 'user_id' => 'INT(6) UNSIGNED NOT NULL',
                 'date' => 'DATE NOT NULL'
             ],
-    'orderLines'=> ['id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+    'order_lines'=> ['id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
                 'order_id' => 'INT(6) UNSIGNED NOT NULL',
                 'item_id' => 'INT(6) UNSIGNED NOT NULL',
                 'amount' => 'INT(6) UNSIGNED NOT NULL'],
@@ -128,7 +128,7 @@ class DatabaseHandler implements DataHandlerInterface
        self::$instance = null;
     }
 
-    private function CreateCreateSqlStatement($tableName, $object, $duplicateKey = "")
+    private function CreateCreateSqlStatement($tableName, $object)
     {
         $sql = "";
         $keys = "";
@@ -143,27 +143,55 @@ class DatabaseHandler implements DataHandlerInterface
         return $sql;
     }
 
-    public function CreateUser(User $user)
+    private function CreateUpdateSqlStatement($tableName, $object, $updateKey)
     {
-        $sql = $this->CreateCreateSqlStatement("users", $user, "");
+        $sql = "";
+        $sets = "";
+        foreach($object as $key => $value)
+        {
+            $sets.= $key. "='". $value. "',";
+        }
+        $sets = rtrim($sets, ",");
+        $sql.= "UPDATE ". $tableName. " SET ";
+        $sql.= $sets;
+        $sql.= " WHERE ". $updateKey . "= '" . $object->$updateKey . "'";
+        return $sql;
+    }
+
+    private function CreateDeleteSqlStatement($tableName, $keyName, $keyValue)
+    {
+        $sql = "DELETE FROM ". $tableName. " WHERE ". $keyName. "= '". $keyValue. "'";
+        return $sql;
+    }
+
+    private function ExecuteSqlStatement($sql, $action)
+    {
         $connection = $this->GetConnection();
         if($connection->query($sql) === TRUE)
         {
-            echo "User created successfully";
+            echo $action ." successfully";
         }
         else
         {
-            echo "Error creating user: ". $connection->error;
+            echo "Error: ". $action . "<br>". $connection->error;
         }
+    }
+
+    public function CreateUser(User $user)
+    {
+        $sql = $this->CreateCreateSqlStatement("users", $user, "");
+        $this->ExecuteSqlStatement($sql, "CreateUser");
     }
 
     public function UpdateUser(User $user)
     {
-
+        $sql = $this->CreateUpdateSqlStatement("users", $user, "id");
+        $this->ExecuteSqlStatement($sql, "UpdateUser");
     }
     public function DeleteUser(int $id)
     {
-
+        $sql = $this->CreateDeleteSqlStatement("users", "id", $id);
+        $this->ExecuteSqlStatement($sql, "DeleteUser");
     }
     public function GetUserById(int $id)
     {
@@ -176,15 +204,20 @@ class DatabaseHandler implements DataHandlerInterface
 
     public function CreateItem(Item $item)
     {
-
+        $sql = $this->CreateCreateSqlStatement("items", $item, "");
+        $this->ExecuteSqlStatement($sql, "CreateItem");
     }
+
     public function UpdateItem(Item $item)
     {
+        $this->CreateUpdateSqlStatement("items", $item, "id");
+        $this->ExecuteSqlStatement($sql, "UpdateItem");
 
     }
     public function DeleteItem(int $id)
     {
-
+        $sql = $this->CreateDeleteSqlStatement("items", "id", $id);
+        $this->ExecuteSqlStatement($sql, "DeleteItem");
     }
     public function GetItem(int $id)
     {
@@ -202,24 +235,18 @@ class DatabaseHandler implements DataHandlerInterface
     public function CreateOrder(Order $order)
     {
         $sql = $this->CreateCreateSqlStatement("orders", $order, "");
-        $connection = $this->GetConnection();
-        if($connection->query($sql) === TRUE)
-        {
-            echo "order created successfully";
-        }
-        else
-        {
-            echo "Error creating order: ". $connection->error;
-        }
-
+        $this->ExecuteSqlStatement($sql, "CreateOrder");
     }
+
     public function UpdateOrder(Order $order)
     {
-
+        $this->CreateUpdateSqlStatement("orders", $order, "id");
+        $this->ExecuteSqlStatement($sql, "UpdateOrder");
     }
     public function DeleteOrder(int $id)
     {
-
+        $sql = $this->CreateDeleteSqlStatement("orders", "id", $id);
+        $this->ExecuteSqlStatement($sql, "DeleteOrder");
     }
     public function GetOrder(int $id)
     {
@@ -227,15 +254,19 @@ class DatabaseHandler implements DataHandlerInterface
     }
     public function CreateOrderLine(OrderLine $orderLine)
     {
+        $sql = $this->CreateCreateSqlStatement("orders", $orderLine, "");
+        $this->ExecuteSqlStatement($sql, "CreateOrderLine");
 
     }
     public function UpdateOrderLine(OrderLine $orderLine)
     {
-
+        $this->CreateUpdateSqlStatement("order_lines", $orderLine, "id");
+        $this->ExecuteSqlStatement($sql, "UpdateOrderLine");
     }
     public function DeleteOrderLine(int $id)
     {
-
+        $sql = $this->CreateDeleteSqlStatement("order_lines", "id", $id);
+        $this->ExecuteSqlStatement($sql, "DeleteOrderLine");
     }
     public function GetOrderLine(int $id)
     {
