@@ -22,6 +22,19 @@ class UserDao extends BaseDAO
         $sql = $this->CreateGetStatement("email", $email);
         $result = $this->ExecutePreparedStatement($sql, null);
         $row = $result->fetch_assoc();
-        return $this->ConvertRowToDataType($row, $this->dataType);
+        return $this->ConvertRowToDataType($row);
+    }
+    protected function ConvertRowToDataType($row)
+    {
+        return new User(
+            $row["id"],
+            $row["name"],
+            $row["email"],
+            $row["password"],
+            $row["date_of_birth"],
+            $row["gender"],
+            $row["search_criteria"],
+            $row["admin"]
+        );
     }
 }

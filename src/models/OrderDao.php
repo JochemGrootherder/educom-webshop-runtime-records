@@ -9,4 +9,13 @@ class OrderDao extends BaseDAO
         $this->primaryColumn = "id";
         $this->dataType = "order";
     }
+
+    protected function ConvertRowToDataType($row)
+    {
+        return new Order(
+            $row["id"],
+            $row["user_id"],
+            $row["date"]
+        );
+    }
 }

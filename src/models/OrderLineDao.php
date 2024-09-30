@@ -9,4 +9,14 @@ class OrderLineDao extends BaseDAO
         $this->primaryColumn = "id";
         $this->dataType = "order_line";
     }
+
+    protected function ConvertRowToDataType($row)
+    {
+        return new OrderLine(
+            $row["id"],
+            $row["order_id"],
+            $row["item_id"],
+            $row["amount"]
+        );
+    }
 }

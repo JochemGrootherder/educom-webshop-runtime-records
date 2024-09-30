@@ -131,53 +131,6 @@ abstract class BaseDAO
         $connection->close();
         return $result;
     }
-    private function ConvertRowToDataType($row, $resultType)
-    {
-        switch($resultType)
-        {
-            case "user":
-                return new User(
-                    $row["id"],
-                    $row["name"],
-                    $row["email"],
-                    $row["password"],
-                    $row["date_of_birth"],
-                    $row["gender"],
-                    $row["search_criteria"],
-                    $row["admin"]
-                );
-            break;
-            case "item":
-                return new Item(
-                    $row["id"],
-                    $row["title"],
-                    $row["description"],
-                    $row["year"],
-                    $row["price"],
-                    $row["type"],
-                    $row["stock"],
-                    $row["date_added"]
-                );
-                break;
-            case "order_line":
-                return new OrderLine(
-                    $row["id"],
-                    $row["order_id"],
-                    $row["item_id"],
-                    $row["amount"]
-                );
-                break;
-            case "order":
-                return new Order(
-                    $row["id"],
-                    $row["user_id"],
-                    $row["date"]
-                );
-                break;
-            default:
-                break;
-        }
-    }
 
     public function GetAllFromTable()
     {
@@ -186,7 +139,7 @@ abstract class BaseDAO
         $results = [];
         while($row = $result->fetch_assoc())
         {
-            $rowResult = $this->ConvertRowToDataType($row, $this->dataType);
+            $rowResult = $this->ConvertRowToDataType($row);
             array_push($results, $rowResult);
         }
         return $results;

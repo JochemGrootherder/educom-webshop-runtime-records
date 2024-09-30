@@ -9,4 +9,18 @@ class ItemDao extends BaseDAO
         $this->primaryColumn = "id";
         $this->dataType = "item";
     }
+
+    protected function ConvertRowToDataType($row)
+    {
+        return new Item(
+            $row["id"],
+            $row["title"],
+            $row["description"],
+            $row["year"],
+            $row["price"],
+            $row["type"],
+            $row["stock"],
+            $row["date_added"]
+        );
+    }
 }
