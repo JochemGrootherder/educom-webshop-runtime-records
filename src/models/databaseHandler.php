@@ -128,34 +128,33 @@ class DatabaseHandler implements DataHandlerInterface
        self::$instance = null;
     }
 
-    private function CreateCreateSqlStatement($tableName, $object)
+    private function CreatePrepareInsertSqlStatement($tableName, $object)
     {
-        $sql = "";
         $keys = "";
         $keys .= implode(",", array_keys((array)$object));
-        $values = "";
-        $values.= "'" . implode("','", (array)$object) . "'";
-        $sql .= "INSERT INTO ". $tableName. " (";
-        $sql .= $keys;
-        $sql .= ") VALUES (";
-        $sql .= $values;
-        $sql.= ")";
-        return $sql;
+
+        $prepared_sql = "INSERT INTO " . $tableName . "(";
+        $prepared_sql .= $keys;
+        $prepared_sql .= ") VALUES (";
+        $in = str_repeat('?, ', count((array)$object)-1) . '?';
+        $prepared_sql .= $in;
+        $prepared_sql.= ")";
+        return $prepared_sql;
     }
 
-    private function CreateUpdateSqlStatement($tableName, $object, $updateKey)
+    private function CreatePrepareUpdateSqlStatement($tableName, $object, $updateKey)
     {
-        $sql = "";
+        $prepared_sql = "";
         $sets = "";
         foreach($object as $key => $value)
         {
-            $sets.= $key. "='". $value. "',";
+            $sets.= $key. "= ?, ";
         }
-        $sets = rtrim($sets, ",");
-        $sql.= "UPDATE ". $tableName. " SET ";
-        $sql.= $sets;
-        $sql.= " WHERE ". $updateKey . "= '" . $object->$updateKey . "'";
-        return $sql;
+        $sets = rtrim($sets, ", ");
+        $prepared_sql.= "UPDATE ". $tableName. " SET ";
+        $prepared_sql.= $sets;
+        $prepared_sql.= " WHERE ". $updateKey . "= '" . $object->$updateKey . "'";
+        return $prepared_sql;
     }
 
     private function CreateDeleteSqlStatement($tableName, $keyName, $keyValue)
@@ -167,7 +166,9 @@ class DatabaseHandler implements DataHandlerInterface
     private function ExecuteSqlStatement($sql, $action)
     {
         $connection = $this->GetConnection();
-        if($connection->query($sql) === TRUE)
+        $result = $connection->query($sql);
+        var_dump($result);
+        if($result === TRUE)
         {
             echo $action ." successfully";
         }
@@ -175,18 +176,66 @@ class DatabaseHandler implements DataHandlerInterface
         {
             echo "Error: ". $action . "<br>". $connection->error;
         }
+        return $result;
+        $connection->close();
+    }
+
+    private function BindToStatement(&$statement, $object)
+    {
+        $data = [];
+        $bindIdentifiers = "";
+
+        foreach((array)$object as $key => $value)
+        {
+            array_push($data, $value);
+            $type = gettype($value);
+            switch($type)
+            {
+                case "integer":
+                case "boolean":
+                    $bindIdentifiers .= "i";
+                    break;
+                    
+                case "string":
+                    $bindIdentifiers .= "s";
+                    break;
+
+                case "double":
+                case "float":
+                    $bindIdentifiers .= "d";
+                    break;
+
+                default: 
+                    $bindIdentifiers .= "b";
+                break;
+            }
+        }
+        $statement->bind_param($bindIdentifiers, ...$data);
+    }
+
+    private function ExecutePreparedStatement($sql, $object)
+    {
+        $connection = $this->GetConnection();
+        $statement = $connection->prepare($sql);
+        if($object != null)
+        {
+            $this->BindToStatement($statement, $object);
+        }
+        $statement->execute();
+        $statement->close();
+        $connection->close();
     }
 
     public function CreateUser(User $user)
     {
-        $sql = $this->CreateCreateSqlStatement("users", $user, "");
-        $this->ExecuteSqlStatement($sql, "CreateUser");
+        $sql = $this->CreatePrepareInsertSqlStatement("users", $user, "");
+        $this->ExecutePreparedStatement($sql, $user);
     }
 
     public function UpdateUser(User $user)
     {
-        $sql = $this->CreateUpdateSqlStatement("users", $user, "id");
-        $this->ExecuteSqlStatement($sql, "UpdateUser");
+        $sql = $this->CreatePrepareUpdateSqlStatement("users", $user, "id");
+        $this->ExecutePreparedStatement($sql, $user);
     }
     public function DeleteUser(int $id)
     {
@@ -199,19 +248,22 @@ class DatabaseHandler implements DataHandlerInterface
     }
     public function GetUserByEmail(string $email)
     {
-
+        echo $email;
+        $sql = "SELECT * FROM users WHERE email = '" .$email . "'";
+        return $this->ExecuteSqlStatement($sql, "GetUserByEmail");
     }
 
     public function CreateItem(Item $item)
     {
-        $sql = $this->CreateCreateSqlStatement("items", $item, "");
-        $this->ExecuteSqlStatement($sql, "CreateItem");
+        $sql = $this->CreatePrepareInsertSqlStatement("items", $item, "");
+        $this->ExecutePreparedStatement($sql, $item);
+
     }
 
     public function UpdateItem(Item $item)
     {
-        $this->CreateUpdateSqlStatement("items", $item, "id");
-        $this->ExecuteSqlStatement($sql, "UpdateItem");
+        $this->CreatePrepareUpdateSqlStatement("items", $item, "id");
+        $this->ExecutePreparedStatement($sql, $item);
 
     }
     public function DeleteItem(int $id)
@@ -234,14 +286,14 @@ class DatabaseHandler implements DataHandlerInterface
 
     public function CreateOrder(Order $order)
     {
-        $sql = $this->CreateCreateSqlStatement("orders", $order, "");
-        $this->ExecuteSqlStatement($sql, "CreateOrder");
+        $sql = $this->CreatePrepareInsertSqlStatement("orders", $order, "");
+        $this->ExecutePreparedStatement($sql, $order);
     }
 
     public function UpdateOrder(Order $order)
     {
-        $this->CreateUpdateSqlStatement("orders", $order, "id");
-        $this->ExecuteSqlStatement($sql, "UpdateOrder");
+        $sql = $this->CreatePrepareUpdateSqlStatement("orders", $order, "id");
+        $this->ExecutePreparedStatement($sql, $order);
     }
     public function DeleteOrder(int $id)
     {
@@ -254,14 +306,14 @@ class DatabaseHandler implements DataHandlerInterface
     }
     public function CreateOrderLine(OrderLine $orderLine)
     {
-        $sql = $this->CreateCreateSqlStatement("orders", $orderLine, "");
-        $this->ExecuteSqlStatement($sql, "CreateOrderLine");
+        $sql = $this->CreatePrepareInsertSqlStatement("orders", $orderLine, "");
+        $this->ExecutePreparedStatement($sql, $orderLine);
 
     }
     public function UpdateOrderLine(OrderLine $orderLine)
     {
-        $this->CreateUpdateSqlStatement("order_lines", $orderLine, "id");
-        $this->ExecuteSqlStatement($sql, "UpdateOrderLine");
+        $this->CreatePrepareUpdateSqlStatement("order_lines", $orderLine, "id");
+        $this->ExecutePreparedStatement($sql, $orderLine);
     }
     public function DeleteOrderLine(int $id)
     {

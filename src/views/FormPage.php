@@ -1,14 +1,16 @@
 <?php
 include 'Page.php';
 
-define ("GENDERS", array('Mr.' => 'Mr.', 'Mrs.' => 'Mrs.', 'Other' => 'Other'));
+define ("GENDERS", array('Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other'));
 define("COMMUNICATION_PREFERENCES", array('Email' => 'Email', 'Phone' => 'Phone', 'Mail' => 'Mail'));
 
 define("REGISTERFORMDATA", [
     'Name'  => ['label' => 'Full Name', 'type' => 'text', 'placeholder' => 'Full name', 'validations' => ["notEmpty", "onlyCharacters"]],
     'Email' => ['label' => 'Email', 'type' => 'text', 'placeholder' => 'Example@example.com', 'validations' => ["notEmpty", "validEmail", "uniqueEmail", "toLowerCase"]],
     'Password' => ['label' => 'Password', 'type' => 'password', 'placeholder' => 'Password', 'validations' => ["notEmpty", "minLength:8", "containsUppercase", "containsLowercase", "containsNumber", "containsSpecialChar"]],
-    'ConfirmPassword' => ['label' => 'Confirm Password', 'type' => 'password', 'placeholder' => 'Confirm Password', 'validations' => ["matchesPassword"]]
+    'ConfirmPassword' => ['label' => 'Confirm Password', 'type' => 'password', 'placeholder' => 'Confirm Password', 'validations' => ["matchesPassword"]],
+    'DateOfBirth' => ['label' => 'Date Of Birth', 'type' =>'date', 'placeholder' => '', 'validations'=> ['']],
+    'Gender' => ['label' => 'Gender', 'type' =>'select', 'options' => GENDERS, 'validations'=> ['notEmpty', 'validOption']]
 ]);
 
 define ("LOGINFORMDATA", [

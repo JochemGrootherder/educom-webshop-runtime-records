@@ -17,6 +17,10 @@ class Home extends Page
         //$database->CreateUser($user);
         $order = new Order(0,0,$date);
         $database->CreateOrder($order);
+
+        $newOrder = new Order(0,1, $date);
+        $database->UpdateOrder($newOrder);
     }
+
 
 }

@@ -14,11 +14,13 @@ Class PageController
     private $dataExtractor = NULL;
     private $inputValidator = NULL;
     private $currentPage = NULL;
+    private $dataHandler = NULL;
 
     public function __construct()
     {
         $this->dataExtractor = new DataExtractor();
         $this->inputValidator = new InputValidator($this->dataExtractor);
+        $this->dataHandler = DatabaseHandler::Connect();
     }
 
     public function ExecuteAction()
@@ -63,9 +65,21 @@ Class PageController
                     $validatedInput = $this->inputValidator->validateInput(REGISTERFORMDATA);
                     if(!$this->containsErrors($validatedInput))
                     {
-                        $email = $this->dataExtractor->getPostVar('Email');
-                        $name = $this->dataExtractor->getPostVar('Name');
-                        $password = $this->dataExtractor->getPostVar('Password');
+                        include_once "models/DataTypes.php";
+                        $user = new User(
+                            0, 
+                            $this->dataExtractor->getPostVar('Name'),
+                            $this->dataExtractor->getPostVar('Email'),
+                            $this->dataExtractor->getPostVar('Password'),
+                            $this->dataExtractor->getPostVar('DateOfBirth'),
+                            $this->dataExtractor->getPostVar('Gender'),
+                            "", 
+                            false
+                        );
+                        $result = $this->dataHandler->GetUserByEmail($user->email);
+                        var_dump($result);
+                        $this->dataHandler->CreateUser($user);
+                        //var_dump($user);
                         //writeUserToFile($email, $name, $password);
                         $this->currentPage = new Login();
                     }
