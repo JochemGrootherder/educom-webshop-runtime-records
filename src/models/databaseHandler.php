@@ -128,7 +128,7 @@ class DatabaseHandler implements DataHandlerInterface
        self::$instance = null;
     }
 
-    private function CreatePrepareInsertSqlStatement($tableName, $object)
+    private function CreateInsertStatement($tableName, $object)
     {
         $keys = "";
         $keys .= implode(",", array_keys((array)$object));
@@ -142,7 +142,7 @@ class DatabaseHandler implements DataHandlerInterface
         return $prepared_sql;
     }
 
-    private function CreatePrepareUpdateSqlStatement($tableName, $object, $updateKey)
+    private function CreateUpdateStatement($tableName, $object, $updateKey)
     {
         $prepared_sql = "";
         $sets = "";
@@ -157,27 +157,16 @@ class DatabaseHandler implements DataHandlerInterface
         return $prepared_sql;
     }
 
-    private function CreateDeleteSqlStatement($tableName, $keyName, $keyValue)
+    private function CreateDeleteStatement($tableName, $keyName, $keyValue)
     {
         $sql = "DELETE FROM ". $tableName. " WHERE ". $keyName. "= '". $keyValue. "'";
         return $sql;
     }
 
-    private function ExecuteSqlStatement($sql, $action)
+    private function CreateGetStatement($tableName, $keyName, $keyValue)
     {
-        $connection = $this->GetConnection();
-        $result = $connection->query($sql);
-        var_dump($result);
-        if($result === TRUE)
-        {
-            echo $action ." successfully";
-        }
-        else
-        {
-            echo "Error: ". $action . "<br>". $connection->error;
-        }
-        return $result;
-        $connection->close();
+        $sql = "SELECT * FROM ". $tableName. " WHERE ". $keyName . " = '" . $keyValue . "'";
+        return $sql;
     }
 
     private function BindToStatement(&$statement, $object)
@@ -222,63 +211,128 @@ class DatabaseHandler implements DataHandlerInterface
             $this->BindToStatement($statement, $object);
         }
         $statement->execute();
+        $result = $statement->get_result();
         $statement->close();
         $connection->close();
+        return $result;
+    }
+
+    private function ConvertRowToDataType($row, $resultType)
+    {
+        switch($resultType)
+        {
+            case "user":
+                return new User(
+                    $row["id"],
+                    $row["name"],
+                    $row["email"],
+                    $row["password"],
+                    $row["date_of_birth"],
+                    $row["gender"],
+                    $row["search_criteria"],
+                    $row["admin"]
+                );
+            break;
+            case "item":
+                return new Item(
+                    $row["id"],
+                    $row["title"],
+                    $row["description"],
+                    $row["year"],
+                    $row["price"],
+                    $row["type"],
+                    $row["stock"],
+                    $row["date_added"]
+                );
+                break;
+            case "order_line":
+                return new OrderLine(
+                    $row["id"],
+                    $row["order_id"],
+                    $row["item_id"],
+                    $row["amount"]
+                );
+                break;
+            case "order":
+                return new Order(
+                    $row["id"],
+                    $row["user_id"],
+                    $row["date"]
+                );
+                break;
+            default:
+                break;
+        }
+    }
+
+    public function GetAllFromTable($tableName)
+    {
+        $sql = "SELECT * FROM ". $tableName;
+        $result = $this->ExecutePreparedStatement($sql, null);
+        $dataType = rtrim($tableName, "s");
+        $results = [];
+        while($row = $result->fetch_assoc())
+        {
+            $rowResult = $this->ConvertRowToDataType($row, $dataType);
+            array_push($results, $rowResult);
+        }
+        return $results;
     }
 
     public function CreateUser(User $user)
     {
-        $sql = $this->CreatePrepareInsertSqlStatement("users", $user, "");
+        $sql = $this->CreateInsertStatement("users", $user, "");
         $this->ExecutePreparedStatement($sql, $user);
     }
 
     public function UpdateUser(User $user)
     {
-        $sql = $this->CreatePrepareUpdateSqlStatement("users", $user, "id");
+        $sql = $this->CreateUpdateStatement("users", $user, "id");
         $this->ExecutePreparedStatement($sql, $user);
     }
     public function DeleteUser(int $id)
     {
-        $sql = $this->CreateDeleteSqlStatement("users", "id", $id);
-        $this->ExecuteSqlStatement($sql, "DeleteUser");
+        $sql = $this->CreateDeleteStatement("users", "id", $id);
+        $this->ExecutePreparedStatement($sql, null);
     }
     public function GetUserById(int $id)
     {
-
+        $sql = $this->CreateGetStatement("users", "id", $id);
+        $result = $this->ExecutePreparedStatement($sql, null);
+        $row = $result->fetch_assoc();
+        return $this->ConvertRowToDataType($row, "user");
     }
     public function GetUserByEmail(string $email)
     {
-        echo $email;
-        $sql = "SELECT * FROM users WHERE email = '" .$email . "'";
-        return $this->ExecuteSqlStatement($sql, "GetUserByEmail");
+        $sql = $this->CreateGetStatement("users", "email", $email);
+        $result = $this->ExecutePreparedStatement($sql, null);
+        $row = $result->fetch_assoc();
+        return $this->ConvertRowToDataType($row, "user");
     }
 
     public function CreateItem(Item $item)
     {
-        $sql = $this->CreatePrepareInsertSqlStatement("items", $item, "");
+        $sql = $this->CreateInsertStatement("items", $item, "");
         $this->ExecutePreparedStatement($sql, $item);
 
     }
 
     public function UpdateItem(Item $item)
     {
-        $this->CreatePrepareUpdateSqlStatement("items", $item, "id");
+        $this->CreateUpdateStatement("items", $item, "id");
         $this->ExecutePreparedStatement($sql, $item);
 
     }
     public function DeleteItem(int $id)
     {
-        $sql = $this->CreateDeleteSqlStatement("items", "id", $id);
-        $this->ExecuteSqlStatement($sql, "DeleteItem");
+        $sql = $this->CreateDeleteStatement("items", "id", $id);
+        $this->ExecutePreparedStatement($sql, null);
     }
-    public function GetItem(int $id)
+    public function GetItemById(int $id)
     {
 
     }
-    public function GetItems()
-    {
-        
-    }
+
     public function GetItemsByFilter(string $filter)
     {
 
@@ -286,19 +340,19 @@ class DatabaseHandler implements DataHandlerInterface
 
     public function CreateOrder(Order $order)
     {
-        $sql = $this->CreatePrepareInsertSqlStatement("orders", $order, "");
+        $sql = $this->CreateInsertStatement("orders", $order, "");
         $this->ExecutePreparedStatement($sql, $order);
     }
 
     public function UpdateOrder(Order $order)
     {
-        $sql = $this->CreatePrepareUpdateSqlStatement("orders", $order, "id");
+        $sql = $this->CreateUpdateStatement("orders", $order, "id");
         $this->ExecutePreparedStatement($sql, $order);
     }
     public function DeleteOrder(int $id)
     {
-        $sql = $this->CreateDeleteSqlStatement("orders", "id", $id);
-        $this->ExecuteSqlStatement($sql, "DeleteOrder");
+        $sql = $this->CreateDeleteStatement("orders", "id", $id);
+        $this->ExecutePreparedStatement($sql, null);
     }
     public function GetOrder(int $id)
     {
@@ -306,19 +360,19 @@ class DatabaseHandler implements DataHandlerInterface
     }
     public function CreateOrderLine(OrderLine $orderLine)
     {
-        $sql = $this->CreatePrepareInsertSqlStatement("orders", $orderLine, "");
+        $sql = $this->CreateInsertStatement("orders", $orderLine, "");
         $this->ExecutePreparedStatement($sql, $orderLine);
 
     }
     public function UpdateOrderLine(OrderLine $orderLine)
     {
-        $this->CreatePrepareUpdateSqlStatement("order_lines", $orderLine, "id");
+        $this->CreateUpdateStatement("order_lines", $orderLine, "id");
         $this->ExecutePreparedStatement($sql, $orderLine);
     }
     public function DeleteOrderLine(int $id)
     {
-        $sql = $this->CreateDeleteSqlStatement("order_lines", "id", $id);
-        $this->ExecuteSqlStatement($sql, "DeleteOrderLine");
+        $sql = $this->CreateDeleteStatement("order_lines", "id", $id);
+        $this->ExecutePreparedStatement($sql, null);
     }
     public function GetOrderLine(int $id)
     {

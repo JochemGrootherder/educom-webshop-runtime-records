@@ -76,11 +76,7 @@ Class PageController
                             "", 
                             false
                         );
-                        $result = $this->dataHandler->GetUserByEmail($user->email);
-                        var_dump($result);
                         $this->dataHandler->CreateUser($user);
-                        //var_dump($user);
-                        //writeUserToFile($email, $name, $password);
                         $this->currentPage = new Login();
                     }
                     else
