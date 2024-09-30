@@ -1,7 +1,7 @@
 <?php
 include 'DataExtractor.php';
 include 'InputValidator.php';
-include 'models/DatabaseHandler.php';
+include "models/UserDao.php";
 
 //include all files in pages directory
 foreach (glob("views/*.php") as $filename)
@@ -14,13 +14,11 @@ Class PageController
     private $dataExtractor = NULL;
     private $inputValidator = NULL;
     private $currentPage = NULL;
-    private $dataHandler = NULL;
 
     public function __construct()
     {
         $this->dataExtractor = new DataExtractor();
         $this->inputValidator = new InputValidator($this->dataExtractor);
-        $this->dataHandler = DatabaseHandler::Connect();
     }
 
     public function ExecuteAction()
@@ -76,7 +74,8 @@ Class PageController
                             "", 
                             false
                         );
-                        $this->dataHandler->CreateUser($user);
+                        $userDao = new UserDao();
+                        $userDao->Create($user);
                         $this->currentPage = new Login();
                     }
                     else

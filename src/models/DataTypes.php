@@ -6,7 +6,12 @@ ENUM TYPES: string
     case CASETTE = "CASETTE";
 };
 
-class Item
+class DataType
+{
+
+}
+
+class Item extends DataType
 {
     public function __construct(int $id = 0
                             , string $title, string $description
@@ -32,7 +37,7 @@ class Item
     public $date_added;
 }
 
-class User
+class User extends DataType
 {
     public function __construct(int $id = 0
                             , string $name, string $email
@@ -59,7 +64,7 @@ class User
 
 }
 
-class Order
+class Order extends DataType
 {
     public function __construct(int $id, int $user_id, string $date)
     {
@@ -74,7 +79,7 @@ class Order
 
 }
 
-class OrderLine
+class OrderLine extends DataType
 {
     public function __construct(int $id, int $order_id, int $item_id, int $amount)
     {
@@ -90,7 +95,7 @@ class OrderLine
     public $amount;
 }
 
-class Genre
+class Genre extends DataType
 {
     public function __construct(string $name, int $item_id)
     {
@@ -102,7 +107,7 @@ class Genre
     public $item_id;
 }
 
-class Artist
+class Artist extends DataType
 {
     public function __construct(string $name, int $item_id)
     {
