@@ -160,25 +160,61 @@ class DatabaseCreator
 
     public function CreateMockUsers()
     {
+        $userDAO = new UserDAO();
+        $adminUser = new User(
+            0,
+            'Admin',
+            'admin@example.com',
+            'Admin123!',
+            '1990-01-01',
+            'Male',
+            '',
+            True
+        );
+        $user1 = new User(
+            0,
+            'test',
+            'test@test.com',
+            'Test123!',
+            '1988-01-01',
+            'Male',
+            '',
+            False
+        );
+        $user2 = new User(
+            0,
+            'Kroket',
+            'Kroket@test.com',
+            'Kroket123!',
+            '1988-01-01',
+            'Male',
+            '',
+            False
+        );
 
+        $userDAO->Create($adminUser);
+        $userDAO->Create($user1);
+        $userDAO->Create($user2);
     }
 
     public function CreateMockItems()
     {
-
+        $itemDAO = new ItemDAO();
     }
 
     public function CreateMockOrders()
     {
-
+        $orderDAO = new OrderDAO();
     }
 
     public function CreateMockOrderLines()
     {
-
+        $orderLinesDao = new OrderLinesDao();
     }
 }
 
 $db = DatabaseCreator::Connect();
 $db->DropDatabase();
 $db->CreateDatabase();
+
+$db->CreateMockUsers();
