@@ -22,14 +22,10 @@ define('TABLES', [
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)'
         ],
     'artists'=> [
-                'name' => 'VARCHAR(50) NOT NULL PRIMARY KEY',
-                'item_id' => 'INT(6) UNSIGNED NOT NULL',
-                '' => 'FOREIGN KEY (item_id) REFERENCES items(id)'
+                'name' => 'VARCHAR(50) NOT NULL PRIMARY KEY'
             ],
     'genres'=> [
-                'name' => 'VARCHAR(50) NOT NULL PRIMARY KEY',
-                'item_id' => 'INT(6) UNSIGNED NOT NULL',
-                '' => 'FOREIGN KEY (item_id) REFERENCES items(id)'
+                'name' => 'VARCHAR(50) NOT NULL PRIMARY KEY'
             ],
     'users'=> [
                 'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -200,6 +196,44 @@ class DatabaseCreator
     public function CreateMockItems()
     {
         $itemDAO = new ItemDAO();
+        $dateAdded = date_create();
+        $dateAdded = date_format($dateAdded, "Y\m\d");
+        $item1 = new Item(
+            0,
+            'A night at the opera',
+            ['Queen'],
+            ['rock', 'classic rock'],
+            "A band's hit album by the British rock band Queen.",
+            1975,
+            12.99,
+            ItemTypes::CD,
+            50,
+            $dateAdded
+        );
+        $item2 = new Item(
+            0,
+            'Trench',
+            ['Twenty one pilots'],
+            ['rock', 'pop'],
+            "Great album",
+            2016,
+            24.99,
+            ItemTypes::VINYL,
+            60,
+            $dateAdded
+        );
+        $item3 = new Item(
+            0,
+            'Wish you were here',
+            ['Pink floyd'],
+            ['rock classics'],
+            "Great album",
+            1975,
+            18.99,
+            ItemTypes::VINYL,
+            15,
+            $dateAdded
+        );
     }
 
     public function CreateMockOrders()
@@ -218,3 +252,4 @@ $db->DropDatabase();
 $db->CreateDatabase();
 
 $db->CreateMockUsers();
+$db->CreateMockItems();

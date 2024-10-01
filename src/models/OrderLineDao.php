@@ -1,13 +1,26 @@
 <?php
-include_once "BaseDAO.php";
-class OrderLineDao extends BaseDAO
+include_once 'DataTypes/OrderLine.php';
+class OrderLineDao
 {
+    private $CRUD;
+    private $primaryColumn;
     public function __construct()
     {
-        parent::__construct();
-        $this->tableName = "order_lines";
+        $this->CRUD = new CRUD();
         $this->primaryColumn = "id";
-        $this->dataType = "order_line";
+    }
+
+    public function Create(OrderLine $OrderLine)
+    {
+        $OrderLineArray = [
+            "id" => $OrderLine->id,
+            "order_id" => $OrderLine->order_id,
+            "item_id" => $OrderLine->item_id,
+            "amount" => $OrderLine->amount
+        ];
+
+        $result = $this->$CRUD->Create("orders_lines", $OrderLineArray);
+        var_dump($result);
     }
 
     protected function ConvertRowToDataType($row)

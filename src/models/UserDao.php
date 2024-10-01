@@ -1,13 +1,29 @@
 <?php
-include_once "BaseDAO.php";
-class UserDao extends BaseDAO
+include_once 'DataTypes/User.php';
+include_once 'CRUD.php';
+class UserDao
 {
+    private $CRUD;
+    private $primaryColumn;
     public function __construct()
     {
-        parent::__construct();
-        $this->tableName = "users";
+        $this->CRUD = new CRUD();
         $this->primaryColumn = "id";
-        $this->dataType = "user";
+    }
+    
+    public function Create(User $user)
+    {
+        $userArray = [
+            "id" => $user->id,
+            "name" => $user->name,
+            "email" => $user->email,
+            "password" => $user->password,
+            "date_of_birth" => $user->date_of_birth,
+            "gender" => $user->gender,
+            "search_criteria" => $user->search_criteria,
+            "admin" => $user->admin
+        ];
+        $result = $this->CRUD->Create("users", $userArray);
     }
 
     public function GetUsers()
