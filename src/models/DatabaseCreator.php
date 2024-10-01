@@ -1,9 +1,9 @@
 <?php
 include_once 'DatabaseConfig.php';
-include 'ItemDao.php';
-include 'OrderDao.php';
-include 'OrderLineDao.php';
-include 'UserDao.php';
+include 'DAOs/ItemDao.php';
+include 'DAOs/OrderDao.php';
+include 'DAOs/OrderLineDao.php';
+include 'DAOs/UserDao.php';
 
 define('TABLES', [
     'items'=> [
