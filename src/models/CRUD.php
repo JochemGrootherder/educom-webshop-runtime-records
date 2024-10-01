@@ -4,6 +4,7 @@ include 'DatabaseHandler.php';
 class CRUD
 {
     private $databaseHandler;
+    private $LastInsertId;
 
     public function __construct()
     {
@@ -29,9 +30,9 @@ class CRUD
         $this->ExecutePreparedStatement($sql, null);
     }
 
-    public function Get(string $key, $identifier)
+    public function Get(string $tableName, string $key, $identifier)
     {
-        $sql = $this->CreatePrepareGetStatement($key, $identifier);
+        $sql = $this->CreatePrepareGetStatement($tableName, $key, $identifier);
         $result = $this->ExecutePreparedStatement($sql, null);
         $row = $result->fetch_assoc();
         return $row;
@@ -112,7 +113,7 @@ class CRUD
         $statement->bind_param($bindIdentifiers, ...$data);
     }
 
-    private function ExecutePreparedStatement($sql, array $values)
+    private function ExecutePreparedStatement($sql, ?array $values)
     {
         $connection = $this->databaseHandler->GetConnection();
         $statement = $connection->prepare($sql);
@@ -123,6 +124,7 @@ class CRUD
         $statement->execute();
         $result = $statement->get_result();
         $statement->close();
+        $this->LastInsertId = $connection->insert_id;
         $connection->close();
         return $result;
     }
@@ -137,5 +139,10 @@ class CRUD
             array_push($rows, $row);
         }
         return $rows;
+    }
+
+    public function GetLastInsertId()
+    {
+        return $this->LastInsertId;
     }
 }

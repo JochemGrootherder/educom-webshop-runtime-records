@@ -4,6 +4,7 @@ include 'DAOs/ItemDao.php';
 include 'DAOs/OrderDao.php';
 include 'DAOs/OrderLineDao.php';
 include 'DAOs/UserDao.php';
+include_once 'CRUD.php';
 
 define('TABLES', [
     'items'=> [
@@ -51,13 +52,13 @@ define('TABLES', [
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
                 '' => 'FOREIGN KEY (order_id) REFERENCES orders(id)'
             ],
-    'item_artist' => [
+    'item_artists' => [
                 'item_id' => 'INT(6) UNSIGNED NOT NULL',
                 'artist_name' => 'VARCHAR(50) NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
                 '' => 'FOREIGN KEY (artist_name) REFERENCES artists(name)'
     ],
-    'item_genre' => [
+    'item_genres' => [
                 'item_id' => 'INT(6) UNSIGNED NOT NULL',
                 'genre_name' => 'VARCHAR(50) NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
@@ -234,6 +235,9 @@ class DatabaseCreator
             15,
             $dateAdded
         );
+        $itemDAO->Create($item1);
+        $itemDAO->Create($item2);
+        $itemDAO->Create($item3);
     }
 
     public function CreateMockOrders()
@@ -253,3 +257,76 @@ $db->CreateDatabase();
 
 $db->CreateMockUsers();
 $db->CreateMockItems();
+
+$crud = new CRUD();
+$createdUsers = $crud->GetAllFromTable("users");
+echo "CREATED USERS: (" . count($createdUsers) . ")" ;
+echo "<br>";
+foreach ($createdUsers as $createdUser)
+{
+    var_dump($createdUser);
+    echo "<br>";
+}
+
+$createdItems = $crud->GetAllFromTable("items");
+echo "CREATED ITEMS: (" . count($createdUsers) . ")" ;
+echo "<br>";
+foreach ($createdItems as $createdItem)
+{
+    var_dump($createdItem);
+    echo "<br>";
+}
+
+$createdOrders = $crud->GetAllFromTable("orders");
+echo "CREATED ORDERS: (" . count($createdOrders) . ")" ;
+echo "<br>";
+foreach ($createdOrders as $createdOrder)
+{
+    var_dump($createdOrder);
+    echo "<br>";
+}
+
+$createdOrderLines = $crud->GetAllFromTable("order_lines");
+echo "CREATED ORDERLINES: (" . count($createdOrderLines) . ")" ;
+echo "<br>";
+foreach ($createdOrderLines as $createdOrderLine)
+{
+    var_dump($createdOrderLine);
+    echo "<br>";
+}
+
+$createdGenres = $crud->GetAllFromTable("genres");
+echo "CREATED GENRES: (" . count($createdGenres) . ")" ;
+echo "<br>";
+foreach ($createdGenres as $createdGenre)
+{
+    var_dump($createdGenre);
+    echo "<br>";
+}
+
+$createdArtists = $crud->GetAllFromTable("artists");
+echo "CREATED ARTISTS: (" . count($createdArtists) . ")" ;
+echo "<br>";
+foreach ($createdArtists as $createdArtist)
+{
+    var_dump($createdArtist);
+    echo "<br>";
+}
+
+$createdItemArtistsLinks = $crud->GetAllFromTable("item_artists");
+echo "CREATED ARTISTS: (" . count($createdItemArtistsLinks) . ")" ;
+echo "<br>";
+foreach ($createdItemArtistsLinks as $createdItemArtistsLink)
+{
+    var_dump($createdItemArtistsLink);
+    echo
+     "<br>";
+}
+$createdItemGenresLinks = $crud->GetAllFromTable("item_genres");
+echo "CREATED ARTISTS: (" . count($createdItemGenresLinks) . ")" ;
+echo "<br>";
+foreach ($createdItemGenresLinks as $createdItemGenresLink)
+{
+    var_dump($createdItemGenresLink);
+    echo "<br>";
+}

@@ -16,7 +16,7 @@ class Item
         $this->year = $year;
         $this->price = $price;
         $this->type = $type;
-        $this->Stock = $stock;
+        $this->stock = $stock;
         $this->date_added = $date_added;
     }
     public $id;

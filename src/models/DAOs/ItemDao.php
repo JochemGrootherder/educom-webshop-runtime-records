@@ -4,6 +4,8 @@ include_once "DataTypes/Item.php";
 include_once "DataTypes/ItemTypes.php";
 include_once "ArtistDao.php";
 include_once "GenreDao.php";
+include_once "ItemArtistDao.php";
+include_once "ItemGenreDao.php";
 
 class ItemDao
 {
@@ -29,35 +31,38 @@ class ItemDao
         );
     }
 
-    public function Create(Item $Item)
+    public function Create(Item $item)
     {
         $itemArray = [
-            "id" => $Item->id,
-            "title" => $Item->title,
-            "description" => $Item->description,
-            "year" => $Item->year,
-            "price" => $Item->price,
-            "type" => $Item->type,
-            "stock" => $Item->stock,
-            "date_added" => $Item->date_added
+            "id" => $item->id,
+            "title" => $item->title,
+            "description" => $item->description,
+            "year" => $item->year,
+            "price" => $item->price,
+            "type" => $item->type,
+            "stock" => $item->stock,
+            "date_added" => $item->date_added
         ];
 
-        $result = $this->$CRUD->Create("items", $itemArray);
-        var_dump($result);
+        $this->CRUD->Create("items", $itemArray);
+        $insertId = $this->CRUD->GetLastInsertId();
         
-        if(!empty($Item->artists))
+        if(!empty($item->artists))
         {
             $artistDao = new ArtistDao();
-            $artistDao->CreateFromArray($Item->artists);
+            $artistDao->CreateFromArray($item->artists);
+
+            $itemArtist = new ItemArtistDao();
+            $itemArtist->LinkItemsAndArtists($insertId, $item->artists);
         }
         
-        if(!empty($Item->genres))
+        if(!empty($item->genres))
         {
             $genreDao = new GenreDao();
-            $genreDao->CreateFromArray($Item->genres);
+            $genreDao->CreateFromArray($item->genres);
+
+            $itemGenreDao = new ItemGenreDao();
+            $itemGenreDao->LinkItemAndGenres($insertId, $item->genres);
         }
     }
-    //function create item
-    //function link artist
-    //function link genre
 }
