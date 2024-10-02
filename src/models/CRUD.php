@@ -1,5 +1,5 @@
 <?php
-include 'DatabaseHandler.php';
+include_once __DIR__.'/DatabaseHandler.php';
 
 class CRUD
 {

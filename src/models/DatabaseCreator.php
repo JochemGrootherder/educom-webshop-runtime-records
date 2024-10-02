@@ -1,10 +1,10 @@
 <?php
-include_once 'DatabaseConfig.php';
-include 'DAOs/ItemDao.php';
-include 'DAOs/OrderDao.php';
-include 'DAOs/OrderLineDao.php';
-include 'DAOs/UserDao.php';
-include_once 'CRUD.php';
+include_once __DIR__.'/DatabaseConfig.php';
+include_once __DIR__.'/DAOs/ItemDao.php';
+include_once __DIR__.'/DAOs/OrderDao.php';
+include_once __DIR__.'/DAOs/OrderLineDao.php';
+include_once __DIR__.'/DAOs/UserDao.php';
+include_once __DIR__.'/CRUD.php';
 
 define('TABLES', [
     'items'=> [

@@ -1,6 +1,5 @@
 <?php
-include_once 'DataTypes/User.php';
-include_once 'CRUD.php';
+include __DIR__.'/../DataTypes/User.php';
 class UserDao
 {
     private $CRUD;

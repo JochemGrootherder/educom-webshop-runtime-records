@@ -1,5 +1,4 @@
 <?php
-include_once 'CRUD.php';
 class ItemGenreDao
 {
     private $CRUD;

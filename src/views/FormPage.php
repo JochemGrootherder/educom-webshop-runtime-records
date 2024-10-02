@@ -1,5 +1,5 @@
 <?php
-include 'Page.php';
+include __DIR__.'/Page.php';
 
 define ("GENDERS", array('Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other'));
 define("COMMUNICATION_PREFERENCES", array('Email' => 'Email', 'Phone' => 'Phone', 'Mail' => 'Mail'));

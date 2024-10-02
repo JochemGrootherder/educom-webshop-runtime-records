@@ -1,7 +1,7 @@
 <?php
 include 'DataExtractor.php';
 include 'InputValidator.php';
-include "models/UserDao.php";
+include_once "models/DAOs/UserDao.php";
 
 //include all files in pages directory
 foreach (glob("views/*.php") as $filename)

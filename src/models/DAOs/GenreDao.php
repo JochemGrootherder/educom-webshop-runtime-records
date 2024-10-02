@@ -1,6 +1,5 @@
 <?php
-include_once "CRUD.php";
-include_once "DataTypes/Genre.php";
+include_once __DIR__."/../DataTypes/Genre.php";
 class GenreDao
 {
     private $CRUD;

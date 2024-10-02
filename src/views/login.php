@@ -1,5 +1,5 @@
 <?php
-include_once 'FormPage.php';
+include_once __DIR__.'/FormPage.php';
 class Login extends FormPage
 {
     private $formResults;

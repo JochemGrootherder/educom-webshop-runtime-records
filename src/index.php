@@ -1,7 +1,7 @@
 <?php
 session_start();
-include "controllers/PageController.php";
-include "variables.php";
+include __DIR__."/controllers/PageController.php";
+include __DIR__."/variables.php";
 UpdateAllowedPages();
 
 $Controller = new PageController();

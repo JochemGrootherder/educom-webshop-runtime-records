@@ -1,11 +1,10 @@
 <?php
-include_once "CRUD.php";
-include_once "DataTypes/Item.php";
-include_once "DataTypes/ItemTypes.php";
-include_once "ArtistDao.php";
-include_once "GenreDao.php";
-include_once "ItemArtistDao.php";
-include_once "ItemGenreDao.php";
+include_once __DIR__."/../DataTypes/Item.php";
+include_once __DIR__."/../DataTypes/ItemTypes.php";
+include_once __DIR__."/ArtistDao.php";
+include_once __DIR__."/GenreDao.php";
+include_once __DIR__."/ItemArtistDao.php";
+include_once __DIR__."/ItemGenreDao.php";
 
 class ItemDao
 {
