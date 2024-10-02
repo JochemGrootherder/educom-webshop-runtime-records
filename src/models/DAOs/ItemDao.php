@@ -45,24 +45,30 @@ class ItemDao
         ];
 
         $this->CRUD->Create("items", $itemArray);
-        $insertId = $this->CRUD->GetLastInsertId();
+        $itemInsertId = $this->CRUD->GetLastInsertId();
         
         if(!empty($item->artists))
         {
             $artistDao = new ArtistDao();
-            $artistDao->CreateFromArray($item->artists);
-
             $itemArtist = new ItemArtistDao();
-            $itemArtist->LinkItemsAndArtists($insertId, $item->artists);
+            foreach($item->artists as $artist)
+            {
+                $artistDao->Create(new Artist(0, $artist));
+                $artistInsertId = $this->CRUD->GetLastInsertId();
+                $itemArtist->LinkItemsAndArtists($itemInsertId, $artistInsertId);
+            }
         }
         
         if(!empty($item->genres))
         {
             $genreDao = new GenreDao();
-            $genreDao->CreateFromArray($item->genres);
-
-            $itemGenreDao = new ItemGenreDao();
-            $itemGenreDao->LinkItemAndGenres($insertId, $item->genres);
+            $itemGenre = new ItemGenreDao();
+            foreach($item->genres as $genre)
+            {
+                $genreDao->Create(new Genre(0, $genre));
+                $genreInsertId = $this->CRUD->GetLastInsertId();
+                $itemGenre->LinkItemsAndGenres($itemInsertId, $genreInsertId);
+            }
         }
     }
 }

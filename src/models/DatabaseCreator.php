@@ -23,10 +23,12 @@ define('TABLES', [
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)'
         ],
     'artists'=> [
-                'name' => 'VARCHAR(50) NOT NULL PRIMARY KEY'
+                'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+                'name' => 'VARCHAR(50) NOT NULL UNIQUE'
             ],
     'genres'=> [
-                'name' => 'VARCHAR(50) NOT NULL PRIMARY KEY'
+                'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+                'name' => 'VARCHAR(50) NOT NULL UNIQUE'
             ],
     'users'=> [
                 'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -54,15 +56,15 @@ define('TABLES', [
             ],
     'item_artists' => [
                 'item_id' => 'INT(6) UNSIGNED NOT NULL',
-                'artist_name' => 'VARCHAR(50) NOT NULL',
+                'artist_id' => 'INT(6) UNSIGNED NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
-                '' => 'FOREIGN KEY (artist_name) REFERENCES artists(name)'
+                '' => 'FOREIGN KEY (artist_id) REFERENCES artists(id)',
     ],
     'item_genres' => [
                 'item_id' => 'INT(6) UNSIGNED NOT NULL',
-                'genre_name' => 'VARCHAR(50) NOT NULL',
+                'genre_id' => 'INT(6) UNSIGNED NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
-                '' => 'FOREIGN KEY (genre_name) REFERENCES genres(name)'
+                '' => 'FOREIGN KEY (genre_id) REFERENCES genres(id)'
     ]
 
 ]);
@@ -202,7 +204,7 @@ class DatabaseCreator
         $item1 = new Item(
             0,
             'A night at the opera',
-            ['Queen'],
+            ['Queen', 'Queen'],
             ['rock', 'classic rock'],
             "A band's hit album by the British rock band Queen.",
             1975,
@@ -314,7 +316,7 @@ foreach ($createdArtists as $createdArtist)
 }
 
 $createdItemArtistsLinks = $crud->GetAllFromTable("item_artists");
-echo "CREATED ARTISTS: (" . count($createdItemArtistsLinks) . ")" ;
+echo "CREATED ARTISTSLINKS: (" . count($createdItemArtistsLinks) . ")" ;
 echo "<br>";
 foreach ($createdItemArtistsLinks as $createdItemArtistsLink)
 {
@@ -323,7 +325,7 @@ foreach ($createdItemArtistsLinks as $createdItemArtistsLink)
      "<br>";
 }
 $createdItemGenresLinks = $crud->GetAllFromTable("item_genres");
-echo "CREATED ARTISTS: (" . count($createdItemGenresLinks) . ")" ;
+echo "CREATED GERNRESLINKS: (" . count($createdItemGenresLinks) . ")" ;
 echo "<br>";
 foreach ($createdItemGenresLinks as $createdItemGenresLink)
 {

@@ -2,12 +2,12 @@
 
 class Genre
 {
-    public function __construct(string $name, int $item_id)
+    public function __construct(int $id, string $name)
     {
+        $this->id = $id;
         $this->name = $name;
-        $this->item_id = $item_id;
     }
 
+    public $id = 0;
     public $name;
-    public $item_id;
 }

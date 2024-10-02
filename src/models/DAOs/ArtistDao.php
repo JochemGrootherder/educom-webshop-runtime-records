@@ -21,24 +21,13 @@ class ArtistDao
     public function Create(Artist $artist)
     {
         $artistArray = [
+            "id" => $artist->id,
             "name" => $artist->name
         ];
-
-        $this->CRUD->Create("artists", $artistArray);
-    }
-
-    public function CreateFromArray(array $artists)
-    {
-        foreach($artists as $artist)
+        $result = $this->CRUD->Get("artists", "name", $artistArray["name"]);
+        if(empty($result))
         {
-            $artistArray = [
-                "name" => $artist
-            ];
-            //create artist if it doesn't exist yet
-            if(empty($this->CRUD->Get("artists", "name", $artist)))
-            {
-                $this->CRUD->Create("artists", $artistArray);
-            }
+            $this->CRUD->Create("artists", $artistArray);
         }
     }
 }

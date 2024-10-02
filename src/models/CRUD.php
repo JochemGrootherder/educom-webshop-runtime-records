@@ -80,11 +80,23 @@ class CRUD
         $sql = "SELECT * FROM " . $tableName . " WHERE " . $key . " = '" . $keyValue . "'";
         return $sql;
     }
+
+    private function CreatePrepareGetStatementWhereAnd(string $tableName, $values)
+    {
+        $sql = "SELECT * FROM " . $tableName . " WHERE ";
+        foreach($values as $key => $value)
+        {
+            $sql.= $key . " = ? AND ";
+        } 
+        $sql = rtrim($sql, "AND ");
+        return $sql;
+    }
+
     private function BindToStatement(&$statement, array $values)
     {
         $data = [];
         $bindIdentifiers = "";
-
+        
         foreach($values as $key => $value)
         {
             array_push($data, $value);
@@ -133,6 +145,18 @@ class CRUD
     {
         $sql = "SELECT * FROM ". $tableName;
         $result = $this->ExecutePreparedStatement($sql, null);
+        $rows = [];
+        while($row = $result->fetch_assoc())
+        {
+            array_push($rows, $row);
+        }
+        return $rows;
+    }
+
+    public function GetFromTableWhereAnd(string $tableName, array $values)
+    {
+        $sql = $this->CreatePrepareGetStatementWhereAnd($tableName, $values);
+        $result = $this->ExecutePreparedStatement($sql, $values);
         $rows = [];
         while($row = $result->fetch_assoc())
         {

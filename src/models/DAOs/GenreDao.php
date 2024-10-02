@@ -21,23 +21,14 @@ class GenreDao
     public function Create(Genre $genre)
     {
         $genreArray = [
+            "id" => $genre->id,
             "name" => $genre->name
         ];
 
-        $this->CRUD->Create("genres", $genreArray);
-    }
-
-    public function CreateFromArray(array $genres)
-    {
-        foreach($genres as $genre)
+        $result = $this->CRUD->Get("genres", "name", $genreArray["name"]);
+        if(empty($result))
         {
-            $genreArray = [
-                "name" => $genre
-            ];
-            if(empty($this->CRUD->Get("genres", "name", $genre)))
-            {
-                $this->CRUD->Create("genres", $genreArray);
-            }
+            $this->CRUD->Create("genres", $genreArray);
         }
     }
 }

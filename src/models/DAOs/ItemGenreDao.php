@@ -8,12 +8,14 @@ class ItemGenreDao
         $this->CRUD = new CRUD();
     }
 
-    public function LinkItemAndGenres(int $itemId, array $genres)
+    public function LinkItemsAndGenres(int $itemId, int $genreId)
     {
-        foreach($genres as $genre)
-        {   
-            $itemGenreArray = ['item_id' => $itemId, 'genre_name' => $genre];
-            $this->CRUD->Create("item_genres", $itemGenreArray);
+        $itemGenresArray = ['item_id' => $itemId, 'genre_id' => $genreId];
+        //check whether combination of artist and item already exists in linking tabel
+        $result = $this->CRUD->GetFromTableWhereAnd("item_genres", $itemGenresArray);
+        if(empty($result))
+        {
+            $this->CRUD->Create("item_genres", $itemGenresArray);
         }
     }
 }
