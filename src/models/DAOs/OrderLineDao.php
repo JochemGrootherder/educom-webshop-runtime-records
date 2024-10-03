@@ -13,23 +13,22 @@ class OrderLineDao
     public function Create(OrderLine $OrderLine)
     {
         $OrderLineArray = [
-            "id" => $OrderLine->id,
-            "order_id" => $OrderLine->order_id,
-            "item_id" => $OrderLine->item_id,
-            "amount" => $OrderLine->amount
+            "id" => $OrderLine->getId(),
+            "order_id" => $OrderLine->getOrder_id(),
+            "item_id" => $OrderLine->getItem_id(),
+            "amount" => $OrderLine->getAmount()
         ];
 
         $result = $this->$CRUD->Create("orders_lines", $OrderLineArray);
-        var_dump($result);
     }
 
     protected function ConvertRowToDataType($row)
     {
-        return new OrderLine(
-            $row["id"],
-            $row["order_id"],
-            $row["item_id"],
-            $row["amount"]
-        );
+        $orderLine = new OrderLine();
+        $orderLine->setId($row["id"]);
+        $orderLine->setOrder_id($row["order_id"]);
+        $orderLine->setItem_id($row["item_id"]);
+        $orderLine->setAmount($row["amount"]);
+        return $orderLine;
     }
 }

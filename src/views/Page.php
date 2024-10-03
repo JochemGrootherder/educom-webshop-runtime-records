@@ -1,5 +1,5 @@
 <?php
-
+include_once __DIR__.'/../controllers/DataController.php';
 abstract class Page
 {
     public function showHeadSection()

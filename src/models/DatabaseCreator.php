@@ -160,36 +160,35 @@ class DatabaseCreator
     public function CreateMockUsers()
     {
         $userDAO = new UserDAO();
-        $adminUser = new User(
-            0,
-            'Admin',
-            'admin@example.com',
-            'Admin123!',
-            '1990-01-01',
-            'Male',
-            '',
-            True
-        );
-        $user1 = new User(
-            0,
-            'test',
-            'test@test.com',
-            'Test123!',
-            '1988-01-01',
-            'Male',
-            '',
-            False
-        );
-        $user2 = new User(
-            0,
-            'Kroket',
-            'Kroket@test.com',
-            'Kroket123!',
-            '1988-01-01',
-            'Male',
-            '',
-            False
-        );
+        $adminUser = new User();
+        $adminUser->setId(0);
+        $adminUser->setName('Admin');
+        $adminUser->setEmail('admin@example.com');
+        $adminUser->setPassword('Admin123!');
+        $adminUser->setDate_of_birth('1990-01-01');
+        $adminUser->setGender('Male');
+        $adminUser->setSearch_criteria('');
+        $adminUser->setAdmin(True);
+
+        $user1 = new User();
+        $user1->setId(0);
+        $user1->setName('test');
+        $user1->setEmail('test@test.com');
+        $user1->setPassword('Test123!');
+        $user1->setDate_of_birth('1988-01-01');
+        $user1->setGender('Male');
+        $user1->setSearch_criteria('');
+        $user1->setAdmin(False);
+
+        $user2 = new User();
+        $user2->setId(0);
+        $user2->setName('Kroket');
+        $user2->setEmail('Kroket@test.com');
+        $user2->setPassword('Kroket123!');
+        $user2->setDate_of_birth('1988-01-01');
+        $user2->setGender('Male');
+        $user2->setSearch_criteria('');
+        $user2->setAdmin(False);
 
         $userDAO->Create($adminUser);
         $userDAO->Create($user1);
@@ -201,45 +200,58 @@ class DatabaseCreator
         $itemDAO = new ItemDAO();
         $dateAdded = date_create();
         $dateAdded = date_format($dateAdded, "Y\m\d");
-        $item1 = new Item(
-            0,
-            'A night at the opera',
-            ['Queen', 'Queen'],
-            ['rock', 'classic rock'],
-            "A band's hit album by the British rock band Queen.",
-            1975,
-            12.99,
-            ItemTypes::CD,
-            50,
-            $dateAdded
-        );
-        $item2 = new Item(
-            0,
-            'Trench',
-            ['Twenty one pilots'],
-            ['rock', 'pop'],
-            "Great album",
-            2016,
-            24.99,
-            ItemTypes::VINYL,
-            60,
-            $dateAdded
-        );
-        $item3 = new Item(
-            0,
-            'Wish you were here',
-            ['Pink floyd'],
-            ['rock classics'],
-            "Great album",
-            1975,
-            18.99,
-            ItemTypes::VINYL,
-            15,
-            $dateAdded
-        );
+        $item1 = new Item();
+        $item1->setId(0);
+        $item1->setTitle('A night at the opera');
+        $item1->setArtists(['Queen']);
+        $item1->setGenres(['rock']);
+        $item1->setDescription("Queen's second studio album, released on 15 July 1975, was a significant breakthrough for the band. It marked the beginning of their post-punk and alternative rock career.");
+        $item1->setStock(50);
+        $item1->setYear(1975);
+        $item1->setPrice(12.99);
+        $item1->setType("CD");
+        $item1->setDate_added($dateAdded);
+        
+        $item2 = new Item();
+        $item2->setId(0);
+        $item2->setTitle('Trench');
+        $item2->setArtists(['Twenty one pilots']);
+        $item2->setGenres(['rock', 'pop']);
+        $item2->setDescription("Great album");
+        $item2->setStock(30);
+        $item2->setYear(2018);
+        $item2->setPrice(14.99);
+        $item2->setType("VINYL");
+        $item2->setDate_added($dateAdded);
+        
+        $item3 = new Item();
+        $item3->setId(0);
+        $item3->setTitle('Wish you were here');
+        $item3->setArtists(['Pink floyd']);
+        $item3->setGenres(['rock classics']);
+        $item3->setDescription('Fantastic album');
+        $item3->setStock(25);
+        $item3->setYear(1975);
+        $item3->setPrice(14.99);
+        $item3->setType("CD");
+        $item3->setDate_added($dateAdded);
+        
+        $item4 = new Item();
+        $item4->setId(0);
+        $item4->setTitle('Scaled and Icy');
+        $item4->setArtists(['Twenty one pilots']);
+        $item4->setGenres(['rock', 'pop']);
+        $item4->setDescription("Great album");
+        $item4->setStock(20);
+        $item4->setYear(2022);
+        $item4->setPrice(16.99);
+        $item4->setType("VINYL");
+        $item4->setDate_added($dateAdded);
+
         $itemDAO->Create($item1);
         $itemDAO->Create($item2);
         $itemDAO->Create($item3);
+        $itemDAO->Create($item4);
     }
 
     public function CreateMockOrders()

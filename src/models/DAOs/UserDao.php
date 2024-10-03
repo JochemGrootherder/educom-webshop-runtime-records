@@ -13,14 +13,14 @@ class UserDao
     public function Create(User $user)
     {
         $userArray = [
-            "id" => $user->id,
-            "name" => $user->name,
-            "email" => $user->email,
-            "password" => $user->password,
-            "date_of_birth" => $user->date_of_birth,
-            "gender" => $user->gender,
-            "search_criteria" => $user->search_criteria,
-            "admin" => $user->admin
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "email" => $user->getEmail(),
+            "password" => $user->getPassword(),
+            "date_of_birth" => $user->getDate_of_birth(),
+            "gender" => $user->getGender(),
+            "search_criteria" => $user->getSearch_criteria(),
+            "admin" => $user->getAdmin()
         ];
         $result = $this->CRUD->Create("users", $userArray);
     }
@@ -41,15 +41,14 @@ class UserDao
     }
     protected function ConvertRowToDataType($row)
     {
-        return new User(
-            $row["id"],
-            $row["name"],
-            $row["email"],
-            $row["password"],
-            $row["date_of_birth"],
-            $row["gender"],
-            $row["search_criteria"],
-            $row["admin"]
-        );
+        $user = new User();
+        $user->setId($row['id']);
+        $user->setName($row['name']);
+        $user->setEmail($row['email']);
+        $user->setPassword($row['password']);
+        $user->setDate_of_birth($row['date_of_birth']);
+        $user->setGender($row['gender']);
+        $user->setSearch_criteria($row['search_criteria']);
+        $user->setAdmin($row['admin']);
     }
 }

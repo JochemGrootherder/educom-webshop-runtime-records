@@ -12,22 +12,27 @@ class GenreDao
 
     private function ConvertRowToDataType($row)
     {
-        return new Genre(
-            $row["name"]
-        );
+        $genre = new Genre();
+        $genre->setId($row["id"]);
+        $genre->setName($row["name"]);
+        return $genre;
     }
 
     public function Create(Genre $genre)
     {
         $genreArray = [
-            "id" => $genre->id,
-            "name" => $genre->name
+            "id" => $genre->getId(),
+            "name" => $genre->getName()
         ];
 
         $result = $this->CRUD->Get("genres", "name", $genreArray["name"]);
         if(empty($result))
         {
             $this->CRUD->Create("genres", $genreArray);
+            //return the id it was inserted with, used for linking
+            return $this->CRUD->GetLastInsertId(); 
         }
+        //if the entry already exists return the id of the existing entry, used for linking
+        return $result["id"];
     }
 }

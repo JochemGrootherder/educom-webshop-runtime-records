@@ -13,21 +13,20 @@ class OrderDao
     public function Create(Order $Order)
     {
         $OrderArray = [
-            "id" => $Order->id,
-            "user_id" => $Order->user_id,
-            "date" => $Order->date
+            "id" => $Order->getId(),
+            "user_id" => $Order->getUser_id(),
+            "date" => $Order->getDate()
         ];
 
         $result = $this->$CRUD->Create("orders", $OrderArray);
-        var_dump($result);
     }
 
     protected function ConvertRowToDataType($row)
     {
-        return new Order(
-            $row["id"],
-            $row["user_id"],
-            $row["date"]
-        );
+        $order = new Order();
+        $order->setId($row["id"]);
+        $order->setUser_id($row["user_id"]);
+        $order->setDate($row["date"]);
+        return $order;
     }
 }

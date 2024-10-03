@@ -1,6 +1,5 @@
 <?php
 include_once __DIR__."/../DataTypes/Item.php";
-include_once __DIR__."/../DataTypes/ItemTypes.php";
 include_once __DIR__."/ArtistDao.php";
 include_once __DIR__."/GenreDao.php";
 include_once __DIR__."/ItemArtistDao.php";
@@ -16,56 +15,47 @@ class ItemDao
         $this->primaryColumn = "id";
     }
 
-    private function ConvertRowToDataType($row)
-    {
-        return new Item(
-            $row["id"],
-            $row["title"],
-            $row["description"],
-            $row["year"],
-            $row["price"],
-            $row["type"],
-            $row["stock"],
-            $row["date_added"]
-        );
-    }
-
     public function Create(Item $item)
     {
         $itemArray = [
-            "id" => $item->id,
-            "title" => $item->title,
-            "description" => $item->description,
-            "year" => $item->year,
-            "price" => $item->price,
-            "type" => $item->type,
-            "stock" => $item->stock,
-            "date_added" => $item->date_added
+            "id" => $item->getId(),
+            "title" => $item->getTitle(),
+            "description" => $item->getDescription(),
+            "year" => $item->getYear(),
+            "price" => $item->getPrice(),
+            "type" => $item->getType(),
+            "stock" => $item->getStock(),
+            "date_added" => $item->getDate_added()
         ];
 
         $this->CRUD->Create("items", $itemArray);
         $itemInsertId = $this->CRUD->GetLastInsertId();
         
-        if(!empty($item->artists))
+        if(!empty($item->getArtists()))
         {
             $artistDao = new ArtistDao();
             $itemArtist = new ItemArtistDao();
-            foreach($item->artists as $artist)
+            foreach($item->getArtists() as $artist)
             {
-                $artistDao->Create(new Artist(0, $artist));
-                $artistInsertId = $this->CRUD->GetLastInsertId();
+                $newArtist = new Artist();
+                $newArtist->setName($artist);
+                $artistInsertId = $artistDao->Create($newArtist);
+                echo "ArtistInsert ID: " . $artistInsertId;
                 $itemArtist->LinkItemsAndArtists($itemInsertId, $artistInsertId);
             }
         }
         
-        if(!empty($item->genres))
+        if(!empty($item->getGenres()))
         {
             $genreDao = new GenreDao();
             $itemGenre = new ItemGenreDao();
-            foreach($item->genres as $genre)
+            foreach($item->getGenres() as $genre)
             {
-                $genreDao->Create(new Genre(0, $genre));
-                $genreInsertId = $this->CRUD->GetLastInsertId();
+                $newGenre = new Genre();
+                $newGenre->setName($genre);
+                $genreInsertId = $genreDao->Create($newGenre);
+                //$this->CRUD->GetLastInsertId();
+                echo "genreInsert ID: " . $genreInsertId;
                 $itemGenre->LinkItemsAndGenres($itemInsertId, $genreInsertId);
             }
         }

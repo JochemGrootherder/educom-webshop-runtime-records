@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__.'/FormPage.php';
+include_once __DIR__.'/Page.php';
 
 class Home extends Page
 {
