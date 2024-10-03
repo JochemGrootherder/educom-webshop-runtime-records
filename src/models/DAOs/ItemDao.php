@@ -2,6 +2,7 @@
 include_once __DIR__."/../DataTypes/Item.php";
 include_once __DIR__."/ArtistDao.php";
 include_once __DIR__."/GenreDao.php";
+include_once __DIR__."/ImageDao.php";
 include_once __DIR__."/ItemArtistDao.php";
 include_once __DIR__."/ItemGenreDao.php";
 
@@ -30,34 +31,46 @@ class ItemDao
 
         $this->CRUD->Create("items", $itemArray);
         $itemInsertId = $this->CRUD->GetLastInsertId();
-        
-        if(!empty($item->getArtists()))
+
+        $artists = $item->getArtists();
+        if(!empty($artists))
         {
             $artistDao = new ArtistDao();
             $itemArtist = new ItemArtistDao();
-            foreach($item->getArtists() as $artist)
+            foreach($artists as $artist)
             {
                 $newArtist = new Artist();
                 $newArtist->setName($artist);
                 $artistInsertId = $artistDao->Create($newArtist);
-                echo "ArtistInsert ID: " . $artistInsertId;
                 $itemArtist->LinkItemsAndArtists($itemInsertId, $artistInsertId);
             }
         }
         
-        if(!empty($item->getGenres()))
+        $genres = $item->getGenres();
+        if(!empty($genres))
         {
             $genreDao = new GenreDao();
             $itemGenre = new ItemGenreDao();
-            foreach($item->getGenres() as $genre)
+            foreach($genres as $genre)
             {
                 $newGenre = new Genre();
                 $newGenre->setName($genre);
                 $genreInsertId = $genreDao->Create($newGenre);
-                //$this->CRUD->GetLastInsertId();
-                echo "genreInsert ID: " . $genreInsertId;
                 $itemGenre->LinkItemsAndGenres($itemInsertId, $genreInsertId);
             }
+        }
+
+        $images = $item->getImages();
+        if(!empty($images))
+        {  
+            $imageDao = new ImageDao();
+            foreach($images as $image)
+            {
+                $newImage = new Image();
+                $newImage->setImage($image);
+                $imageDao->Create($itemInsertId, $newImage);
+            }
+
         }
     }
 }

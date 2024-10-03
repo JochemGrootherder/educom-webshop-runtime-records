@@ -17,11 +17,6 @@ define('TABLES', [
                 'stock' => 'INT(6) UNSIGNED NOT NULL',
                 'date_added' => 'DATE NOT NULL'
             ],
-    'images' => [
-                'item_id' => 'INT(6) UNSIGNED NOT NULL',
-                'image' => 'BLOB NOT NULL',
-                '' => 'FOREIGN KEY (item_id) REFERENCES items(id)'
-        ],
     'artists'=> [
                 'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
                 'name' => 'VARCHAR(50) NOT NULL UNIQUE'
@@ -65,6 +60,12 @@ define('TABLES', [
                 'genre_id' => 'INT(6) UNSIGNED NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
                 '' => 'FOREIGN KEY (genre_id) REFERENCES genres(id)'
+    ],
+    'item_images' => [
+                'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+                'item_id' => 'INT(6) UNSIGNED NOT NULL',   
+                'image' => 'LONGBLOB NOT NULL',
+                '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
     ]
 
 ]);
@@ -200,6 +201,16 @@ class DatabaseCreator
         $itemDAO = new ItemDAO();
         $dateAdded = date_create();
         $dateAdded = date_format($dateAdded, "Y\m\d");
+        $images1 = [];
+        array_push($images1, file_get_contents(__DIR__.'/../images/a_night_at_the_opera_front.jpg'));
+        $images2 = [];
+        array_push($images2, file_get_contents(__DIR__.'/../images/trench_front.jpg'));
+        array_push($images2, file_get_contents(__DIR__.'/../images/trench_front2.jpg'));
+        $images3 = [];
+        array_push($images3, file_get_contents(__DIR__.'/../images/wish_you_were_here_front.jpg'));
+        $images4 = [];
+        array_push($images4, file_get_contents(__DIR__.'/../images/scaled_and_icy_front.jpg'));
+
         $item1 = new Item();
         $item1->setId(0);
         $item1->setTitle('A night at the opera');
@@ -211,6 +222,7 @@ class DatabaseCreator
         $item1->setPrice(12.99);
         $item1->setType("CD");
         $item1->setDate_added($dateAdded);
+        $item1->setImages($images1);
         
         $item2 = new Item();
         $item2->setId(0);
@@ -223,7 +235,8 @@ class DatabaseCreator
         $item2->setPrice(14.99);
         $item2->setType("VINYL");
         $item2->setDate_added($dateAdded);
-        
+        $item2->setImages($images2);
+
         $item3 = new Item();
         $item3->setId(0);
         $item3->setTitle('Wish you were here');
@@ -235,6 +248,7 @@ class DatabaseCreator
         $item3->setPrice(14.99);
         $item3->setType("CD");
         $item3->setDate_added($dateAdded);
+        $item3->setImages($images3);
         
         $item4 = new Item();
         $item4->setId(0);
@@ -247,6 +261,7 @@ class DatabaseCreator
         $item4->setPrice(16.99);
         $item4->setType("VINYL");
         $item4->setDate_added($dateAdded);
+        $item4->setImages($images4);
 
         $itemDAO->Create($item1);
         $itemDAO->Create($item2);
@@ -343,4 +358,15 @@ foreach ($createdItemGenresLinks as $createdItemGenresLink)
 {
     var_dump($createdItemGenresLink);
     echo "<br>";
+}
+
+$createdItemImages = $crud->GetAllFromTable("item_images");
+echo "CREATED ITEMIMAGES: (" . count($createdItemImages) . ")" ;
+echo "<br>";
+$images = [];
+foreach ($createdItemImages as $createdItemImage)
+{
+    echo "image ID: " . $createdItemImage['id'] . "<br>";
+    echo "item ID: " . $createdItemImage['item_id'] . "<br>";
+    echo '<img src="data:image/jpeg;base64,'.base64_encode($createdItemImage['image']).'"/>';
 }

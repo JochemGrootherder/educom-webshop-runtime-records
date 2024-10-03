@@ -12,6 +12,7 @@ class Item
     protected string $type;
     protected int $stock;
     protected string $date_added;
+    protected array $images;
 
     public function __construct()
     {
@@ -25,6 +26,7 @@ class Item
         $this->type = '';
         $this->stock = 0;
         $this->date_added = '';
+        $this->images = [];
     }
 
     public function ConvertRowToDataType($row)
@@ -275,6 +277,30 @@ class Item
 	public function setDate_added($date_added)
 	{
 		$this->date_added = $date_added;
+
+		return $this;
+	}
+
+	/**
+	 * Get the value of images
+	 *
+	 * @return  mixed
+	 */
+	public function getImages()
+	{
+		return $this->images;
+	}
+
+	/**
+	 * Set the value of images
+	 *
+	 * @param   mixed  $images  
+	 *
+	 * @return  self
+	 */
+	public function setImages($images)
+	{
+		$this->images = $images;
 
 		return $this;
 	}
