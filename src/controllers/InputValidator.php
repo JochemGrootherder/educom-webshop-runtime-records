@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__.'/../models/DAOs/UserDao.php';
 
 class InputValidator
 {
@@ -108,10 +109,13 @@ class InputValidator
                 case 'uniqueEmail':
                     if(!empty($formResults[$key]['value']))
                     {
-                        /*if(userExists($formResults[$key]['value']))
+                        $userDao = new UserDao();
+                        $email = $formResults[$key]['value'];
+                        $result = $userDao->GetUserByEmail($email);
+                        if($result != null)
                         {
                             $formResults[$key]['error'] = "This email already exists";
-                        }*/
+                        }
                     }
                     break;
                 case 'minLength':
@@ -167,10 +171,13 @@ class InputValidator
                 case 'emailExists':
                     if(!empty($formResults[$key]['value']))
                     {
-                        /*if(!userExists($formResults[$key]['value']))
+                        $userDao = new UserDao();
+                        $email = $formResults[$key]['value'];
+                        $result = $userDao->GetUserByEmail($email);
+                        if($result == null)
                         {
                             $formResults[$key]['error'] = "This user does not exist";
-                        }*/
+                        }
                     }
                     break;
                 case 'toLowerCase':
@@ -203,6 +210,12 @@ class InputValidator
         
     function validateLogin($email, $password)
     {
+        $userDao = new UserDao();
+        $user = $userDao->GetUserByEmail($email);
+        if($user != null)
+        {
+            return $user->GetPassword() == $password;
+        }
         /*$user = getUserFromFile($email);
         if($user != null)
         {
@@ -211,6 +224,5 @@ class InputValidator
                 return true;
             }
         }*/
-        return false;
     }
 }

@@ -14,7 +14,7 @@ define("REGISTERFORMDATA", [
 ]);
 
 define ("LOGINFORMDATA", [
-    'Email' => ['label' => 'Email', 'type' => 'text', 'placeholder' => 'Example@example.com', 'validations' => ["notEmpty", "loginValid", "toLowerCase", "emailExists"]],
+    'Email' => ['label' => 'Email', 'type' => 'text', 'placeholder' => 'Example@example.com', 'validations' => ["notEmpty", "emailExists", "loginValid", "toLowerCase"]],
     'Password' => ['label' => 'Password', 'type' => 'password', 'placeholder' => 'Password', 'validations' => []]
     ]);
 

@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__."/../DataTypes/Image.php";
+include_once __DIR__.'/../CRUD.php';
 class ImageDao
 {
     private $CRUD;

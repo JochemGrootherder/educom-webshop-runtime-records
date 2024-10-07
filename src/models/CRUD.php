@@ -34,8 +34,11 @@ class CRUD
     {
         $sql = $this->CreatePrepareGetStatement($tableName, $key, $identifier);
         $result = $this->ExecutePreparedStatement($sql, null);
-        $row = $result->fetch_assoc();
-        return $row;
+        if(!empty($result))
+        {
+            return $result;
+        }
+        return null;
     }
 
     

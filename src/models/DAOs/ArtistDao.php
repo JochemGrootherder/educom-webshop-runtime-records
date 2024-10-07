@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__."/../DataTypes/Artist.php";
+include_once __DIR__.'/../CRUD.php';
 class ArtistDao
 {
     private $CRUD;

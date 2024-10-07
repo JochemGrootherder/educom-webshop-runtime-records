@@ -5,6 +5,7 @@ include_once __DIR__."/GenreDao.php";
 include_once __DIR__."/ImageDao.php";
 include_once __DIR__."/ItemArtistDao.php";
 include_once __DIR__."/ItemGenreDao.php";
+include_once __DIR__.'/../CRUD.php';
 
 class ItemDao
 {

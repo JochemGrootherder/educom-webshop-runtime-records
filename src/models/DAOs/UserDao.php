@@ -1,5 +1,6 @@
 <?php
-include __DIR__.'/../DataTypes/User.php';
+include_once __DIR__.'/../DataTypes/User.php';
+include_once __DIR__.'/../CRUD.php';
 class UserDao
 {
     private $CRUD;
@@ -34,10 +35,13 @@ class UserDao
     }
     public function GetUserByEmail(string $email)
     {
-        $sql = $this->CreateGetStatement("email", $email);
-        $result = $this->ExecutePreparedStatement($sql, null);
+        $result = $this->CRUD->Get("users", "email", $email);
         $row = $result->fetch_assoc();
-        return $this->ConvertRowToDataType($row);
+        if(!empty($row))
+        {
+            return $this->ConvertRowToDataType($row);
+        }
+        return null;
     }
     protected function ConvertRowToDataType($row)
     {
@@ -50,5 +54,6 @@ class UserDao
         $user->setGender($row['gender']);
         $user->setSearch_criteria($row['search_criteria']);
         $user->setAdmin($row['admin']);
+        return $user;
     }
 }

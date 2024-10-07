@@ -63,17 +63,14 @@ Class PageController
                     $validatedInput = $this->inputValidator->validateInput(REGISTERFORMDATA);
                     if(!$this->containsErrors($validatedInput))
                     {
-                        include_once "models/DataTypes.php";
-                        $user = new User(
-                            0, 
-                            $this->dataExtractor->getPostVar('Name'),
-                            $this->dataExtractor->getPostVar('Email'),
-                            $this->dataExtractor->getPostVar('Password'),
-                            $this->dataExtractor->getPostVar('DateOfBirth'),
-                            $this->dataExtractor->getPostVar('Gender'),
-                            "", 
-                            false
-                        );
+                        include_once __DIR__."/../models/DataTypes/User.php";
+                        $user = new User();
+                        $user->SetName($this->dataExtractor->getPostVar('Name'));
+                        $user->SetEmail($this->dataExtractor->getPostVar('Email'));
+                        $user->SetPassword($this->dataExtractor->getPostVar('Password'));
+                        $user->SetDate_of_birth($this->dataExtractor->getPostVar('DateOfBirth'));
+                        $user->SetGender($this->dataExtractor->getPostVar('Gender'));
+
                         $userDao = new UserDao();
                         $userDao->Create($user);
                         $this->currentPage = new Login();
@@ -95,7 +92,12 @@ Class PageController
                     if(!$this->containsErrors($validatedInput))
                     {
                         $email = $this->dataExtractor->getPostVar('Email');
-                        $_SESSION['user'] = getUserFromFile($email);
+                        $userDao = new UserDao();
+                        $user = $userDao->GetUserByEmail($email);
+                        $_SESSION['user_name'] = $user->getName();
+                        $_SESSION['user_email'] = $user->getEmail();
+                        $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
+                        $_SESSION['user_admin'] = $user->GetAdmin();
                         updateAllowedPages();
                         $this->currentPage = new Home();
                     }

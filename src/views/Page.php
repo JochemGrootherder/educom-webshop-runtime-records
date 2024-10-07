@@ -1,5 +1,4 @@
 <?php
-include_once __DIR__.'/../controllers/DataController.php';
 abstract class Page
 {
     public function showHeadSection()
@@ -34,7 +33,7 @@ abstract class Page
                 <a href="index.php?page=ShoppingCart" class="menu-link">SHOPPING CART</a>
             </li>
             ';
-            if(empty($_SESSION['user'])){
+            if(empty($_SESSION['user_name'])){
                 echo'
             <li class="nav-menu-item">
                 <a href="index.php?page=Login" class="menu-link">LOGIN</a>

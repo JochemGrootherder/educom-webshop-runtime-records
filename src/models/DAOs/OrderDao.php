@@ -1,5 +1,6 @@
 <?php
 include_once 'DataTypes/Order.php';
+include_once __DIR__.'/../CRUD.php';
 class OrderDao
 {
     private $CRUD;
