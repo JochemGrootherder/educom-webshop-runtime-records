@@ -148,12 +148,7 @@ class CRUD
     {
         $sql = "SELECT * FROM ". $tableName;
         $result = $this->ExecutePreparedStatement($sql, null);
-        $rows = [];
-        while($row = $result->fetch_assoc())
-        {
-            array_push($rows, $row);
-        }
-        return $rows;
+        return $result;
     }
 
     public function GetFromTableWhereAnd(string $tableName, array $values)

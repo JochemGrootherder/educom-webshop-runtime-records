@@ -200,7 +200,7 @@ class DatabaseCreator
     {
         $itemDAO = new ItemDAO();
         $dateAdded = date_create();
-        $dateAdded = date_format($dateAdded, "Y\m\d");
+        $dateAdded = date_format($dateAdded, "Y-m-d");
         $images1 = [];
         array_push($images1, file_get_contents(__DIR__.'/../images/a_night_at_the_opera_front.jpg'));
         $images2 = [];
@@ -288,7 +288,12 @@ $db->CreateMockUsers();
 $db->CreateMockItems();
 
 $crud = new CRUD();
-$createdUsers = $crud->GetAllFromTable("users");
+$result = $crud->GetAllFromTable("users");
+$createdUsers = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdUsers, $row);
+}
 echo "CREATED USERS: (" . count($createdUsers) . ")" ;
 echo "<br>";
 foreach ($createdUsers as $createdUser)
@@ -297,7 +302,12 @@ foreach ($createdUsers as $createdUser)
     echo "<br>";
 }
 
-$createdItems = $crud->GetAllFromTable("items");
+$result = $crud->GetAllFromTable("items");
+$createdItems = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdItems, $row);
+}
 echo "CREATED ITEMS: (" . count($createdUsers) . ")" ;
 echo "<br>";
 foreach ($createdItems as $createdItem)
@@ -306,7 +316,12 @@ foreach ($createdItems as $createdItem)
     echo "<br>";
 }
 
-$createdOrders = $crud->GetAllFromTable("orders");
+$result = $crud->GetAllFromTable("orders");
+$createdOrders = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdOrders, $row);
+}
 echo "CREATED ORDERS: (" . count($createdOrders) . ")" ;
 echo "<br>";
 foreach ($createdOrders as $createdOrder)
@@ -315,7 +330,12 @@ foreach ($createdOrders as $createdOrder)
     echo "<br>";
 }
 
-$createdOrderLines = $crud->GetAllFromTable("order_lines");
+$result = $crud->GetAllFromTable("order_lines");
+$createdOrderLines = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdOrderLines, $row);
+}
 echo "CREATED ORDERLINES: (" . count($createdOrderLines) . ")" ;
 echo "<br>";
 foreach ($createdOrderLines as $createdOrderLine)
@@ -324,7 +344,12 @@ foreach ($createdOrderLines as $createdOrderLine)
     echo "<br>";
 }
 
-$createdGenres = $crud->GetAllFromTable("genres");
+$result = $crud->GetAllFromTable("genres");
+$createdGenres = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdGenres, $row);
+}
 echo "CREATED GENRES: (" . count($createdGenres) . ")" ;
 echo "<br>";
 foreach ($createdGenres as $createdGenre)
@@ -333,7 +358,12 @@ foreach ($createdGenres as $createdGenre)
     echo "<br>";
 }
 
-$createdArtists = $crud->GetAllFromTable("artists");
+$result = $crud->GetAllFromTable("artists");
+$createdArtists = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdArtists, $row);
+}
 echo "CREATED ARTISTS: (" . count($createdArtists) . ")" ;
 echo "<br>";
 foreach ($createdArtists as $createdArtist)
@@ -342,7 +372,12 @@ foreach ($createdArtists as $createdArtist)
     echo "<br>";
 }
 
-$createdItemArtistsLinks = $crud->GetAllFromTable("item_artists");
+$result = $crud->GetAllFromTable("item_artists");
+$createdItemArtistsLinks = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdItemArtistsLinks, $row);
+}
 echo "CREATED ARTISTSLINKS: (" . count($createdItemArtistsLinks) . ")" ;
 echo "<br>";
 foreach ($createdItemArtistsLinks as $createdItemArtistsLink)
@@ -351,7 +386,12 @@ foreach ($createdItemArtistsLinks as $createdItemArtistsLink)
     echo
      "<br>";
 }
-$createdItemGenresLinks = $crud->GetAllFromTable("item_genres");
+$result = $crud->GetAllFromTable("item_genres");
+$createdItemGenresLinks = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdItemGenresLinks, $row);
+}
 echo "CREATED GERNRESLINKS: (" . count($createdItemGenresLinks) . ")" ;
 echo "<br>";
 foreach ($createdItemGenresLinks as $createdItemGenresLink)
@@ -360,7 +400,12 @@ foreach ($createdItemGenresLinks as $createdItemGenresLink)
     echo "<br>";
 }
 
-$createdItemImages = $crud->GetAllFromTable("item_images");
+$result = $crud->GetAllFromTable("item_images");
+$createdItemImages = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdItemImages, $row);
+}
 echo "CREATED ITEMIMAGES: (" . count($createdItemImages) . ")" ;
 echo "<br>";
 $images = [];

@@ -17,6 +17,33 @@ class ItemDao
         $this->primaryColumn = "id";
     }
 
+    private function ConvertRowToDataType($row)
+    {
+        $item = new Item();
+        $item->setId($row['id']);
+        $item->setTitle($row['title']);
+        $item->setDescription($row['description']);
+        $item->setYear($row['year']);
+        $item->setPrice($row['price']);
+        $item->setType($row['type']);
+        $item->setStock($row['stock']);
+        $item->setDate_added($row['date_added']);
+
+        $itemArtistDao = new ItemArtistDao();
+        $artists = $itemArtistDao->GetArtistsByItemId($item->GetId());
+        $item->setArtists($artists);
+
+        $itemGenreDao = new ItemGenreDao();
+        $genres = $itemGenreDao->GetGenresByItemId($item->GetId());
+        $item->setGenres($genres);
+
+        $imageDao = new ImageDao();
+        $images = $imageDao->GetImagesByItemId($item->GetId());
+        $item->setImages($images);
+        
+        return $item;
+    }
+
     public function Create(Item $item)
     {
         $itemArray = [
@@ -74,4 +101,32 @@ class ItemDao
 
         }
     }
+    public function GetAllItems()
+    {
+        $result = $this->CRUD->GetAllFromTable('items');
+        if($result != null)
+        {
+            $items = [];
+            while($row = $result->fetch_assoc())
+            {
+                $item = $this->ConvertRowToDataType($row);
+                array_push($items, $item);
+            }
+            return $items;
+        }
+        return null;
+    }
+
+    public function GetItemById(int $id)
+    {
+        $result = $this->CRUD->Get("items", "id", $id);
+        if($result != null)
+        {
+            $row = $result->fetch_alloc();
+            $item = $this->ConvertRowToDataType($row);
+            return $item;
+        }
+        return null;
+    }
+
 }

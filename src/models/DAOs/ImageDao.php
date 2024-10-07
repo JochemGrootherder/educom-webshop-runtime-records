@@ -30,4 +30,16 @@ class ImageDao
         $this->CRUD->Create("item_images", $imageArray);
         return $this->CRUD->GetLastInsertId();
     }
+
+    public function GetImagesByItemId($itemId)
+    {
+        $images = [];
+        $result = $this->CRUD->Get("item_images", "item_id", $itemId);
+        while($row = $result->fetch_assoc())
+        {
+            $image = $this->ConvertRowToDataType($row);
+            array_push($images, $image);
+        }
+        return $images;
+    }
 }

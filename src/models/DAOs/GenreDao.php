@@ -27,13 +27,29 @@ class GenreDao
         ];
 
         $result = $this->CRUD->Get("genres", "name", $genreArray["name"]);
-        if(empty($result))
+        if($result != null)
         {
-            $this->CRUD->Create("genres", $genreArray);
-            //return the id it was inserted with, used for linking
-            return $this->CRUD->GetLastInsertId(); 
+            $row = $result->fetch_assoc();
+            if(empty($row))
+            {
+                $this->CRUD->Create("genres", $genreArray);
+                //return the id it was inserted with, used for linking
+                return $this->CRUD->GetLastInsertId(); 
+            }
+            //if the entry already exists return the id of the existing entry, used for linking
+            return $row["id"];
         }
-        //if the entry already exists return the id of the existing entry, used for linking
-        return $result["id"];
+        return null;
+    }
+
+    public function GetGenreById(int $id)
+    {
+        $result = $this->CRUD->Get("genres", "id", $id);
+        if($result != null)
+        {
+            $row = $result->fetch_assoc();
+            $genre = $this->ConvertRowToDataType($row);
+            return $genre;
+        }
     }
 }

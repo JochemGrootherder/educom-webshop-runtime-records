@@ -27,13 +27,29 @@ class ArtistDao
         ];
 
         $result = $this->CRUD->Get("artists", "name", $artistArray["name"]);
-        if(empty($result))
+        if ($result != null)
         {
-            $this->CRUD->Create("artists", $artistArray);
-            //return the id it was inserted with, used for linking
-            return $this->CRUD->GetLastInsertId();
+            $row = $result->fetch_assoc();
+            if(empty($row))
+            {
+                $this->CRUD->Create("artists", $artistArray);
+                //return the id it was inserted with, used for linking
+                return $this->CRUD->GetLastInsertId();
+            }
+            //if the entry already exists return the id of the existing entry, used for linking
+            return $row["id"];
         }
-        //if the entry already exists return the id of the existing entry, used for linking
-        return $result["id"];
+        return null;
+    }
+
+    public function GetArtistById(int $id)
+    {
+        $result = $this->CRUD->Get("artists", "id", $id);
+        if($result != null)
+        {
+            $row = $result->fetch_assoc();
+            $artist = $this->ConvertRowToDataType($row);
+            return $artist;
+        }
     }
 }
