@@ -32,8 +32,9 @@ class CRUD
 
     public function Get(string $tableName, string $key, $identifier)
     {
-        $sql = $this->CreatePrepareGetStatement($tableName, $key, $identifier);
-        $result = $this->ExecutePreparedStatement($sql, null);
+        $sql = $this->CreatePrepareGetStatement($tableName, $key);
+        $values = [$identifier];
+        $result = $this->ExecutePreparedStatement($sql, $values);
         if(!empty($result))
         {
             return $result;
@@ -78,9 +79,9 @@ class CRUD
         return $sql;
     }
 
-    private function CreatePrepareGetStatement(string $tableName, string $key, $keyValue)
+    private function CreatePrepareGetStatement(string $tableName, string $key)
     {
-        $sql = "SELECT * FROM " . $tableName . " WHERE " . $key . " = '" . $keyValue . "'";
+        $sql = "SELECT * FROM " . $tableName . " WHERE " . $key . " = ?";
         return $sql;
     }
 
