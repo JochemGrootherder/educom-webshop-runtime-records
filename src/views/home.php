@@ -16,6 +16,14 @@ class Home extends Page
         {
             echo "
             <a href='?page=ItemDetails/".$item['id']."' class='itemContainer'>
+                <div class='price-container'>
+                    <div class='price-upper'>
+                        " . $item['priceUpper'] . "
+                    </div>
+                        ." . $item['priceLower'] . "
+                    <div class='price-lower'>
+                    </div>
+                </div>
                 <div class='itemImageContainer'>
                     <img class= 'itemImage' src='data:image/jpeg;base64,".base64_encode($item['image'])."'/>
                 </div>
@@ -51,9 +59,20 @@ class Home extends Page
             }
             $artistText = implode(", ", $artistNames);
 
-            $title = $item->GetTitle();      
+            $title = $item->GetTitle();
             
-            array_push($containerItems, ['id'=> $id, 'image' => $image, 'title' => $title, 'artists' => $artistText]);
+            $price = $item->GetPrice();
+            $prices = explode(".", $price, 2);
+            $priceUpper = $prices[0];
+            $priceLower = $prices[1];
+          
+            array_push($containerItems, [
+                'id'=> $id, 
+                'image' => $image,
+                'title' => $title, 
+                'artists' => $artistText, 
+                'priceUpper' => $priceUpper,
+                'priceLower' => $priceLower]);
         }
         return $containerItems;
     }
