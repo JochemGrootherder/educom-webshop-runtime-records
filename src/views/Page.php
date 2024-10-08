@@ -9,7 +9,8 @@ abstract class Page
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>My Webshop</title>
         
-            <link rel="stylesheet" href="./CSS/stylesheet.css">
+            <link rel="stylesheet" href="./css/style.css">
+            <link rel="stylesheet" href="./css/homepage.css">
         </head>';
     }
     
@@ -61,6 +62,7 @@ abstract class Page
     function showBodySection()
     {
         echo '<body>';
+        $this->showHeadSection();
         $this->showHeader();
         $this->showBody();
         $this->showFooter();

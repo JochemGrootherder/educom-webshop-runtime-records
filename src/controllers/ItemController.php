@@ -14,4 +14,11 @@ class ItemController
         $items = $itemDao->GetAllItems();
         return $items;
     }
+
+    public function GetItemById($itemId)
+    {
+        $itemDao = new ItemDao();
+        $item = $itemDao->GetItemById($itemId);
+        return $item;
+    }
 }

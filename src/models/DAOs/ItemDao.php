@@ -122,7 +122,7 @@ class ItemDao
         $result = $this->CRUD->Get("items", "id", $id);
         if($result != null)
         {
-            $row = $result->fetch_alloc();
+            $row = $result->fetch_assoc();
             $item = $this->ConvertRowToDataType($row);
             return $item;
         }

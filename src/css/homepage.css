@@ -1,0 +1,34 @@
+.itemImage
+{
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.itemImageContainer
+{
+    max-width: 100%;
+    height: 25%;
+
+}
+
+.itemContainer
+{
+    vertical-align: top;
+    display: inline-block;
+    width: 25%;
+}
+
+.subtext
+{
+    display: block;
+    text-align: left;
+}
+
+.itemCatalog
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}

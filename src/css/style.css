@@ -1,0 +1,147 @@
+:root
+{
+    /* fonts */
+    --regular-font: "Arial, Helvetica, sans-serif";
+    
+    --font-size-extra-large: 32px;
+    --font-size-large:24px;
+    --font-size-medium:18px;
+    --font-size-small:12px;
+
+    /* sizes */
+    --window-width: 1000px;
+
+    --content-block-size: 200px;
+
+    --default-margin: 20px;
+    --default-icon-size: 40px;
+
+    /* colors */
+    --black: #000;
+    --white: #fff;
+}
+
+html, body
+{
+    width: var(--window-width);
+    margin: auto;
+    text-align: left;
+    background-color: var(--white);
+}
+
+header
+{
+    min-height: 48px;
+    display:flex;
+    justify-content: center;
+}
+
+footer
+{
+    background-color: var(--black);
+    color:var(--white);
+    font-size: 10px;
+    text-align: right;
+}
+
+p
+{
+    color: darkslategray;
+    font-size: 12px;
+}
+
+.nav-menu
+{
+    list-style-type: none;
+    overflow: hidden;
+}
+
+.nav-menu-item
+{
+    float: left;
+}
+
+.nav-menu-item .menu-link
+{
+    display: block;
+    padding:16px;
+    text-align:center;
+    text-decoration: none;
+    background-color: lightblue;
+    color: var(--white);
+}
+
+.menu-link:hover
+{ 
+    background-color: rgba(173, 216, 230, 0.541);
+}
+
+
+.dropdown-menu-trigger {
+    background-color: lightblue;
+    margin-top: 16px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    z-index: 5000 !important;
+}
+
+.dropdown-menu-trigger:hover .dropdown {
+    top: 0px;
+}
+
+.dropdown-menu
+{
+    margin: 0px;
+    padding: 0px;
+    left:-100px;
+    list-style-type: none;
+}
+
+.dropdown {
+    position: absolute;
+    top: -400px;
+    height: auto;
+    margin-top: 66px;
+    width: auto;
+}
+
+.dropdown-item .menu-link
+{
+    color: white;
+    text-decoration: none;
+    padding: 16px;
+    background-color: lightblue;
+}
+.dropdown-item:hover .menu-link:hover
+{ 
+    background-color: rgba(173, 216, 230, 0.541);
+}
+
+.dropdown-item{
+    padding: 16px;
+}
+
+.form-group
+{
+    display: flex;
+    margin: 2px;
+}
+
+.control-label
+{
+    vertical-align: top;
+    width: 110px;
+}
+
+.form-control
+{
+    width: 300px;
+}
+
+.error
+{
+    color: red;
+    max-width: 340px;
+}

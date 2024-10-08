@@ -49,13 +49,15 @@ Class PageController
 
     private function HandlePageRequest($page)
     {
-        if(!in_array($page, $_SESSION['allowedPages']))
+        $pageRequest = explode('/', $page, 2);
+        $pageName = $pageRequest[0];
+        if(!in_array($pageName, $_SESSION['allowedPages']))
         {
             echo '<script>alert("Invalid page requested, redirecting to homepage");</script>';
             $this->currentPage = new Home();
             return false;
         }
-        switch($page)
+        switch($pageName)
         {
             case 'Register':
                 if($this->dataExtractor->getPostVar('formDataName') === 'Register')
@@ -116,11 +118,14 @@ Class PageController
                     updateAllowedPages();
                     $this->currentPage = new Home();
                     break;
+                case 'ItemDetails':
+                    $this->currentPage = ItemDetails::WithItemId($pageRequest[1]);
+                    break;
             default:
-                $this->currentPage = new $page();
+                $this->currentPage = new $pageName();
                 break;
         }
-        return $page;
+        return $pageName;
     }
     private function containsErrors($formResults)
     {

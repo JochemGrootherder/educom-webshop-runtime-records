@@ -46,7 +46,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getId()
+	public function GetId()
 	{
 		return $this->id;
 	}
@@ -58,7 +58,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setId($id)
+	public function SetId($id)
 	{
 		$this->id = $id;
 
@@ -70,7 +70,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getTitle()
+	public function GetTitle()
 	{
 		return $this->title;
 	}
@@ -82,7 +82,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setTitle($title)
+	public function SetTitle($title)
 	{
 		$this->title = $title;
 
@@ -94,7 +94,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getArtists()
+	public function GetArtists()
 	{
 		return $this->artists;
 	}
@@ -106,7 +106,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setArtists($artists)
+	public function SetArtists($artists)
 	{
 		$this->artists = $artists;
 
@@ -118,7 +118,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getGenres()
+	public function GetGenres()
 	{
 		return $this->genres;
 	}
@@ -130,7 +130,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setGenres($genres)
+	public function SetGenres($genres)
 	{
 		$this->genres = $genres;
 
@@ -142,7 +142,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getDescription()
+	public function GetDescription()
 	{
 		return $this->description;
 	}
@@ -154,7 +154,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setDescription($description)
+	public function SetDescription($description)
 	{
 		$this->description = $description;
 
@@ -166,7 +166,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getYear()
+	public function GetYear()
 	{
 		return $this->year;
 	}
@@ -178,7 +178,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setYear($year)
+	public function SetYear($year)
 	{
 		$this->year = $year;
 
@@ -190,7 +190,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getPrice()
+	public function GetPrice()
 	{
 		return $this->price;
 	}
@@ -202,7 +202,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setPrice($price)
+	public function SetPrice($price)
 	{
 		$this->price = $price;
 
@@ -214,7 +214,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getType()
+	public function GetType()
 	{
 		return $this->type;
 	}
@@ -226,7 +226,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setType($type)
+	public function SetType($type)
 	{
 		$this->type = $type;
 
@@ -238,7 +238,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getStock()
+	public function GetStock()
 	{
 		return $this->stock;
 	}
@@ -250,7 +250,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setStock($stock)
+	public function SetStock($stock)
 	{
 		$this->stock = $stock;
 
@@ -262,7 +262,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getDate_added()
+	public function GetDate_added()
 	{
 		return $this->date_added;
 	}
@@ -274,7 +274,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setDate_added($date_added)
+	public function SetDate_added($date_added)
 	{
 		$this->date_added = $date_added;
 
@@ -286,7 +286,7 @@ class Item
 	 *
 	 * @return  mixed
 	 */
-	public function getImages()
+	public function GetImages()
 	{
 		return $this->images;
 	}
@@ -298,7 +298,7 @@ class Item
 	 *
 	 * @return  self
 	 */
-	public function setImages($images)
+	public function SetImages($images)
 	{
 		$this->images = $images;
 

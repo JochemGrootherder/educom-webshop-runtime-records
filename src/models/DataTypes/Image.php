@@ -15,7 +15,7 @@ class Image
 	 *
 	 * @return  mixed
 	 */
-	public function getId()
+	public function GetId()
 	{
 		return $this->id;
 	}
@@ -27,7 +27,7 @@ class Image
 	 *
 	 * @return  self
 	 */
-	public function setId($id)
+	public function SetId($id)
 	{
 		$this->id = $id;
 
@@ -40,7 +40,7 @@ class Image
 	 *
 	 * @return  mixed
 	 */
-	public function getImage()
+	public function GetImage()
 	{
 		return $this->image;
 	}
@@ -52,7 +52,7 @@ class Image
 	 *
 	 * @return  self
 	 */
-	public function setImage($image)
+	public function SetImage($image)
 	{
 		$this->image = $image;
 
