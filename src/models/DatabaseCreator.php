@@ -54,12 +54,14 @@ define('TABLES', [
                 'artist_id' => 'INT(6) UNSIGNED NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
                 '' => 'FOREIGN KEY (artist_id) REFERENCES artists(id)',
+                '' => 'CONSTRAINT PK_item_id_artist_id PRIMARY KEY (item_id, artist_id)'
     ],
     'item_genres' => [
                 'item_id' => 'INT(6) UNSIGNED NOT NULL',
                 'genre_id' => 'INT(6) UNSIGNED NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
-                '' => 'FOREIGN KEY (genre_id) REFERENCES genres(id)'
+                '' => 'FOREIGN KEY (genre_id) REFERENCES genres(id)',
+                '' => 'CONSTRAINT PK_item_id_genre_id PRIMARY KEY (item_id, genre_id)'
     ],
     'item_images' => [
                 'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -191,9 +193,20 @@ class DatabaseCreator
         $user2->setSearch_criteria('');
         $user2->setAdmin(False);
 
+        $user3 = new User();
+        $user3->setId(0);
+        $user3->setName('Kroket');
+        $user3->setEmail('broodjekroket1@gmail.com');
+        $user3->setPassword('Kroket123!');
+        $user3->setDate_of_birth('1988-01-01');
+        $user3->setGender('Male');
+        $user3->setSearch_criteria('');
+        $user3->setAdmin(True);
+
         $userDAO->Create($adminUser);
         $userDAO->Create($user1);
         $userDAO->Create($user2);
+        $userDAO->Create($user3);
     }
 
     public function CreateMockItems()
