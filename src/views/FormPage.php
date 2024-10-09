@@ -23,8 +23,9 @@ define("ADDITEMFORMDATA", [
     'Title'  => ['label' => 'Title', 'type' => 'text', 'placeholder' => 'Title', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
     'Description'  => ['label' => 'Description', 'type' => 'text', 'placeholder' => 'Description', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
     'Artists'  => ['label' => 'Artists', 'type' => 'text', 'placeholder' => 'Artists, seperate by |||', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
-    'AddArtist' => ['id'=> 'AddArtist','label' => 'AddArtist', 'type' => 'button', 'value' => 'Add Artist', 'onclick' => 'AddArtist()', 'validations'=> []],
+    'AddArtist' => ['label' => '', 'type' => 'button', 'value' => 'Add artist', 'onclick' => 'AddArtist', 'validations'=> []],
     'Genres'  => ['label' => 'Genres', 'type' => 'text', 'placeholder' => 'Genres, seperate by |||', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
+    'AddGenre' => ['label' => '', 'type' => 'button', 'value' => 'Add genre', 'onclick' => 'AddGenre', 'validations'=> []],
     'Price'  => ['label' => 'Price', 'type' => 'number', 'placeholder' => '0.0', 'step'=> '0.01', 'validations' => ["notEmpty", "twoDecimals", "min:0"]],
     'Year' => ['label' => 'Year', 'type' => 'number', 'placeholder' => '0000', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
     'Type' => ['label' => 'Type', 'type' =>'select', 'options' => ITEM_TYPES, 'validations'=> ['notEmpty', 'validOption']],
@@ -100,8 +101,7 @@ abstract class FormPage extends Page
             case 'button':
                 echo '<script type="text/javascript" src="'.__DIR__.'/FormScript.php"></script> ';
                 echo '
-                <button class="add-button"
-                onclick="'.$metaData['onclick'].'">
+                <button class="add-button" action="index.php?" name="pressedButton" value="'.$metaData['onclick'].'">'. $metaData['value'].'
                 </button>'
                 ;
                 break;
@@ -123,7 +123,7 @@ abstract class FormPage extends Page
     public function openForm($formDataName, $target, $legend)
     {
         echo '
-        <form method="POST" action="index.php?" id='.$formDataName.'>
+        <form method="POST" id='.$formDataName.'>
             <fieldset>
                 <input type="hidden" name="page" value="'.$target.'">
                 <input type="hidden" name="formDataName" value="'.$formDataName.'">
@@ -135,7 +135,7 @@ abstract class FormPage extends Page
         echo'
                 <div class="form-group">
                     <label class="control-label" for="send"></label>
-                    <button name="send" class="btn btn-primary">'.$buttonText.'</button>
+                    <button name="pressedButton" value="postForm" action="index.php?" class="btn btn-primary">'.$buttonText.'</button>
                 </div>
             </fieldset>
         </form>';
