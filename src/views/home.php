@@ -11,34 +11,11 @@ class Home extends Page
     }
     function showBody()
     {
-        echo "<div class='itemCatalog'>";
-        foreach($this->GetContainerItems() as $item)
+        if(!empty($_SESSION['user_admin']) && $_SESSION['user_admin']==true)
         {
-            echo "
-            <a href='?page=ItemDetails/".$item['id']."' class='itemContainer'>
-                <div class='price-container'>
-                    <div class='price-upper'>
-                        " . $item['priceUpper'] . "
-                    </div>
-                        ." . $item['priceLower'] . "
-                    <div class='price-lower'>
-                    </div>
-                </div>
-                <div class='itemImageContainer'>
-                    <img class= 'itemImage' src='data:image/jpeg;base64,".base64_encode($item['image'])."'/>
-                </div>
-                <div class='subtext'>
-                    <div class='itemTitle'>"
-                        . $item['title'] . "
-                    </div>
-                    <div class='itemArtists'> "
-                        . $item['artists'] . " 
-                    </div>
-                </div>
-            </a>
-            ";   
+            $this->ShowAdminPanel();
         }
-        echo "</div>";  
+        $this->ShowItemCatalog();
     }
 
     private function GetContainerItems()
@@ -75,5 +52,42 @@ class Home extends Page
                 'priceLower' => $priceLower]);
         }
         return $containerItems;
+    }
+
+    private function ShowItemCatalog()
+    {
+        echo "<div class='itemCatalog'>";
+        foreach($this->GetContainerItems() as $item)
+        {
+            echo "
+            <a href='?page=ItemDetails/".$item['id']."' class='itemContainer'>
+                <div class='price-container'>
+                    <div class='price-upper'>
+                        " . $item['priceUpper'] . "
+                    </div>
+                        ." . $item['priceLower'] . "
+                    <div class='price-lower'>
+                    </div>
+                </div>
+                <div class='itemImageContainer'>
+                    <img class= 'itemImage' src='data:image/jpeg;base64,".base64_encode($item['image'])."'/>
+                </div>
+                <div class='subtext'>
+                    <div class='itemTitle'>"
+                        . $item['title'] . "
+                    </div>
+                    <div class='itemArtists'> "
+                        . $item['artists'] . " 
+                    </div>
+                </div>
+            </a>
+            ";   
+        }
+        echo "</div>";  
+    }
+
+    private function ShowAdminPanel()
+    {
+        echo '<a href="index.php?page=AddItem" class="menu-link">ADD ITEM</a>';
     }
 }

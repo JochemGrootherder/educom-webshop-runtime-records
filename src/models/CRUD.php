@@ -103,28 +103,37 @@ class CRUD
         
         foreach($values as $key => $value)
         {
-            array_push($data, $value);
+            $data[] = $value;
             $type = gettype($value);
-            switch($type)
-            {
-                case "integer":
-                case "boolean":
-                    $bindIdentifiers .= "i";
-                    break;
+
+            $bindIdentifier = 'b';
+            if($type == 'boolean' || $type == 'integer') $bindIdentifier = 'i';
+            if($type == 'string' ) $bindIdentifier = 's';
+            if($type == 'double' || $type == 'float') $bindIdentifier = 'd';
+            $bindIdentifiers .= $bindIdentifier;
+         
+         
+         
+            // switch($type)
+            // {
+            //     case "integer":
+            //     case "boolean":
+            //         $bindIdentifiers .= "i";
+            //         break;
                     
-                case "string":
-                    $bindIdentifiers .= "s";
-                    break;
+            //     case "string":
+            //         $bindIdentifiers .= "s";
+            //         break;
 
-                case "double":
-                case "float":
-                    $bindIdentifiers .= "d";
-                    break;
+            //     case "double":
+            //     case "float":
+            //         $bindIdentifiers .= "d";
+            //         break;
 
-                default: 
-                    $bindIdentifiers .= "b";
-                break;
-            }
+            //     default: 
+            //         $bindIdentifiers .= "b";
+            //     break;
+            // }
         }
         $statement->bind_param($bindIdentifiers, ...$data);
     }

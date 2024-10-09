@@ -60,67 +60,20 @@ Class PageController
         switch($pageName)
         {
             case 'Register':
-                if($this->dataExtractor->getPostVar('formDataName') === 'Register')
-                {
-                    $validatedInput = $this->inputValidator->validateInput(REGISTERFORMDATA);
-                    if(!$this->containsErrors($validatedInput))
-                    {
-                        include_once __DIR__."/../models/DataTypes/User.php";
-                        $user = new User();
-                        $user->SetName($this->dataExtractor->getPostVar('Name'));
-                        $user->SetEmail($this->dataExtractor->getPostVar('Email'));
-                        $user->SetPassword($this->dataExtractor->getPostVar('Password'));
-                        $user->SetDate_of_birth($this->dataExtractor->getPostVar('DateOfBirth'));
-                        $user->SetGender($this->dataExtractor->getPostVar('Gender'));
-
-                        $userDao = new UserDao();
-                        $userDao->Create($user);
-                        $this->currentPage = new Login();
-                    }
-                    else
-                    {
-                        $this->currentPage = Register::WithResults($validatedInput);
-                    }
-                }
-                else
-                {
-                    $this->currentPage = new Register();
-                }
+                $this->HandleRegisterRequest();
                 break;
             case 'Login':
-                if($this->dataExtractor->getPostVar('formDataName') === 'Login')
-                {
-                    $validatedInput = $this->inputValidator->validateInput(LOGINFORMDATA);
-                    if(!$this->containsErrors($validatedInput))
-                    {
-                        $email = $this->dataExtractor->getPostVar('Email');
-                        $userDao = new UserDao();
-                        $user = $userDao->GetUserByEmail($email);
-                        $_SESSION['user_name'] = $user->getName();
-                        $_SESSION['user_email'] = $user->getEmail();
-                        $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
-                        $_SESSION['user_admin'] = $user->GetAdmin();
-                        updateAllowedPages();
-                        $this->currentPage = new Home();
-                    }
-                    else
-                    {
-                        $this->currentPage = Login::WithResults($validatedInput);
-                    }
-                }
-                else
-                {
-                    $this->currentPage = new Login();
-                }
+                $this->HandleLoginRequest();
                 break;
-                case 'Logout':
-                    session_unset();
-                    updateAllowedPages();
-                    $this->currentPage = new Home();
-                    break;
-                case 'ItemDetails':
-                    $this->currentPage = ItemDetails::WithItemId($pageRequest[1]);
-                    break;
+            case 'Logout':
+                $this->HandleLogoutRequest();
+                break;
+            case 'ItemDetails':
+                $this->HandleItemDetailsRequest($pageRequest[1]);
+                break;
+            case 'AddItem':
+                $this->HandleAddItemRequest();
+                break;
             default:
                 $this->currentPage = new $pageName();
                 break;
@@ -139,6 +92,101 @@ Class PageController
             }
         }
         return $containsErrors;
+    }
+
+    private function HandleRegisterRequest()
+    {
+        if($this->dataExtractor->getPostVar('formDataName') === 'Register')
+        {
+            $validatedInput = $this->inputValidator->validateInput(REGISTERFORMDATA);
+            if(!$this->containsErrors($validatedInput))
+            {
+                include_once __DIR__."/../models/DataTypes/User.php";
+                $user = new User();
+                $user->SetName($this->dataExtractor->getPostVar('Name'));
+                $user->SetEmail($this->dataExtractor->getPostVar('Email'));
+                $user->SetPassword($this->dataExtractor->getPostVar('Password'));
+                $user->SetDate_of_birth($this->dataExtractor->getPostVar('DateOfBirth'));
+                $user->SetGender($this->dataExtractor->getPostVar('Gender'));
+
+                $userDao = new UserDao();
+                $userDao->Create($user);
+                $this->currentPage = new Login();
+            }
+            else
+            {
+                $this->currentPage = Register::WithResults($validatedInput);
+            }
+        }
+        else
+        {
+            $this->currentPage = new Register();
+        }
+    }
+
+    private function HandleLoginRequest()
+    {
+        if($this->dataExtractor->getPostVar('formDataName') === 'Login')
+        {
+            $validatedInput = $this->inputValidator->validateInput(LOGINFORMDATA);
+            if(!$this->containsErrors($validatedInput))
+            {
+                $email = $this->dataExtractor->getPostVar('Email');
+                $userDao = new UserDao();
+                $user = $userDao->GetUserByEmail($email);
+                $_SESSION['user_name'] = $user->getName();
+                $_SESSION['user_email'] = $user->getEmail();
+                $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
+                $_SESSION['user_admin'] = $user->GetAdmin();
+                updateAllowedPages();
+                $this->currentPage = new Home();
+            }
+            else
+            {
+                $this->currentPage = Login::WithResults($validatedInput);
+            }
+        }
+        else
+        {
+            $this->currentPage = new Login();
+        }
+    }
+
+    private function HandleLogoutRequest()
+    {
+        session_unset();
+        updateAllowedPages();
+        $this->currentPage = new Home();
+    }
+
+    private function HandleItemDetailsRequest($id)
+    {
+        $this->currentPage = ItemDetails::WithItemId($id);
+    }
+
+    private function HandleAddItemRequest()
+    {
+        if($this->dataExtractor->getPostVar('formDataName') === 'AddItem')
+        {
+            $validatedInput = $this->inputValidator->validateInput(ADDITEMFORMDATA);
+            if(!$this->containsErrors($validatedInput))
+            {
+                $this->currentPage = new Home();
+            }
+            else
+            {
+                $this->currentPage = AddItem::WithResults(ADDITEMFORMDATA, $validatedInput);
+            }
+        }
+        else
+        {
+            $this->currentPage = new AddItem();
+        }
+    }
+
+    private function UpdateFormData($formData, $formResults)
+    {
+        
     }
 
 }

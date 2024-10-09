@@ -3,6 +3,7 @@ include __DIR__.'/Page.php';
 
 define ("GENDERS", array('Male' => 'Male', 'Female' => 'Female', 'Other' => 'Other'));
 define("COMMUNICATION_PREFERENCES", array('Email' => 'Email', 'Phone' => 'Phone', 'Mail' => 'Mail'));
+define("ITEM_TYPES", array('CD' => 'CD', 'VINYL' => 'VINYL', 'CASSETTE' => 'CASSETTE'));
 
 define("REGISTERFORMDATA", [
     'Name'  => ['label' => 'Full Name', 'type' => 'text', 'placeholder' => 'Full name', 'validations' => ["notEmpty", "onlyCharacters"]],
@@ -16,7 +17,20 @@ define("REGISTERFORMDATA", [
 define ("LOGINFORMDATA", [
     'Email' => ['label' => 'Email', 'type' => 'text', 'placeholder' => 'Example@example.com', 'validations' => ["notEmpty", "emailExists", "loginValid", "toLowerCase"]],
     'Password' => ['label' => 'Password', 'type' => 'password', 'placeholder' => 'Password', 'validations' => []]
-    ]);
+]);
+
+define("ADDITEMFORMDATA", [
+    'Title'  => ['label' => 'Title', 'type' => 'text', 'placeholder' => 'Title', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
+    'Description'  => ['label' => 'Description', 'type' => 'text', 'placeholder' => 'Description', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
+    'Artists'  => ['label' => 'Artists', 'type' => 'text', 'placeholder' => 'Artists, seperate by |||', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
+    'AddArtist' => ['id'=> 'AddArtist','label' => 'AddArtist', 'type' => 'button', 'value' => 'Add Artist', 'onclick' => 'AddArtist()', 'validations'=> []],
+    'Genres'  => ['label' => 'Genres', 'type' => 'text', 'placeholder' => 'Genres, seperate by |||', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
+    'Price'  => ['label' => 'Price', 'type' => 'number', 'placeholder' => '0.0', 'step'=> '0.01', 'validations' => ["notEmpty", "twoDecimals", "min:0"]],
+    'Year' => ['label' => 'Year', 'type' => 'number', 'placeholder' => '0000', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
+    'Type' => ['label' => 'Type', 'type' =>'select', 'options' => ITEM_TYPES, 'validations'=> ['notEmpty', 'validOption']],
+    'Stock' => ['label' => 'Stock', 'type' => 'number', 'placeholder' => '0', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
+    'Images' => ['label' => 'Images', 'type' => 'text', 'placeholder' => '', 'validations' => []]
+]);
 
 abstract class FormPage extends Page
 {
@@ -44,7 +58,7 @@ abstract class FormPage extends Page
             case 'textarea':
                 echo '
                 <textarea class="form-control" name="'.$key.'" placeholder= "'.$metaData['placeholder'].'" ">'.$formResult['value'].'</textarea>';
-            break;
+                break;
             case'select':
                 echo '
                 <select name="'.$key.'">';
@@ -59,7 +73,7 @@ abstract class FormPage extends Page
                 }
                 
                 echo '</select>';
-            break;
+                break;
             case 'radio':
                 foreach($metaData['options'] as $option_key => $option_value)
                 {
@@ -73,11 +87,28 @@ abstract class FormPage extends Page
                     echo '>'.$option_value.'</input>
                     </div>';
                 }
-            break;
+                break;
+            case 'number':
+                echo '
+                    <input type="'.$metaData['type'].'"class="form-control" 
+                    name="'.$key.'" 
+                    placeholder= "'.$metaData['placeholder'].'" 
+                    value="'.$formResult['value'].'"
+                    step='. $metaData['step'].'>
+                    </input>';
+                break;
+            case 'button':
+                echo '<script type="text/javascript" src="'.__DIR__.'/FormScript.php"></script> ';
+                echo '
+                <button class="add-button"
+                onclick="'.$metaData['onclick'].'">
+                </button>'
+                ;
+                break;
             default:
-            echo '
-            <input type="'.$metaData['type'].'"class="form-control" name="'.$key.'" placeholder= "'.$metaData['placeholder'].'" value="'.$formResult['value'].'"></input>';
-            break;
+                echo '
+                <input type="'.$metaData['type'].'"class="form-control" name="'.$key.'" placeholder= "'.$metaData['placeholder'].'" value="'.$formResult['value'].'"></input>';
+                break;
         }
         
         if(!empty($formResult['error']))
@@ -86,12 +117,13 @@ abstract class FormPage extends Page
         }
         echo '</div>';
 
+        echo"";
     }
 
     public function openForm($formDataName, $target, $legend)
     {
         echo '
-        <form method="POST" action="index.php?">
+        <form method="POST" action="index.php?" id='.$formDataName.'>
             <fieldset>
                 <input type="hidden" name="page" value="'.$target.'">
                 <input type="hidden" name="formDataName" value="'.$formDataName.'">
@@ -119,4 +151,5 @@ abstract class FormPage extends Page
         }
         return $formResults;
     }
+
 }

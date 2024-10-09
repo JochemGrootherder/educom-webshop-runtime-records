@@ -9,7 +9,7 @@ function updateAllowedPages()
     }
     elseif($_SESSION['user_admin'] === true)
     {
-        $_SESSION['allowedPages'] = array('Home', 'ItemDetails', 'Orders', 'Profile', 'ShoppingCart', 'Logout', 'EditItem');
+        $_SESSION['allowedPages'] = array('Home', 'ItemDetails', 'Orders', 'Profile', 'ShoppingCart', 'Logout', 'EditItem', 'AddItem');
     }
     else
     {
