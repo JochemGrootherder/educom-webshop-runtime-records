@@ -41,6 +41,10 @@ class Home extends Page
             $price = $item->GetPrice();
             $prices = explode(".", $price, 2);
             $priceUpper = $prices[0];
+            if(empty($prices[1]))
+            {
+                $prices[1] = '00';
+            }
             $priceLower = $prices[1];
           
             array_push($containerItems, [

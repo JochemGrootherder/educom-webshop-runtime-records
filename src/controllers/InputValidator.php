@@ -61,6 +61,17 @@ class InputValidator
                         }
                     }
                     break;
+                case 'onlyNumbersAndCharacters':
+                    if(!empty($formResults[$key]['value']))
+                    {
+                        $formResults[$key]['value'] = trim($formResults[$key]['value']);
+                        $pattern = '/^(([0-9]*)(\p{L}\p{M}*+\-*\h*)*)*$/u';
+                        if(!preg_match($pattern, $formResults[$key]['value']))
+                        {
+                            $formResults[$key]['error'] = $key." can only contain numbers, letters and spaces";
+                        }
+                    }
+                    break;
                 case 'notEmptyIf':
                     if(empty($formResults[$key]['value']) && $formResults[$parts[1]]['value'] == $parts[2])
                     {
@@ -75,36 +86,6 @@ class InputValidator
                             $formResults[$key]['error'] = "Invalid Email format. Expected: example@example.com";
                         } 
                     } 
-                    break;
-                case 'validPhoneNumber':
-                    if(!empty($formResults[$key]['value']))
-                    {
-                        //0612345678 
-                        //OR 
-                        //+31612345678 
-                        $pattern = match(strlen($formResults[$key]['value'])) {
-                            10 => '/06[0-9]{8}/', 
-                            12 => '/[+]316[0-9]{8}/',
-                            default => '' 
-                        }; 
-                    
-                        if (empty($pattern) || !preg_match($pattern, $formResults[$key]['value'])) 
-                        {
-                            $formResults[$key]['error'] = "Phonenumber has an invalid format. Expected format: '0612345678' or '+31612345678'"; 
-                        } 
-                    }  
-                    break;
-                case 'validZipcode':
-                    
-                if(!empty($formResults[$key]['value']))
-                {
-                    $value = strtoupper($formResults[$key]['value']);
-                    $pattern = '/^[0-9]{4}[A-Z]{2}$/';
-                    if(!preg_match($pattern, $value))
-                    {
-                        $formResults[$key]['error'] = "Zipcode has an invalid format. Expected format: '1234AB'";
-                    }
-                }
                     break;
                 case 'uniqueEmail':
                     if(!empty($formResults[$key]['value']))
@@ -192,6 +173,54 @@ class InputValidator
                         $formResults[$key]['error'] = "Combination of email and password is incorrect";
                     }
                     break;
+                case 'twoDecimals':
+                    if(!empty($formResults[$key]['value']))
+                    {
+                        if(!preg_match('/^[0-9]*[.,]{1}[0-9]{2}$/', $formResults[$key]['value']))
+                        {
+                            $formResults[$key]['error'] = $key." input must be a positive number with two decimals";
+                        }
+                    }
+                    break;
+                case 'fullNumber':
+                    if(!empty($formResults[$key]['value']))
+                    {
+                        if(!preg_match('/^[0-9]*$/', $formResults[$key]['value']))
+                        {
+                            $formResults[$key]['error'] = $key." input must be a full number";
+                        }
+                    }
+                    break;
+                case 'min':
+                    if(!empty($formResults[$key]['value']))
+                    {
+                        $minValue = $parts[1];
+                        if($formResults[$key]['value'] <= $minValue)
+                        {
+                            $formResults[$key]['error'] = $key." input must be greater than " . $minValue;
+                        }
+                    }
+                    break;
+                case 'ValidImage':
+                    if(empty($_FILES["ImagesToUpload"]["tmp_name"]))
+                    {
+                        $formResults[$key]['error'] = " file can not be empty";
+                        break;
+                    }
+                    if($_FILES["ImagesToUpload"]["size"] > 5000000)
+                    {
+                        $formResults[$key]['error'] = "file size must not exceed 5MB";
+                        break;
+                    }
+
+                    $target_file = basename($_FILES["ImagesToUpload"]["name"]);
+                    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+                    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
+                    {
+                        $formResults[$key]['error'] = "Only JPG, JPEG, PNG files are allowed";
+                        break;
+                    }
+                    break;
                 }
         }   
         return $formResults;
@@ -216,13 +245,5 @@ class InputValidator
         {
             return $user->GetPassword() == $password;
         }
-        /*$user = getUserFromFile($email);
-        if($user != null)
-        {
-            if($user['Password'] == $password)
-            {
-                return true;
-            }
-        }*/
     }
 }

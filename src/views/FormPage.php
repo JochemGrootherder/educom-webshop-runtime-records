@@ -24,13 +24,13 @@ define("ADDITEMFORMDATA", [
     'Description'  => ['label' => 'Description', 'type' => 'text', 'placeholder' => 'Description', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
     'Artists'  => ['label' => 'Artists', 'type' => 'text', 'placeholder' => 'Artists, seperate by |||', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
     'AddArtist' => ['label' => '', 'type' => 'button', 'value' => 'Add artist', 'onclick' => 'AddArtist', 'validations'=> []],
-    'Genres'  => ['label' => 'Genres', 'type' => 'text', 'placeholder' => 'Genres, seperate by |||', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
+    'Genres'  => ['label' => 'Genres', 'type' => 'text', 'placeholder' => 'Genres, seperate by |||', 'validations' => ["notEmpty", "onlyCharacters"]],
     'AddGenre' => ['label' => '', 'type' => 'button', 'value' => 'Add genre', 'onclick' => 'AddGenre', 'validations'=> []],
     'Price'  => ['label' => 'Price', 'type' => 'number', 'placeholder' => '0.0', 'step'=> '0.01', 'validations' => ["notEmpty", "twoDecimals", "min:0"]],
     'Year' => ['label' => 'Year', 'type' => 'number', 'placeholder' => '0000', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
     'Type' => ['label' => 'Type', 'type' =>'select', 'options' => ITEM_TYPES, 'validations'=> ['notEmpty', 'validOption']],
     'Stock' => ['label' => 'Stock', 'type' => 'number', 'placeholder' => '0', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
-    'Images' => ['label' => 'Images', 'type' => 'text', 'placeholder' => '', 'validations' => []]
+    'ImagesToUpload' => ['label' => 'Images', 'name' => 'ImagesToUpload', 'type' => 'file', 'value' => '','placeholder' => '', 'accept' => '.jpg, .png, .jpeg','validations' => ["ValidImage"]]
 ]);
 
 abstract class FormPage extends Page
@@ -105,6 +105,15 @@ abstract class FormPage extends Page
                 </button>'
                 ;
                 break;
+            case 'file':
+                echo '
+                    <input type="'.$metaData['type'].'"class="form-control" 
+                    name="'.$key.'" 
+                    id="'.$key.'"
+                    placeholder= "'.$metaData['placeholder'].'" 
+                    accept="'.$metaData['accept'].'" >
+                    </input>';
+                break;
             default:
                 echo '
                 <input type="'.$metaData['type'].'"class="form-control" name="'.$key.'" placeholder= "'.$metaData['placeholder'].'" value="'.$formResult['value'].'"></input>';
@@ -123,7 +132,7 @@ abstract class FormPage extends Page
     public function openForm($formDataName, $target, $legend)
     {
         echo '
-        <form method="POST" id='.$formDataName.'>
+        <form method="POST" id='.$formDataName.' enctype="multipart/form-data">
             <fieldset>
                 <input type="hidden" name="page" value="'.$target.'">
                 <input type="hidden" name="formDataName" value="'.$formDataName.'">

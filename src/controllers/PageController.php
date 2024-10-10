@@ -171,6 +171,23 @@ Class PageController
             $validatedInput = $this->inputValidator->validateInput(ADDITEMFORMDATA);
             if(!$this->containsErrors($validatedInput))
             {
+                $item = new Item();
+                $item->SetTitle($validatedInput['Title']['value']);
+                $item->SetDescription($validatedInput['Description']['value']);
+                $item->SetPrice($validatedInput['Price']['value']);
+                $item->SetArtists([$validatedInput['Artists']['value']]);
+                $item->SetGenres([$validatedInput['Genres']['value']]);
+                $item->SetYear($validatedInput['Year']['value']);
+                $item->SetStock($validatedInput['Stock']['value']);
+                $image = file_get_contents($_FILES['ImagesToUpload']['tmp_name']);
+                $item->SetImages([$image]);
+                $dateAdded = date_create();
+                $dateAdded = date_format($dateAdded, "Y-m-d");
+                $item->SetDate_added($dateAdded);
+                
+                $itemDao = new ItemDao();
+                $itemDao->Create($item);
+                
                 $this->currentPage = new Home();
             }
             else
