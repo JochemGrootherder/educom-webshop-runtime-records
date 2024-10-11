@@ -22,8 +22,7 @@ class ShoppingCartItemDao
         }
         else
         {
-            $row = $result->fetch_assoc();
-            $newAmount = $row['amount'] + $amount;
+            $newAmount = $result[0]['amount'] + $amount;
             $shoppingCartItemsArray['amount'] = $newAmount;
             $this->CRUD->Update("shopping_cart_items", ['shopping_cart_id', 'item_id'], $shoppingCartItemsArray);
         }
@@ -49,9 +48,9 @@ class ShoppingCartItemDao
         return null;
     }
 
-    public function GetItemsByShoppingCartId(int $ShoppingCartId)
+    public function GetItemsByShoppingCartId(int $shoppingCartId)
     {
-        $result = $this->CRUD->Get("shopping_cart_items", "Shopping_cart_id", $ShoppingCartId);
+        $result = $this->CRUD->Get("shopping_cart_items", "Shopping_cart_id", $shoppingCartId);
         if($result != null)
         {
             $items = [];
@@ -61,11 +60,26 @@ class ShoppingCartItemDao
                 $item = $itemDao->GetItemById($row['item_id']);
                 if($item != null)
                 {
-                    array_push($items, $item);
+                    $amount = $this->GetItemCount($shoppingCartId, $row['item_id']);
+                    $items[] = ['amount' => $amount, 'item' => $item];
                 }
             }
             return $items;
         }
         return null;
+    }
+
+    private function GetItemCount($shoppingCartId, $itemId)
+    {
+        $selectArray = [
+                    'shopping_cart_id' => $shoppingCartId,
+                    'item_id' => $itemId];
+        
+        $result = $this->CRUD->GetFromTableWhereAnd("shopping_cart_items", $selectArray);
+        if($result!= null)
+        {
+            return $result[0]['amount'];
+        }
+        return 0;
     }
 }

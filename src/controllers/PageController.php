@@ -2,6 +2,7 @@
 include 'DataExtractor.php';
 include 'InputValidator.php';
 include_once "models/DAOs/UserDao.php";
+include_once "models/DAOs/ShoppingCartDao.php";
 
 //include all files in pages directory
 foreach (glob("views/*.php") as $filename)
@@ -215,6 +216,10 @@ Class PageController
             {
                 //add to cart
                 //update stock in db
+
+                $shoppingCartDao = new ShoppingCartDao();
+                $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
+                $shoppingCartDao->AddToShoppingCart($shoppingCart->GetId(), $itemId, $validatedInput['Amount']['value']);
 
                 $this->currentPage = new ShoppingCartPage();
             }

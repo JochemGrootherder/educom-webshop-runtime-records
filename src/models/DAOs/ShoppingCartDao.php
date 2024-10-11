@@ -1,6 +1,7 @@
 <?php
 include_once __DIR__.'/../CRUD.php';
 include_once __DIR__."/../DataTypes/ShoppingCart.php";
+include_once __DIR__."/ShoppingCartItemDao.php";
 class ShoppingCartDao
 {
     private $CRUD;
@@ -13,7 +14,6 @@ class ShoppingCartDao
     {
         $dateUpdated = date_create();
         $dateUpdated = date_format($dateUpdated, "Y-m-d-H-i-s");
-        var_dump($dateUpdated);
 
         $shoppingCartArray = [
             "id" => $shoppingCart->getId(),
@@ -26,9 +26,19 @@ class ShoppingCartDao
 
     public function AddToShoppingCart($shoppingCartId, $ItemId, $amount)
     {
-        $shoppingCartItemsDao = new ShoppingCartItemsDao();
+        $shoppingCartItemsDao = new ShoppingCartItemDao();
         $shoppingCartItemsDao->LinkShoppingCartAndItems($shoppingCartId, $ItemId, $amount);
         $this->Update($shoppingCartId);
+    }
+
+    public function GetShoppingCartItems($userId)
+    {
+        $shoppingCartItemsDao = new ShoppingCartItemDao();
+        $shoppingCart = $this->GetShoppingCartByUserId($userId);
+        if($shoppingCart!= null)
+        {
+            return $shoppingCartItemsDao->GetItemsByShoppingCartId($shoppingCart->getId());
+        }
     }
 
     private function Update($id)
@@ -37,11 +47,11 @@ class ShoppingCartDao
         $dateUpdated = date_format($dateUpdated, "Y-m-d-H-i-s");
 
         $shoppingCartArray = [
-            "id" => $shoppingCart->GetId(),
+            "id" => $id,
             "date_last_updated" => $dateUpdated
         ];
 
-        $result = $this->$CRUD->Update("shopping_carts", ['id'] ,$shoppingCartArray);
+        $result = $this->CRUD->Update("shopping_carts", ['id'] ,$shoppingCartArray);
     }
 
     
@@ -61,7 +71,7 @@ class ShoppingCartDao
         $shoppingCart = new ShoppingCart();
         $shoppingCart->setId($row["id"]);
         $shoppingCart->setUserId($row["user_id"]);
-        $shoppingCart->setDate($row["date_last_updated"]);
+        $shoppingCart->SetDateLastUpdate($row["date_last_updated"]);
         return $shoppingCart;
     }
 }
