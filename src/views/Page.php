@@ -28,28 +28,28 @@ abstract class Page
         echo '
             <ul class="nav-menu">
             <li class="nav-menu-item">
-                <a href="index.php?page=Home" class="menu-link">HOME</a>
+                <a href="index.php?page=HomePage" class="menu-link">HOME</a>
             </li>
             <li class="nav-menu-item">
-                <a href="index.php?page=ShoppingCart" class="menu-link">SHOPPING CART</a>
+                <a href="index.php?page=ShoppingCartPage" class="menu-link">SHOPPING CART</a>
             </li>
             ';
             if(empty($_SESSION['user_name'])){
                 echo'
             <li class="nav-menu-item">
-                <a href="index.php?page=Login" class="menu-link">LOGIN</a>
+                <a href="index.php?page=LoginPage" class="menu-link">LOGIN</a>
             </li>
             <li class="nav-menu-item">
-                <a href="index.php?page=Register" class="menu-link">REGISTER</a>
+                <a href="index.php?page=RegisterPage" class="menu-link">REGISTER</a>
             </li>';
             }else
             {
                 echo'
                 <li class="nav-menu-item">
-                    <a href="index.php?page=Profile" class="menu-link">PROFILE</a>
+                    <a href="index.php?page=ProfilePage" class="menu-link">PROFILE</a>
                 </li>
                 <li class="nav-menu-item">
-                    <a href="index.php?page=Logout" class="menu-link">LOG OUT</a>
+                    <a href="index.php?page=LogoutPage" class="menu-link">LOG OUT</a>
                 </li>';
             }
         echo '</ul>';

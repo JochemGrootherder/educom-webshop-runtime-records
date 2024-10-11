@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__.'/../models/DAOs/UserDao.php';
+include_once __DIR__.'/../models/DAOs/ItemDao.php';
 
 class InputValidator
 {
@@ -195,7 +196,7 @@ class InputValidator
                     if(!empty($formResults[$key]['value']))
                     {
                         $minValue = $parts[1];
-                        if($formResults[$key]['value'] <= $minValue)
+                        if($formResults[$key]['value'] < $minValue)
                         {
                             $formResults[$key]['error'] = $key." input must be greater than " . $minValue;
                         }
@@ -219,6 +220,23 @@ class InputValidator
                     {
                         $formResults[$key]['error'] = "Only JPG, JPEG, PNG files are allowed";
                         break;
+                    }
+                    break;
+                case 'notMoreThanAvailable':
+                    if(!empty($formResults[$key]['value']))
+                    {
+                        $page = $this->dataExtractor->GetPostVar('page');
+                        $pageRequest = explode('/', $page, 2);
+                        $itemId = $pageRequest[1];
+                        $itemDao = new ItemDao();
+                        $item = $itemDao->GetItemById($itemId);
+                        if($item != null)
+                        {
+                            if($item->GetStock() < (int)$formResults[$key]['value'])
+                            {
+                                $formResults[$key]['error'] = "You can't buy more than available items";
+                            }
+                        }
                     }
                     break;
                 }

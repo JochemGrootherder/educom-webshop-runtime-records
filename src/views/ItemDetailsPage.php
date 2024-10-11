@@ -1,13 +1,25 @@
 <?php
-include_once __DIR__.'/Page.php';
+include_once __DIR__.'/FormPage.php';
 include_once __DIR__.'/../controllers/ItemController.php';
 
-class ItemDetails extends Page
+class ItemDetailsPage extends FormPage
 {
     private $Item;
+    private $formResults;
+    private $formData;
 
     public function __construct()
     {
+        $this->formData = ADDTOCARTFORMDATA;
+        $this->formResults = $this->CreateEmptyFormResults($this->formData);
+    }
+
+    public static function WithResults($ItemId, $formResults)
+    {
+        $instance = new self();
+        $instance->GetItem($ItemId);
+        $instance->formResults = $formResults;
+        return $instance;
     }
 
     public static function WithItemId($ItemId)
@@ -23,6 +35,7 @@ class ItemDetails extends Page
     }
     public function showBody()
     {
+        $this->ShowAddToCart();
         $this->ShowItemDetails();
     }
 
@@ -53,6 +66,10 @@ class ItemDetails extends Page
         $price = $this->Item->GetPrice();
         $prices = explode(".", $price, 2);
         $priceUpper = $prices[0];
+        if(empty($prices[1]))
+        {
+            $prices[1] = '00';
+        }
         $priceLower = $prices[1];
 
         return [
@@ -89,5 +106,11 @@ class ItemDetails extends Page
                 <p>" . $elements['description'] . "</p>
             </div>
         </div>";
+    }
+
+    private function ShowAddToCart()
+    {
+        $targetPage = 'AddToCartPage/' . $this->Item->GetId();
+        $this->showForm($this->formData, $this->formResults, 'AddToCart', $targetPage, '', 'Add to cart');
     }
 }

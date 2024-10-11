@@ -4,11 +4,9 @@ include_once __DIR__.'/../CRUD.php';
 class ArtistDao
 {
     private $CRUD;
-    private $primaryColumn;
     public function __construct()
     {
         $this->CRUD = new CRUD();
-        $this->primaryColumn = "name";
     }
 
     private function ConvertRowToDataType($row)

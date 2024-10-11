@@ -1,5 +1,5 @@
 <?php
-class Orders extends Page
+class OrdersPage extends Page
 {    
     public function __construct()
     {

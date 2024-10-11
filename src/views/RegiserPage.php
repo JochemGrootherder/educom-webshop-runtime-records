@@ -1,12 +1,11 @@
 <?php
 include_once __DIR__.'/FormPage.php';
-class Login extends FormPage
+class RegisterPage extends FormPage
 {
-    public $formResults;
-
+    private $formResults;
     public function __construct()
     {
-        $this->formResults = $this->CreateEmptyFormResults(LOGINFORMDATA);
+        $this->formResults = $this->CreateEmptyFormResults(REGISTERFORMDATA);
     }
 
     public static function WithResults($formResults)
@@ -17,11 +16,11 @@ class Login extends FormPage
     }
     function showTitle()
     {
-        echo "Login";
+        echo "Register";
 
     }
     function showBody()
     {
-        $this->showForm(LOGINFORMDATA, $this->formResults, 'Login', 'Login', 'Login', 'Login');
+        $this->showForm(REGISTERFORMDATA, $this->formResults, 'Register', 'RegisterPage', 'Register', 'Register');
     }
 }

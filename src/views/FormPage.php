@@ -22,15 +22,19 @@ define ("LOGINFORMDATA", [
 define("ADDITEMFORMDATA", [
     'Title'  => ['label' => 'Title', 'type' => 'text', 'placeholder' => 'Title', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
     'Description'  => ['label' => 'Description', 'type' => 'text', 'placeholder' => 'Description', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
-    'Artists'  => ['label' => 'Artists', 'type' => 'text', 'placeholder' => 'Artists, seperate by |||', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
-    'AddArtist' => ['label' => '', 'type' => 'button', 'value' => 'Add artist', 'onclick' => 'AddArtist', 'validations'=> []],
-    'Genres'  => ['label' => 'Genres', 'type' => 'text', 'placeholder' => 'Genres, seperate by |||', 'validations' => ["notEmpty", "onlyCharacters"]],
-    'AddGenre' => ['label' => '', 'type' => 'button', 'value' => 'Add genre', 'onclick' => 'AddGenre', 'validations'=> []],
+    'Artists'  => ['label' => 'Artists', 'type' => 'text', 'placeholder' => 'Artist', 'validations' => ["notEmpty", "onlyNumbersAndCharacters"]],
+    //'AddArtist' => ['label' => '', 'type' => 'button', 'value' => 'Add artist', 'onclick' => 'AddArtist', 'validations'=> []],
+    'Genres'  => ['label' => 'Genres', 'type' => 'text', 'placeholder' => 'Genre', 'validations' => ["notEmpty", "onlyCharacters"]],
+    //'AddGenre' => ['label' => '', 'type' => 'button', 'value' => 'Add genre', 'onclick' => 'AddGenre', 'validations'=> []],
     'Price'  => ['label' => 'Price', 'type' => 'number', 'placeholder' => '0.0', 'step'=> '0.01', 'validations' => ["notEmpty", "twoDecimals", "min:0"]],
     'Year' => ['label' => 'Year', 'type' => 'number', 'placeholder' => '0000', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
     'Type' => ['label' => 'Type', 'type' =>'select', 'options' => ITEM_TYPES, 'validations'=> ['notEmpty', 'validOption']],
     'Stock' => ['label' => 'Stock', 'type' => 'number', 'placeholder' => '0', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
     'ImagesToUpload' => ['label' => 'Images', 'name' => 'ImagesToUpload', 'type' => 'file', 'value' => '','placeholder' => '', 'accept' => '.jpg, .png, .jpeg','validations' => ["ValidImage"]]
+]);
+
+define("ADDTOCARTFORMDATA", [
+    'Amount' => ['label' => 'Amount', 'type' => 'number', 'placeholder' => '0', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:1", "notMoreThanAvailable"]]
 ]);
 
 abstract class FormPage extends Page
@@ -132,11 +136,14 @@ abstract class FormPage extends Page
     public function openForm($formDataName, $target, $legend)
     {
         echo '
-        <form method="POST" id='.$formDataName.' enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
             <fieldset>
                 <input type="hidden" name="page" value="'.$target.'">
-                <input type="hidden" name="formDataName" value="'.$formDataName.'">
-                <legend>'.$legend.'</legend>';
+                <input type="hidden" name="formDataName" value="'.$formDataName.'">';
+        if(!empty($legend))
+        {
+                echo '<legend>'.$legend.'</legend>';
+        }
     }
     
     public function closeForm($buttonText)

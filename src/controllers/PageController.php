@@ -54,27 +54,30 @@ Class PageController
         if(!in_array($pageName, $_SESSION['allowedPages']))
         {
             echo '<script>alert("Invalid page requested, redirecting to homepage");</script>';
-            $this->currentPage = new Home();
+            $this->currentPage = new HomePage();
             return false;
         }
         switch($pageName)
         {
-            case 'Register':
+            case 'RegisterPage':
                 $this->HandleRegisterRequest();
                 break;
-            case 'Login':
+            case 'LoginPage':
                 $this->HandleLoginRequest();
                 break;
-            case 'Logout':
+            case 'LogoutPage':
                 $this->HandleLogoutRequest();
                 break;
-            case 'ItemDetails':
+            case 'ItemDetailsPage':
                 $this->HandleItemDetailsRequest($pageRequest[1]);
                 break;
-            case 'AddItem':
+            case 'AddItemPage':
                 $this->HandleAddItemRequest();
                 break;
-            default:
+            case 'AddToCartPage':
+                $this->HandleAddToCartRequest($pageRequest[1]);
+                break;
+            default: 
                 $this->currentPage = new $pageName();
                 break;
         }
@@ -111,16 +114,16 @@ Class PageController
 
                 $userDao = new UserDao();
                 $userDao->Create($user);
-                $this->currentPage = new Login();
+                $this->currentPage = new LoginPage();
             }
             else
             {
-                $this->currentPage = Register::WithResults($validatedInput);
+                $this->currentPage = RegisterPage::WithResults($validatedInput);
             }
         }
         else
         {
-            $this->currentPage = new Register();
+            $this->currentPage = new RegisterPage();
         }
     }
 
@@ -131,24 +134,25 @@ Class PageController
             $validatedInput = $this->inputValidator->validateInput(LOGINFORMDATA);
             if(!$this->containsErrors($validatedInput))
             {
-                $email = $this->dataExtractor->getPostVar('Email');
+                $email = $this->dataExtractor->GetPostVar('Email');
                 $userDao = new UserDao();
                 $user = $userDao->GetUserByEmail($email);
-                $_SESSION['user_name'] = $user->getName();
-                $_SESSION['user_email'] = $user->getEmail();
+                $_SESSION['user_id'] = $user->GetId();
+                $_SESSION['user_name'] = $user->GetName();
+                $_SESSION['user_email'] = $user->GetEmail();
                 $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
                 $_SESSION['user_admin'] = $user->GetAdmin();
                 updateAllowedPages();
-                $this->currentPage = new Home();
+                $this->currentPage = new HomePage();
             }
             else
             {
-                $this->currentPage = Login::WithResults($validatedInput);
+                $this->currentPage = LoginPage::WithResults($validatedInput);
             }
         }
         else
         {
-            $this->currentPage = new Login();
+            $this->currentPage = new LoginPage();
         }
     }
 
@@ -156,12 +160,12 @@ Class PageController
     {
         session_unset();
         updateAllowedPages();
-        $this->currentPage = new Home();
+        $this->currentPage = new HomePage();
     }
 
     private function HandleItemDetailsRequest($id)
     {
-        $this->currentPage = ItemDetails::WithItemId($id);
+        $this->currentPage = ItemDetailsPage::WithItemId($id);
     }
 
     private function HandleAddItemRequest()
@@ -188,22 +192,41 @@ Class PageController
                 $itemDao = new ItemDao();
                 $itemDao->Create($item);
                 
-                $this->currentPage = new Home();
+                $this->currentPage = new HomePage();
             }
             else
             {
-                $this->currentPage = AddItem::WithResults(ADDITEMFORMDATA, $validatedInput);
+                $this->currentPage = AddItemPage::WithResults(ADDITEMFORMDATA, $validatedInput);
             }
         }
         else
         {
-            $this->currentPage = new AddItem();
+            $this->currentPage = new AddItemPage();
         }
     }
 
-    private function UpdateFormData($formData, $formResults)
+    private function HandleAddToCartRequest($itemId)
     {
-        
+        if($this->dataExtractor->getPostVar('formDataName') === 'AddToCart')
+        {
+
+            $validatedInput = $this->inputValidator->validateInput(ADDTOCARTFORMDATA);
+            if(!$this->containsErrors($validatedInput))
+            {
+                //add to cart
+                //update stock in db
+
+                $this->currentPage = new ShoppingCartPage();
+            }
+            else
+            {
+                $this->currentPage = ItemDetailsPage::WithResults($itemId, $validatedInput);
+            }
+        }
+        else
+        {
+            $this->currentPage = new HomePage();
+        }
     }
 
 }

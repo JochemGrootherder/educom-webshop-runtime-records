@@ -29,7 +29,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getId()
+	public function GetId()
 	{
 		return $this->id;
 	}
@@ -41,7 +41,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setId($id)
+	public function SetId($id)
 	{
 		$this->id = $id;
 
@@ -53,7 +53,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getName()
+	public function GetName()
 	{
 		return $this->name;
 	}
@@ -65,7 +65,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setName($name)
+	public function SetName($name)
 	{
 		$this->name = $name;
 
@@ -77,7 +77,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getEmail()
+	public function GetEmail()
 	{
 		return $this->email;
 	}
@@ -89,7 +89,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setEmail($email)
+	public function SetEmail($email)
 	{
 		$this->email = $email;
 
@@ -101,7 +101,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getPassword()
+	public function GetPassword()
 	{
 		return $this->password;
 	}
@@ -113,7 +113,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setPassword($password)
+	public function SetPassword($password)
 	{
 		$this->password = $password;
 
@@ -125,7 +125,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getDate_of_birth()
+	public function GetDate_of_birth()
 	{
 		return $this->date_of_birth;
 	}
@@ -137,7 +137,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setDate_of_birth($date_of_birth)
+	public function SetDate_of_birth($date_of_birth)
 	{
 		$this->date_of_birth = $date_of_birth;
 
@@ -149,7 +149,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getGender()
+	public function GetGender()
 	{
 		return $this->gender;
 	}
@@ -161,7 +161,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setGender($gender)
+	public function SetGender($gender)
 	{
 		$this->gender = $gender;
 
@@ -173,7 +173,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getSearch_criteria()
+	public function GetSearch_criteria()
 	{
 		return $this->search_criteria;
 	}
@@ -185,7 +185,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setSearch_criteria($search_criteria)
+	public function SetSearch_criteria($search_criteria)
 	{
 		$this->search_criteria = $search_criteria;
 
@@ -197,7 +197,7 @@ class User
 	 *
 	 * @return  mixed
 	 */
-	public function getAdmin()
+	public function GetAdmin()
 	{
 		return $this->admin;
 	}
@@ -209,7 +209,7 @@ class User
 	 *
 	 * @return  self
 	 */
-	public function setAdmin($admin)
+	public function SetAdmin($admin)
 	{
 		$this->admin = $admin;
 

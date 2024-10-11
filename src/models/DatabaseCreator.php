@@ -4,6 +4,7 @@ include_once __DIR__.'/DAOs/ItemDao.php';
 include_once __DIR__.'/DAOs/OrderDao.php';
 include_once __DIR__.'/DAOs/OrderLineDao.php';
 include_once __DIR__.'/DAOs/UserDao.php';
+include_once __DIR__.'/DAOs/ShoppingCartDao.php';
 include_once __DIR__.'/CRUD.php';
 
 define('TABLES', [
@@ -68,7 +69,21 @@ define('TABLES', [
                 'item_id' => 'INT(6) UNSIGNED NOT NULL',   
                 'image' => 'LONGBLOB NOT NULL',
                 '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
-    ]
+    ],
+    'shopping_carts' => [
+                'id' => 'INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+                'user_id' => 'INT(6) UNSIGNED NULL',
+                'date_last_updated' => 'DATETIME NOT NULL',
+                '' => 'FOREIGN KEY (user_id) REFERENCES users(id)'
+    ],
+    'shopping_cart_items' => [
+                'item_id' => 'INT(6) UNSIGNED NOT NULL',
+                'shopping_cart_id' => 'INT(6) UNSIGNED NOT NULL',
+                'amount' => 'INT(6) UNSIGNED NOT NULL',
+                '' => 'FOREIGN KEY (shopping_cart_id) REFERENCES shopping_carts(id)',
+                '' => 'FOREIGN KEY (item_id) REFERENCES items(id)',
+                '' => 'CONSTRAINT PK_shopping_cart_id_items_id PRIMARY KEY (shopping_cart_id, item_id)'
+    ],
 
 ]);
 
@@ -312,6 +327,20 @@ echo "<br>";
 foreach ($createdUsers as $createdUser)
 {
     var_dump($createdUser);
+    echo "<br>";
+}
+
+$result = $crud->GetAllFromTable("shopping_carts");
+$createdShoppingCarts = [];
+while($row = $result->fetch_assoc())
+{
+    array_push($createdShoppingCarts, $row);
+}
+echo "CREATED SHOPPINGCARTS: (" . count($createdShoppingCarts) . ")" ;
+echo "<br>";
+foreach ($createdShoppingCarts as $createdShoppingCart)
+{
+    var_dump($createdShoppingCart);
     echo "<br>";
 }
 

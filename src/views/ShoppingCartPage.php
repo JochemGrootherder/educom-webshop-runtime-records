@@ -1,6 +1,6 @@
 <?php
 
-class ShoppingCart extends Page
+class ShoppingCartPage extends Page
 {    
     public function __construct()
     {

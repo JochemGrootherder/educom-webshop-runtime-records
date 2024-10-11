@@ -1,5 +1,5 @@
 <?php
-class Profile extends Page
+class ProfilePage extends Page
 {    
     public function __construct()
     {

@@ -14,16 +14,23 @@ class UserDao
     public function Create(User $user)
     {
         $userArray = [
-            "id" => $user->getId(),
-            "name" => $user->getName(),
-            "email" => $user->getEmail(),
-            "password" => $user->getPassword(),
-            "date_of_birth" => $user->getDate_of_birth(),
-            "gender" => $user->getGender(),
-            "search_criteria" => $user->getSearch_criteria(),
-            "admin" => $user->getAdmin()
+            "id" => $user->GetId(),
+            "name" => $user->GetName(),
+            "email" => $user->GetEmail(),
+            "password" => $user->GetPassword(),
+            "date_of_birth" => $user->GetDate_of_birth(),
+            "gender" => $user->GetGender(),
+            "search_criteria" => $user->GetSearch_criteria(),
+            "admin" => $user->GetAdmin()
         ];
         $result = $this->CRUD->Create("users", $userArray);
+        $userId = $this->CRUD->GetLastInsertId();
+
+        //create a shoppingcart for the user
+        $shoppingCart = new ShoppingCart();
+        $shoppingCart->SetUserId($userId);
+        $shoppingCartDao = new ShoppingCartDao();
+        $shoppingCartDao->Create($shoppingCart);
     }
 
     public function GetUsers()

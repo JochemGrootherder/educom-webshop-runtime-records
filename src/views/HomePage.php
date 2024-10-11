@@ -2,7 +2,7 @@
 include_once __DIR__.'/Page.php';
 include_once __DIR__.'/../controllers/ItemController.php';
 
-class Home extends Page
+class HomePage extends Page
 {
     function showTitle()
     {
@@ -64,7 +64,7 @@ class Home extends Page
         foreach($this->GetContainerItems() as $item)
         {
             echo "
-            <a href='?page=ItemDetails/".$item['id']."' class='itemContainer'>
+            <a href='?page=ItemDetailsPage/".$item['id']."' class='itemContainer'>
                 <div class='price-container'>
                     <div class='price-upper'>
                         " . $item['priceUpper'] . "

@@ -17,9 +17,9 @@ class CRUD
         $this->ExecutePreparedStatement($sql, $values);
     }
 
-    public function Update(array $values)
+    public function Update($tableName, $key, $values)
     {
-        $sql = $this->CreatePrepareUpdateStatement($values);
+        $sql = $this->CreatePrepareUpdateStatement($tableName, $key, $values);
         $this->ExecutePreparedStatement($sql, $values);
 
     }
@@ -57,18 +57,26 @@ class CRUD
         return $prepared_sql;
     }
 
-    private function CreatePrepareUpdateStatement(string $tableName, string $key, array $values)
+    private function CreatePrepareUpdateStatement(string $tableName, array $tableKeys, array $values)
     {
         $prepared_sql = "";
-        $sets = "";
+        $valueSets = "";
+        $keySets = "";
         foreach($values as $key => $value)
         {
-            $sets.= $key. "= ?, ";
+            $valueSets.= $key. "= ?, ";
         }
-        $sets = rtrim($sets, ", ");
+        $valueSets = rtrim($valueSets, ", ");
+
+        foreach($tableKeys as $tableKey)
+        {
+            $keySets.= $tableKey. " = '" . $values[$tableKey]. "' AND ";
+        }
+        $keySets = rtrim($keySets, " AND ");
+
         $prepared_sql.= "UPDATE ". $tableName. " SET ";
-        $prepared_sql.= $sets;
-        $prepared_sql.= " WHERE ". $key . "= '" . $values[$key] . "'";
+        $prepared_sql.= $valueSets;
+        $prepared_sql.= " WHERE ". $keySets;
         return $prepared_sql;
     }
 
