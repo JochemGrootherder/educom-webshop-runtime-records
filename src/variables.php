@@ -3,17 +3,22 @@
 
 function updateAllowedPages()
 {
+    $_SESSION['allowedPages'] = ['HomePage', 'ItemDetailsPage', 'ShoppingCartPage', 'AddToCartPage'];
     if(empty($_SESSION['user_name']))
     {
-        $_SESSION['allowedPages'] = array('HomePage', 'ItemDetailsPage', 'ShoppingCartPage', 'AddToCartPage', 'RegisterPage', 'LoginPage');
+        $_SESSION['allowedPages'][] = 'RegisterPage';
+        $_SESSION['allowedPages'][] = 'LoginPage';
+        return;
     }
-    elseif($_SESSION['user_admin'] === true)
+    
+    $_SESSION['allowedPages'][] = 'OrdersPage';
+    $_SESSION['allowedPages'][] = 'ProfilePage';
+    $_SESSION['allowedPages'][] = 'LogoutPage';
+    
+    if($_SESSION['user_admin'] === true)
     {
-        $_SESSION['allowedPages'] = array('HomePage', 'ItemDetailsPage', 'OrdersPage', 'ProfilePage', 'ShoppingCartPage', 'AddToCartPage', 'LogoutPage', 'EditItemPage', 'AddItemPage');
-    }
-    else
-    {
-        $_SESSION['allowedPages'] = array('HomePage', 'ItemDetailsPage', 'OrdersPage', 'ProfilePage', 'ShoppingCartPage', 'AddToCartPage', 'LogoutPage');
+        $_SESSION['allowedPages'][] = 'EditItemPage';
+        $_SESSION['allowedPages'][] = 'AddItemPage';
     }
 }
 

@@ -219,7 +219,12 @@ Class PageController
 
                 $shoppingCartDao = new ShoppingCartDao();
                 $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
-                $shoppingCartDao->AddToShoppingCart($shoppingCart->GetId(), $itemId, $validatedInput['Amount']['value']);
+                $shoppingCartId = $shoppingCart->GetId();
+                $amount = $validatedInput['Amount']['value'];
+                $shoppingCartDao->AddToShoppingCart($shoppingCartId, $itemId, $amount);
+
+                $itemDao = new ItemDao();
+                $itemDao->DecreaseItemStock($itemId, $amount);
 
                 $this->currentPage = new ShoppingCartPage();
             }

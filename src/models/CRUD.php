@@ -17,11 +17,10 @@ class CRUD
         $this->ExecutePreparedStatement($sql, $values);
     }
 
-    public function Update($tableName, $key, $values)
+    public function Update(string $tableName, array $setValues, array $whereValues)
     {
-        $sql = $this->CreatePrepareUpdateStatement($tableName, $key, $values);
-        $this->ExecutePreparedStatement($sql, $values);
-
+        $sql = $this->CreatePrepareUpdateStatement($tableName, $setValues, $whereValues);
+        $this->ExecutePreparedStatement($sql, array_merge($setValues, $whereValues));
     }
 
     public function Delete($identifier)
@@ -56,30 +55,29 @@ class CRUD
         $prepared_sql.= ")";
         return $prepared_sql;
     }
+    //parser
 
-    private function CreatePrepareUpdateStatement(string $tableName, array $tableKeys, array $values)
+    private function CreatePrepareUpdateStatement(string $tableName, array $setValues, array $whereValues)
     {
-        $prepared_sql = "";
-        $valueSets = "";
-        $keySets = "";
-        foreach($values as $key => $value)
+        $valuesSet = "";
+        $valuesWhere = "";  
+        foreach($setValues as $key => $value)
         {
-            $valueSets.= $key. "= ?, ";
+            $valuesSet.= $key. " = ?, ";
         }
-        $valueSets = rtrim($valueSets, ", ");
+        $valuesSet = rtrim($valuesSet, ", ");
 
-        foreach($tableKeys as $tableKey)
+        foreach($whereValues as $key => $value)
         {
-            $keySets.= $tableKey. " = '" . $values[$tableKey]. "' AND ";
+            $valuesWhere.= $key. " = ? AND ";
         }
-        $keySets = rtrim($keySets, " AND ");
+        $valuesWhere = rtrim($valuesWhere, " AND ");
 
-        $prepared_sql.= "UPDATE ". $tableName. " SET ";
-        $prepared_sql.= $valueSets;
-        $prepared_sql.= " WHERE ". $keySets;
+        $prepared_sql = "UPDATE " . $tableName . " SET ";
+        $prepared_sql .= $valuesSet . " WHERE " . $valuesWhere;
+        echo $prepared_sql;
         return $prepared_sql;
     }
-
 
     private function CreatePrepareDeleteStatement(string $tableName, string $key, $keyValue)
     {
@@ -119,36 +117,16 @@ class CRUD
             if($type == 'string' ) $bindIdentifier = 's';
             if($type == 'double' || $type == 'float') $bindIdentifier = 'd';
             $bindIdentifiers .= $bindIdentifier;
-         
-         
-         
-            // switch($type)
-            // {
-            //     case "integer":
-            //     case "boolean":
-            //         $bindIdentifiers .= "i";
-            //         break;
-                    
-            //     case "string":
-            //         $bindIdentifiers .= "s";
-            //         break;
-
-            //     case "double":
-            //     case "float":
-            //         $bindIdentifiers .= "d";
-            //         break;
-
-            //     default: 
-            //         $bindIdentifiers .= "b";
-            //     break;
-            // }
         }
         $statement->bind_param($bindIdentifiers, ...$data);
     }
 
+    //UPDATE TO SET PARAMETER TO ONLY $SQL
     private function ExecutePreparedStatement($sql, ?array $values)
     {
         $connection = $this->databaseHandler->GetConnection();
+        //echo "<br><br> ". $sql . "<br>"; 
+        //var_dump($values);
         $statement = $connection->prepare($sql);
         if($values != null)
         {
@@ -184,5 +162,13 @@ class CRUD
     public function GetLastInsertId()
     {
         return $this->LastInsertId;
+    }
+
+    public function DecrementValue(string $tableName, string $keyIdentifier, int $keyValue, string $valueIdentifier ,int $value)
+    {        
+        $sql = "UPDATE items SET ";
+        $sql .= $valueIdentifier. " = ". $valueIdentifier. " - ".$value; 
+        $sql.= " WHERE " . $keyIdentifier . "= '" . $keyValue . "'";
+        $this->ExecutePreparedStatement($sql, null);
     }
 }

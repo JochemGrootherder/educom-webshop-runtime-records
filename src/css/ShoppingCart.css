@@ -1,0 +1,41 @@
+.cart-content
+{
+    margin: auto;
+    width: 70%;
+}
+
+.shopping-cart-headers
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.shopping-cart-header
+{
+    width: 20%;
+}
+
+.shopping-cart-elements
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.shopping-cart-element
+{
+    width: 20%;
+}
+
+.shopping-cart-remove
+{
+    width: 10%;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.total-price
+{
+    width: 80%;
+    text-align: right;
+    
+}

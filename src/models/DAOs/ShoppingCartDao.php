@@ -46,12 +46,9 @@ class ShoppingCartDao
         $dateUpdated = date_create();
         $dateUpdated = date_format($dateUpdated, "Y-m-d-H-i-s");
 
-        $shoppingCartArray = [
-            "id" => $id,
-            "date_last_updated" => $dateUpdated
-        ];
-
-        $result = $this->CRUD->Update("shopping_carts", ['id'] ,$shoppingCartArray);
+        $whereValues = ['id' => $id];
+        $setValues = ['date_last_updated' => $dateUpdated];
+        $result = $this->CRUD->Update("shopping_carts", $setValues ,$whereValues);
     }
 
     

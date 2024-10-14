@@ -71,6 +71,7 @@ class ItemDetailsPage extends FormPage
             $prices[1] = '00';
         }
         $priceLower = $prices[1];
+        $stock = $this->Item->GetStock();
 
         return [
             'images' => $images,
@@ -79,7 +80,8 @@ class ItemDetailsPage extends FormPage
             'genreText' => $genreText,
             'description' => $description,
             'priceUpper' => $priceUpper,
-            'priceLower' => $priceLower
+            'priceLower' => $priceLower,
+            'stock' => $stock
         ];
     }
 
@@ -88,6 +90,9 @@ class ItemDetailsPage extends FormPage
         $elements = $this->GetBodyElements();
         echo "
         <div class='item-details'>
+        <h1>
+            STOCK: ".$elements['stock']."
+        </h1>
             <div class='price-container'>
                 <div class='price-upper'>
                     " . $elements['priceUpper'] . "

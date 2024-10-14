@@ -9,8 +9,9 @@ abstract class Page
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>My Webshop</title>
         
-            <link rel="stylesheet" href="./css/style.css">
-            <link rel="stylesheet" href="./css/homepage.css">
+            <link rel="stylesheet" href="./css/Style.css">
+            <link rel="stylesheet" href="./css/Homepage.css">
+            <link rel="stylesheet" href="./css/ShoppingCart.css">
         </head>';
     }
     

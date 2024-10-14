@@ -8,11 +8,11 @@ class ShoppingCartItemDao
         $this->CRUD = new CRUD();
     }
 
-    public function LinkShoppingCartAndItems(int $ShoppingCartId, int $itemId, int $amount)
+    public function LinkShoppingCartAndItems(int $shoppingCartId, int $itemId, int $amount)
     {
         $shoppingCartItemsArray = [
-                                    'item_id' => $itemId, 
-                                    'shopping_cart_id' => $ShoppingCartId];
+                            'item_id' => $itemId, 
+                            'shopping_cart_id' => $shoppingCartId];
         //check whether combination of item and shopping cart already exists in linking tabel
         $result = $this->CRUD->GetFromTableWhereAnd("shopping_cart_items", $shoppingCartItemsArray);
         if(empty($result))
@@ -23,8 +23,9 @@ class ShoppingCartItemDao
         else
         {
             $newAmount = $result[0]['amount'] + $amount;
-            $shoppingCartItemsArray['amount'] = $newAmount;
-            $this->CRUD->Update("shopping_cart_items", ['shopping_cart_id', 'item_id'], $shoppingCartItemsArray);
+            $whereValues = ['item_id' => $itemId, 'shopping_cart_id' => $shoppingCartId];
+            $setValues = ['amount' => $newAmount];
+            $this->CRUD->Update("shopping_cart_items", $setValues, $whereValues);
         }
     }
 

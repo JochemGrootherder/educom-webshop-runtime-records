@@ -92,6 +92,6 @@ class HomePage extends Page
 
     private function ShowAdminPanel()
     {
-        echo '<a href="index.php?page=AddItem" class="menu-link">ADD ITEM</a>';
+        echo '<a href="index.php?page=AddItemPage" class="menu-link">ADD ITEM</a>';
     }
 }

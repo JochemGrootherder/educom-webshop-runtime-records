@@ -129,4 +129,8 @@ class ItemDao
         return null;
     }
 
+    public function DecreaseItemStock($itemId, $amount)
+    {
+        $this->CRUD->DecrementValue("items", "id", $itemId, "stock", $amount);
+    }
 }

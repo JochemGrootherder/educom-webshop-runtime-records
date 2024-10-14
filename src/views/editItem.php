@@ -1,7 +1,7 @@
 <?php
 include_once __DIR__.'/FormPage.php';
 
-class EditItem extends FormPage
+class EditItemPage extends FormPage
 {
     private $formResults;
     
