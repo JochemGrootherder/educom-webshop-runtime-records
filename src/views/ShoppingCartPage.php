@@ -52,9 +52,8 @@ class ShoppingCartPage extends Page
     {
         $amount = $cartItem['amount'];
         $item = $cartItem['item'];
-        //<a href='index.php?page=RemoveItemPage/".$item->GetId()."' class='shopping-cart-remove-button'>Remove</a>
         echo "<div class='shopping-cart-elements'>
-            <a href='index.php?page=RemoveItemPage/".$item->GetId()."' class='shopping-cart-element shopping-cart-remove'>Remove</a>
+            <a href='index.php?page=RemoveFromCartPage/".$item->GetId()."' class='shopping-cart-element shopping-cart-remove'>Remove</a>
             <a href='index.php?page=ItemDetailsPage/".$item->GetId()."' class='shopping-cart-element'>" . $item->GetTitle() . "</a>
             <p class='shopping-cart-element'>" . $item->GetPrice() . "</p>
             <p class='shopping-cart-element'>" . $amount . "</p>

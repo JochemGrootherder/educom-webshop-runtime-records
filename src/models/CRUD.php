@@ -23,10 +23,10 @@ class CRUD
         $this->ExecutePreparedStatement($sql, array_merge($setValues, $whereValues));
     }
 
-    public function Delete($identifier)
+    public function Delete(string $tableName, array $values)
     {
-        $sql = $this->CreatePrepareDeleteStatement($identifier);
-        $this->ExecutePreparedStatement($sql, null);
+        $sql = $this->CreatePrepareDeleteStatement($tableName, $values);
+        $this->ExecutePreparedStatement($sql, $values);
     }
 
     public function Get(string $tableName, string $key, $identifier)
@@ -75,13 +75,17 @@ class CRUD
 
         $prepared_sql = "UPDATE " . $tableName . " SET ";
         $prepared_sql .= $valuesSet . " WHERE " . $valuesWhere;
-        echo $prepared_sql;
         return $prepared_sql;
     }
 
-    private function CreatePrepareDeleteStatement(string $tableName, string $key, $keyValue)
+    private function CreatePrepareDeleteStatement(string $tableName, array $values)
     {
-        $sql = "DELETE FROM " . $tableName. " WHERE " . $key .  " = '" . $keyValue . "'";
+        $sql = "DELETE FROM " . $tableName . " WHERE ";
+        foreach($values as $key => $value)
+        {
+            $sql.= $key . " = ? AND ";
+        } 
+        $sql = rtrim($sql, " AND ");
         return $sql;
     }
 
@@ -125,8 +129,6 @@ class CRUD
     private function ExecutePreparedStatement($sql, ?array $values)
     {
         $connection = $this->databaseHandler->GetConnection();
-        //echo "<br><br> ". $sql . "<br>"; 
-        //var_dump($values);
         $statement = $connection->prepare($sql);
         if($values != null)
         {
@@ -168,7 +170,15 @@ class CRUD
     {        
         $sql = "UPDATE items SET ";
         $sql .= $valueIdentifier. " = ". $valueIdentifier. " - ".$value; 
-        $sql.= " WHERE " . $keyIdentifier . "= '" . $keyValue . "'";
+        $sql.= " WHERE " . $keyIdentifier . " = '" . $keyValue . "'";
+        $this->ExecutePreparedStatement($sql, null);
+    }
+
+    public function IncrementValue(string $tableName, string $keyIdentifier, int $keyValue, string $valueIdentifier, int $value)
+    {
+        $sql = "UPDATE items SET ";
+        $sql.= $valueIdentifier. " = ". $valueIdentifier. " + ".$value; 
+        $sql.= " WHERE ". $keyIdentifier. " = '". $keyValue. "'";
         $this->ExecutePreparedStatement($sql, null);
     }
 }

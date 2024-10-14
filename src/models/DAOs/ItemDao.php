@@ -133,4 +133,9 @@ class ItemDao
     {
         $this->CRUD->DecrementValue("items", "id", $itemId, "stock", $amount);
     }
+
+    public function IncreaseItemStock($itemId, $amount)
+    {
+        $this->CRUD->IncrementValue("items", "id", $itemId, "stock", $amount);
+    }
 }

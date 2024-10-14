@@ -78,6 +78,9 @@ Class PageController
             case 'AddToCartPage':
                 $this->HandleAddToCartRequest($pageRequest[1]);
                 break;
+            case 'RemoveFromCartPage':
+                $this->HandleRemoveFromCartRequest($pageRequest[1]);
+                break;
             default: 
                 $this->currentPage = new $pageName();
                 break;
@@ -214,9 +217,6 @@ Class PageController
             $validatedInput = $this->inputValidator->validateInput(ADDTOCARTFORMDATA);
             if(!$this->containsErrors($validatedInput))
             {
-                //add to cart
-                //update stock in db
-
                 $shoppingCartDao = new ShoppingCartDao();
                 $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
                 $shoppingCartId = $shoppingCart->GetId();
@@ -237,6 +237,25 @@ Class PageController
         {
             $this->currentPage = new HomePage();
         }
+    }
+
+    private function HandleRemoveFromCartRequest($itemId)
+    {
+        $shoppingCartDao = new ShoppingCartDao();
+        $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
+        $shoppingCartId = $shoppingCart->GetId();
+
+        $amount = $shoppingCartDao->GetAmountOfItem($shoppingCartId, $itemId);
+        
+        $shoppingCartDao->RemoveFromCart($shoppingCartId, $itemId);
+        //Remove from cart
+
+        if($amount != 0)
+        {
+            $itemDao = new ItemDao();
+            $itemDao->IncreaseItemStock($itemId, $amount);
+        }
+        $this->currentPage = new ShoppingCartpage();
     }
 
 }

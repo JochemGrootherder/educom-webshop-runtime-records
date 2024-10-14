@@ -24,10 +24,17 @@ class ShoppingCartDao
         $result = $this->CRUD->Create("shopping_carts", $shoppingCartArray);
     }
 
-    public function AddToShoppingCart($shoppingCartId, $ItemId, $amount)
+    public function AddToShoppingCart(int $shoppingCartId, int $ItemId, int $amount)
     {
         $shoppingCartItemsDao = new ShoppingCartItemDao();
         $shoppingCartItemsDao->LinkShoppingCartAndItems($shoppingCartId, $ItemId, $amount);
+        $this->Update($shoppingCartId);
+    }
+
+    public function RemoveFromCart(int $shoppingCartId, int $itemId)
+    {
+        $shoppingCartItemsDao = new ShoppingCartItemDao();
+        $shoppingCartItemsDao->Delete($shoppingCartId, $itemId);
         $this->Update($shoppingCartId);
     }
 
@@ -60,6 +67,19 @@ class ShoppingCartDao
             $row = $result->fetch_assoc();
             $shoppingCart = $this->ConvertRowToDataType($row);
             return $shoppingCart;
+        }
+    }
+
+    public function GetAmountOfItem(int $shoppingCartId, int $itemId)
+    {
+        $values = [
+            "shopping_cart_id" => $shoppingCartId,
+            "item_id" => $itemId
+        ];
+        $result = $this->CRUD->GetFromTableWhereAnd("shopping_cart_items", $values);
+        if($result != null)
+        {
+            return $result[0]["amount"];
         }
     }
 

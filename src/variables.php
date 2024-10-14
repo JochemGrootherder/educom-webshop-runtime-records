@@ -14,6 +14,7 @@ function updateAllowedPages()
     $_SESSION['allowedPages'][] = 'OrdersPage';
     $_SESSION['allowedPages'][] = 'ProfilePage';
     $_SESSION['allowedPages'][] = 'LogoutPage';
+    $_SESSION['allowedPages'][] = 'RemoveFromCartPage';
     
     if($_SESSION['user_admin'] === true)
     {

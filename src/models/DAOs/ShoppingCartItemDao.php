@@ -29,6 +29,15 @@ class ShoppingCartItemDao
         }
     }
 
+    public function Delete(int $shoppingCartId, int $itemId)
+    {
+        $values = [
+            'item_id' => $itemId,
+            'shopping_cart_id' => $shoppingCartId
+        ];
+        $this->CRUD->Delete("shopping_cart_items", $values);
+    }
+
     public function GetShoppingCartsByItemId(int $itemId)
     {
         $result = $this->CRUD->Get("shopping_cart_items", "item_id", $itemId);
