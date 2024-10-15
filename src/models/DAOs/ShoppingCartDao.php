@@ -21,7 +21,8 @@ class ShoppingCartDao
             "date_last_updated" => $dateUpdated
         ];
 
-        $result = $this->CRUD->Create("shopping_carts", $shoppingCartArray);
+        $this->CRUD->Create("shopping_carts", $shoppingCartArray);
+        return $this->CRUD->GetLastInsertId();
     }
 
     public function AddToShoppingCart(int $shoppingCartId, int $ItemId, int $amount)
@@ -38,13 +39,12 @@ class ShoppingCartDao
         $this->Update($shoppingCartId);
     }
 
-    public function GetShoppingCartItems($userId)
+    public function GetShoppingCartItems($shoppingCartId)
     {
-        $shoppingCartItemsDao = new ShoppingCartItemDao();
-        $shoppingCart = $this->GetShoppingCartByUserId($userId);
-        if($shoppingCart!= null)
+        if($shoppingCartId!= null)
         {
-            return $shoppingCartItemsDao->GetItemsByShoppingCartId($shoppingCart->getId());
+            $shoppingCartItemsDao = new ShoppingCartItemDao();
+            return $shoppingCartItemsDao->GetItemsByShoppingCartId($shoppingCartId);
         }
     }
 
@@ -58,6 +58,13 @@ class ShoppingCartDao
         $result = $this->CRUD->Update("shopping_carts", $setValues ,$whereValues);
     }
 
+    public function Delete($id)
+    {
+        $this->EmptyShoppingCartByCartId($id);
+        $whereValues = ['id' => $id];
+        $this->CRUD->Delete("shopping_carts", $whereValues);
+    }
+
     
     public function GetShoppingCartByUserId(int $userId)
     {
@@ -68,6 +75,20 @@ class ShoppingCartDao
             $shoppingCart = $this->ConvertRowToDataType($row);
             return $shoppingCart;
         }
+    }
+
+    public function CopyShoppingCart(int $originalId, int $newId)
+    {
+        $items = $this->GetShoppingCartItems($originalId);
+        $shoppingCartItemsDao = new ShoppingCartItemDao();
+        $shoppingCartItemsDao->CopyItemsByShoppingCartId($originalId, $newId);
+        $this->Update($newId);
+    }
+
+    public function EmptyShoppingCartByCartId(int $cartId)
+    {
+        $whereValues = ['shopping_cart_id' => $cartId];
+        $this->CRUD->Delete("shopping_cart_items", $whereValues);
     }
 
     public function GetAmountOfItem(int $shoppingCartId, int $itemId)

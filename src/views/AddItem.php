@@ -25,7 +25,7 @@ class AddItemPage extends FormPage
     }
     function showBody()
     {
-        $this->showForm($this->formData, $this->formResults, 'AddItem', 'AddItem', 'Add item', 'Add');
+        $this->showForm($this->formData, $this->formResults, 'AddItem', 'AddItemPage', 'Add item', 'Add');
 
     }
 }

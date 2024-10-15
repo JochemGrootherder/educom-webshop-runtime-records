@@ -141,12 +141,19 @@ Class PageController
             {
                 $email = $this->dataExtractor->GetPostVar('Email');
                 $userDao = new UserDao();
+                $shoppingCartDao = new ShoppingCartDao();
                 $user = $userDao->GetUserByEmail($email);
                 $_SESSION['user_id'] = $user->GetId();
                 $_SESSION['user_name'] = $user->GetName();
                 $_SESSION['user_email'] = $user->GetEmail();
                 $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
                 $_SESSION['user_admin'] = $user->GetAdmin();
+
+                $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
+                $shoppingCartDao->CopyShoppingCart($_SESSION['shopping_cart_id'], $shoppingCart->GetId());
+                $shoppingCartDao->Delete($_SESSION['shopping_cart_id']);
+                $_SESSION['shopping_cart_id'] = $shoppingCart->GetId();
+
                 updateAllowedPages();
                 header("Location: index.php?page=HomePage");
                 // $this->currentPage = new HomePage();
@@ -164,9 +171,11 @@ Class PageController
 
     private function HandleLogoutRequest()
     {
+        $this->UnsetShoppingCart();
         session_unset();
         updateAllowedPages();
-        $this->currentPage = new HomePage();
+        header("Location: index.php?page=HomePage");
+        //$this->currentPage = new HomePage();
     }
 
     private function HandleItemDetailsRequest($id)
@@ -221,10 +230,8 @@ Class PageController
             if(!$this->containsErrors($validatedInput))
             {
                 $shoppingCartDao = new ShoppingCartDao();
-                $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
-                $shoppingCartId = $shoppingCart->GetId();
                 $amount = $validatedInput['Amount']['value'];
-                $shoppingCartDao->AddToShoppingCart($shoppingCartId, $itemId, $amount);
+                $shoppingCartDao->AddToShoppingCart($_SESSION['shopping_cart_id'], $itemId, $amount);
 
                 $itemDao = new ItemDao();
                 $itemDao->DecreaseItemStock($itemId, $amount);
@@ -259,7 +266,24 @@ Class PageController
             $itemDao = new ItemDao();
             $itemDao->IncreaseItemStock($itemId, $amount);
         }
-        $this->currentPage = new ShoppingCartpage();
+        header("Location: index.php?page=ShoppingCartPage");
+        //$this->currentPage = new ShoppingCartpage();
+    }
+
+    private function UnsetShoppingCart()
+    {
+        //clear shopping cart
+        $shoppingCartDao = new ShoppingCartDao();
+        $itemDao = new ItemDao();
+        $itemsInCart = $shoppingCartDao->GetShoppingCartItems($_SESSION['shopping_cart_id']);
+        foreach($itemsInCart as $itemInCart)
+        {
+            $amount = $itemInCart['amount'];
+            $itemId = $itemInCart['item']->GetId();
+            $itemDao->IncreaseItemStock($itemId, $amount);
+        }
+        $shoppingCartDao->EmptyShoppingCartByCartId($_SESSION['shopping_cart_id']);
+
     }
 
 }

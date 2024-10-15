@@ -22,7 +22,7 @@ class ShoppingCartPage extends Page
     private function GetItemsInCart()
     {
         $shoppingCartDao = new ShoppingCartDao();
-        return $shoppingCartDao->GetShoppingCartItems($_SESSION['user_id']);
+        return $shoppingCartDao->GetShoppingCartItems($_SESSION['shopping_cart_id']);
     }
 
     private function ShowContent()

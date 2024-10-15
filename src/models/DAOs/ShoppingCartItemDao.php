@@ -79,6 +79,18 @@ class ShoppingCartItemDao
         return null;
     }
 
+    public function CopyItemsByShoppingCartId(int $originalId, int $newId)
+    {
+        $items = $this->GetItemsByShoppingCartId($originalId);
+        if($items!= null)
+        {
+            foreach($items as $item)
+            {
+                $this->LinkShoppingCartAndItems($newId, $item['item']->GetId(), $item['amount']);
+            }
+        }
+    }
+
     private function GetItemCount($shoppingCartId, $itemId)
     {
         $selectArray = [

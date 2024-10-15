@@ -2,7 +2,7 @@
 session_start();
 include __DIR__."/controllers/PageController.php";
 include __DIR__."/variables.php";
-UpdateAllowedPages();
+UpdateVariables();
 
 $Controller = new PageController();
 $Controller->ExecuteAction();

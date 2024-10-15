@@ -1,6 +1,18 @@
 
 <?php
 
+
+function UpdateVariables()
+{
+    $shoppingCartDao = new ShoppingCartDao();
+    if(empty($_SESSION['shopping_cart_id']))
+    {
+        $shoppingCartId = $shoppingCartDao->Create(new ShoppingCart());
+        $_SESSION['shopping_cart_id'] = $shoppingCartId;
+    }
+    updateAllowedPages();
+}
+
 function updateAllowedPages()
 {
     $_SESSION['allowedPages'] = ['HomePage', 'ItemDetailsPage', 'ShoppingCartPage', 'AddToCartPage'];

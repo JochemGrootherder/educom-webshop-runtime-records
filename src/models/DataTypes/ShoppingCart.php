@@ -9,7 +9,7 @@ class ShoppingCart
     public function __construct()
     {
         $this->id = 0;
-        $this->userId = 0;
+        $this->userId = null;
         $this->dateLastUpdate = '';
     }
 
