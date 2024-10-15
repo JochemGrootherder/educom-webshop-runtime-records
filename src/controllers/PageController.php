@@ -118,7 +118,8 @@ Class PageController
 
                 $userDao = new UserDao();
                 $userDao->Create($user);
-                $this->currentPage = new LoginPage();
+                header("Location: index.php?page=LoginPage");
+                //$this->currentPage = new LoginPage();
             }
             else
             {
@@ -147,7 +148,8 @@ Class PageController
                 $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
                 $_SESSION['user_admin'] = $user->GetAdmin();
                 updateAllowedPages();
-                $this->currentPage = new HomePage();
+                header("Location: index.php?page=HomePage");
+                // $this->currentPage = new HomePage();
             }
             else
             {
@@ -195,8 +197,9 @@ Class PageController
                 
                 $itemDao = new ItemDao();
                 $itemDao->Create($item);
+                header("Location: index.php?page=HomePage");
                 
-                $this->currentPage = new HomePage();
+                //$this->currentPage = new HomePage();
             }
             else
             {
@@ -226,7 +229,8 @@ Class PageController
                 $itemDao = new ItemDao();
                 $itemDao->DecreaseItemStock($itemId, $amount);
 
-                $this->currentPage = new ShoppingCartPage();
+                //$this->currentPage = new ShoppingCartPage();
+                header("Location: index.php?page=ShoppingCartPage");
             }
             else
             {

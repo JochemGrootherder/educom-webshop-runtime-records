@@ -148,10 +148,11 @@ abstract class FormPage extends Page
     
     public function closeForm($buttonText)
     {
+        //echo '<script type="text/javascript" src="'.__DIR__.'/FormScript.php"></script>'; 
         echo'
                 <div class="form-group">
                     <label class="control-label" for="send"></label>
-                    <button name="pressedButton" value="postForm" action="index.php?" class="btn btn-primary">'.$buttonText.'</button>
+                    <button id= "postForm" name="postForm" value="postForm" action="index.php?" class="btn btn-primary">'.$buttonText.'</button>
                 </div>
             </fieldset>
         </form>';
