@@ -155,10 +155,6 @@ Class PageController
                 $shoppingCart = new ShoppingCart();
                 $shoppingCart->SetUserId($user->GetId());
                 $shoppingCart = $shoppingCartDao->Create($shoppingCart);
-                var_dump($shoppingCart);
-                echo "<br>";
-                var_dump($_SESSION);
-                echo "<br> ID: ".$shoppingCart->GetId();
                 if(!empty($_SESSION['shopping_cart_id']))
                 {
                     $shoppingCartDao->CopyShoppingCart($_SESSION['shopping_cart_id'], $shoppingCart->GetId());
