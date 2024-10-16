@@ -22,7 +22,8 @@ class ShoppingCartDao
         ];
 
         $this->CRUD->Create("shopping_carts", $shoppingCartArray);
-        return $this->CRUD->GetLastInsertId();
+        $shoppingCart->SetId($this->CRUD->GetLastInsertId());
+        return $shoppingCart;
     }
 
     public function AddToShoppingCart(int $shoppingCartId, int $ItemId, int $amount)

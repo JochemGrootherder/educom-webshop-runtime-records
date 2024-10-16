@@ -25,12 +25,6 @@ class UserDao
         ];
         $result = $this->CRUD->Create("users", $userArray);
         $userId = $this->CRUD->GetLastInsertId();
-
-        //create a shoppingcart for the user
-        $shoppingCart = new ShoppingCart();
-        $shoppingCart->SetUserId($userId);
-        $shoppingCartDao = new ShoppingCartDao();
-        $shoppingCartDao->Create($shoppingCart);
     }
 
     public function GetUsers()

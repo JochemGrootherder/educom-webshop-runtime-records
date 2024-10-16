@@ -72,6 +72,9 @@ Class PageController
             case 'ItemDetailsPage':
                 $this->HandleItemDetailsRequest($pageRequest[1]);
                 break;
+            case 'ShoppingCartPage':
+                $this->HandleShoppingCartRequest();
+                break;
             case 'AddItemPage':
                 $this->HandleAddItemRequest();
                 break;
@@ -149,9 +152,18 @@ Class PageController
                 $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
                 $_SESSION['user_admin'] = $user->GetAdmin();
 
-                $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
-                $shoppingCartDao->CopyShoppingCart($_SESSION['shopping_cart_id'], $shoppingCart->GetId());
-                $shoppingCartDao->Delete($_SESSION['shopping_cart_id']);
+                $shoppingCart = new ShoppingCart();
+                $shoppingCart->SetUserId($user->GetId());
+                $shoppingCart = $shoppingCartDao->Create($shoppingCart);
+                var_dump($shoppingCart);
+                echo "<br>";
+                var_dump($_SESSION);
+                echo "<br> ID: ".$shoppingCart->GetId();
+                if(!empty($_SESSION['shopping_cart_id']))
+                {
+                    $shoppingCartDao->CopyShoppingCart($_SESSION['shopping_cart_id'], $shoppingCart->GetId());
+                    $shoppingCartDao->Delete($_SESSION['shopping_cart_id']);
+                }
                 $_SESSION['shopping_cart_id'] = $shoppingCart->GetId();
 
                 updateAllowedPages();
@@ -171,8 +183,12 @@ Class PageController
 
     private function HandleLogoutRequest()
     {
-        $this->UnsetShoppingCart();
+        $shoppingCartDao = new ShoppingCartDao();
+        $shoppingCart = new ShoppingCart();
+        $shoppingCart = $shoppingCartDao->Create($shoppingCart);
+        $shoppingCartDao->CopyShoppingCart($_SESSION['shopping_cart_id'], $shoppingCart->GetId());
         session_unset();
+        $_SESSION['shopping_cart_id'] = $shoppingCart->GetId();
         updateAllowedPages();
         header("Location: index.php?page=HomePage");
         //$this->currentPage = new HomePage();
@@ -181,6 +197,18 @@ Class PageController
     private function HandleItemDetailsRequest($id)
     {
         $this->currentPage = ItemDetailsPage::WithItemId($id);
+    }
+
+    private function HandleShoppingCartRequest()
+    {
+        if(empty($_SESSION['shopping_cart_id']))
+        {
+            $shoppingCartDao = new ShoppingCartDao();
+            $shoppingCart = new ShoppingCart();
+            $shoppingCart = $shoppingCartDao->Create($shoppingCart);
+            $_SESSION['shopping_cart_id'] = $shoppingCart->GetId();
+        }
+        $this->currentPage = new ShoppingCartPage();
     }
 
     private function HandleAddItemRequest()
@@ -223,6 +251,13 @@ Class PageController
 
     private function HandleAddToCartRequest($itemId)
     {
+        if(empty($_SESSION['shopping_cart_id']))
+        {
+            $shoppingCartDao = new ShoppingCartDao();
+            $shoppingCart = new ShoppingCart();
+            $shoppingCart = $shoppingCartDao->Create($shoppingCart);
+            $_SESSION['shopping_cart_id'] = $shoppingCart->GetId();
+        }
         if($this->dataExtractor->getPostVar('formDataName') === 'AddToCart')
         {
 
@@ -253,13 +288,11 @@ Class PageController
     private function HandleRemoveFromCartRequest($itemId)
     {
         $shoppingCartDao = new ShoppingCartDao();
-        $shoppingCart = $shoppingCartDao->GetShoppingCartByUserId($_SESSION['user_id']);
-        $shoppingCartId = $shoppingCart->GetId();
+        $shoppingCartId = $_SESSION['shopping_cart_id'];
 
         $amount = $shoppingCartDao->GetAmountOfItem($shoppingCartId, $itemId);
         
         $shoppingCartDao->RemoveFromCart($shoppingCartId, $itemId);
-        //Remove from cart
 
         if($amount != 0)
         {
@@ -269,21 +302,4 @@ Class PageController
         header("Location: index.php?page=ShoppingCartPage");
         //$this->currentPage = new ShoppingCartpage();
     }
-
-    private function UnsetShoppingCart()
-    {
-        //clear shopping cart
-        $shoppingCartDao = new ShoppingCartDao();
-        $itemDao = new ItemDao();
-        $itemsInCart = $shoppingCartDao->GetShoppingCartItems($_SESSION['shopping_cart_id']);
-        foreach($itemsInCart as $itemInCart)
-        {
-            $amount = $itemInCart['amount'];
-            $itemId = $itemInCart['item']->GetId();
-            $itemDao->IncreaseItemStock($itemId, $amount);
-        }
-        $shoppingCartDao->EmptyShoppingCartByCartId($_SESSION['shopping_cart_id']);
-
-    }
-
 }
