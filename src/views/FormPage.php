@@ -11,7 +11,7 @@ define("REGISTERFORMDATA", [
     'Password' => ['label' => 'Password', 'type' => 'password', 'placeholder' => 'Password', 'validations' => ["notEmpty", "minLength:8", "containsUppercase", "containsLowercase", "containsNumber", "containsSpecialChar"]],
     'ConfirmPassword' => ['label' => 'Confirm Password', 'type' => 'password', 'placeholder' => 'Confirm Password', 'validations' => ["matchesPassword"]],
     'DateOfBirth' => ['label' => 'Date Of Birth', 'type' =>'date', 'placeholder' => '', 'validations'=> ['']],
-    'Gender' => ['label' => 'Gender', 'type' =>'select', 'options' => GENDERS, 'validations'=> ['notEmpty', 'validOption']]
+    'Gender' => ['label' => 'Gender', 'type' =>'select', 'options' => GENDERS, 'multiple'=> '', 'validations'=> ['notEmpty', 'validOption']]
 ]);
 
 define ("LOGINFORMDATA", [
@@ -28,7 +28,7 @@ define("ADDITEMFORMDATA", [
     //'AddGenre' => ['label' => '', 'type' => 'button', 'value' => 'Add genre', 'onclick' => 'AddGenre', 'validations'=> []],
     'Price'  => ['label' => 'Price', 'type' => 'number', 'placeholder' => '0.0', 'step'=> '0.01', 'validations' => ["notEmpty", "twoDecimals", "min:0"]],
     'Year' => ['label' => 'Year', 'type' => 'number', 'placeholder' => '0000', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
-    'Type' => ['label' => 'Type', 'type' =>'select', 'options' => ITEM_TYPES, 'validations'=> ['notEmpty', 'validOption']],
+    'Type' => ['label' => 'Type', 'type' =>'select', 'options' => ITEM_TYPES, 'multiple'=> '','validations'=> ['notEmpty', 'validOption']],
     'Stock' => ['label' => 'Stock', 'type' => 'number', 'placeholder' => '0', 'step'=> '1', 'validations' => ["notEmpty", "fullNumber", "min:0"]],
     'ImagesToUpload' => ['label' => 'Images', 'name' => 'ImagesToUpload', 'type' => 'file', 'value' => '','placeholder' => '', 'accept' => '.jpg, .png, .jpeg','validations' => ["ValidImage"]]
 ]);
@@ -66,7 +66,7 @@ abstract class FormPage extends Page
                 break;
             case'select':
                 echo '
-                <select name="'.$key.'">';
+                <select name="'.$key.'" '. $metaData['multiple'].'>';
                 foreach($metaData['options'] as $option_key => $option_value)
                 {
                     echo '<option value="'.$option_key.'"';
@@ -118,6 +118,27 @@ abstract class FormPage extends Page
                     accept="'.$metaData['accept'].'" >
                     </input>';
                 break;
+            case 'checkbox':
+                foreach($metaData['options'] as $option_key => $option_value)
+                {
+                echo '
+                <div class="checkbox">
+                    <label for='.$option_key.'>
+                    <input type="checkbox" name="'.$key.'[]" id='.$option_key.' value="'.$option_value.'"';
+                    $values = explode('||', $formResult['value']);
+                    foreach($values as $value)
+                    {
+                        if($value == $option_value)
+                        {
+                            echo'checked="checked"';
+                        }
+                    }
+                    echo '>'.$option_value.'</input>
+                    </label>
+                </div>';
+                }
+                break;
+            case 'date':
             default:
                 echo '
                 <input type="'.$metaData['type'].'"class="form-control" name="'.$key.'" placeholder= "'.$metaData['placeholder'].'" value="'.$formResult['value'].'"></input>';

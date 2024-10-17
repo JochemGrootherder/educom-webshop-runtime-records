@@ -84,6 +84,9 @@ Class PageController
             case 'RemoveFromCartPage':
                 $this->HandleRemoveFromCartRequest($pageRequest[1]);
                 break;
+            case 'ProfilePage':
+                $this->HandleProfileRequest();
+                break;
             default: 
                 $this->currentPage = new $pageName();
                 break;
@@ -149,7 +152,7 @@ Class PageController
                 $_SESSION['user_id'] = $user->GetId();
                 $_SESSION['user_name'] = $user->GetName();
                 $_SESSION['user_email'] = $user->GetEmail();
-                $_SESSION['user_search_criteria'] = $user->GetSearch_criteria();
+                $_SESSION['user_search_criteria'] = $this->ConvertSearchCriteriaToArray($user->GetSearch_criteria());
                 $_SESSION['user_admin'] = $user->GetAdmin();
 
                 $shoppingCart = new ShoppingCart();
@@ -163,8 +166,8 @@ Class PageController
                 $_SESSION['shopping_cart_id'] = $shoppingCart->GetId();
 
                 updateAllowedPages();
-                header("Location: index.php?page=HomePage");
-                // $this->currentPage = new HomePage();
+                //header("Location: index.php?page=HomePage");
+                 $this->currentPage = new HomePage();
             }
             else
             {
@@ -298,4 +301,51 @@ Class PageController
         header("Location: index.php?page=ShoppingCartPage");
         //$this->currentPage = new ShoppingCartpage();
     }
+
+    private function HandleProfileRequest()
+    {
+        if($this->dataExtractor->getPostVar('formDataName') === 'Search_criteria')
+        {
+            $profilePage = new ProfilePage();
+            $formData = $profilePage->CreateFormData();
+            $formResults = $this->dataExtractor->getDataFromPost($formData);
+            $validatedInput = $this->inputValidator->validateInput($formData);
+            if(!$this->containsErrors($validatedInput))
+            {
+                $searchCriteriaString = '';
+                foreach($formResults as $key => $value)
+                {
+                    $searchCriteriaString.= $key . '=>'. $value['value'] . ',';
+                }
+                $userDao = new UserDao();
+                $user = $userDao->GetUserById($_SESSION['user_id']);
+                $user->SetSearch_criteria($searchCriteriaString);
+		        $_SESSION['user_search_criteria'] = $this->ConvertSearchCriteriaToArray($searchCriteriaString);
+                $userDao->Update($user);
+
+                $this->currentPage = ProfilePage::WithResults($validatedInput);
+                return;
+                //header("Location: index.php?page=ProfilePage");
+            }
+            $this->currentPage = ProfilePage::WithResults($validatedInput);
+            return;
+        }
+        $this->currentPage = new ProfilePage();
+    }
+	private function ConvertSearchCriteriaToArray($searchCriteriaString)
+	{
+		$searchCriteria = [];
+        $criterias = explode(',', $searchCriteriaString);
+        foreach($criterias as $criteria)
+        {
+            if(!empty($criteria))
+            {
+                $criteria = explode('=>', $criteria);
+                $key = $criteria[0];
+                $value = $criteria[1];
+				$searchCriteria[$key] = $value;
+            }
+        }
+		return $searchCriteria;
+	}
 }

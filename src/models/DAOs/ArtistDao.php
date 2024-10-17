@@ -50,4 +50,16 @@ class ArtistDao
             return $artist;
         }
     }
+    
+    public function GetAll()
+    {
+        $results = $this->CRUD->GetAllFromTable("artists");
+        $artists = [];
+        while($row = $results->fetch_assoc())
+        {
+            $artist = $this->ConvertRowToDataType($row);
+            $artists[] = $artist;
+        }
+        return $artists;
+    }
 }

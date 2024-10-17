@@ -21,6 +21,10 @@ class DataExtractor
             return $default;
         }
         $value = $array[$key];
+        if(getType($value) == 'array')
+        {
+            $value = implode('||', $value);
+        }
         $value = trim($value);
         $value = stripslashes($value);
         $value = htmlspecialchars($value);

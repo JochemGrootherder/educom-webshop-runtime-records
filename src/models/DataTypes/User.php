@@ -188,7 +188,6 @@ class User
 	public function SetSearch_criteria($search_criteria)
 	{
 		$this->search_criteria = $search_criteria;
-
 		return $this;
 	}
 

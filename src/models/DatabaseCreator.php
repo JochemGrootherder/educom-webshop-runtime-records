@@ -33,7 +33,7 @@ define('TABLES', [
                 'password' => 'VARCHAR(50) NOT NULL',
                 'date_of_birth' => 'DATE NOT NULL',
                 'gender' => 'VARCHAR(30) NOT NULL',
-                'search_criteria' => 'VARCHAR(80) NULL',
+                'search_criteria' => 'VARCHAR(500) NULL',
                 'admin' => 'BOOLEAN NOT NULL',
             ],  
     'orders'=> [
@@ -274,7 +274,7 @@ class DatabaseCreator
         $item3->setStock(25);
         $item3->setYear(1975);
         $item3->setPrice(14.99);
-        $item3->setType("CD");
+        $item3->setType("VINYL");
         $item3->setDate_added($dateAdded);
         $item3->setImages($images3);
         

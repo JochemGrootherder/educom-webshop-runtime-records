@@ -52,4 +52,16 @@ class GenreDao
             return $genre;
         }
     }
+
+    public function GetAll()
+    {
+        $results = $this->CRUD->GetAllFromTable("genres");
+        $genres = [];
+        while($row = $results->fetch_assoc())
+        {
+            $genre = $this->ConvertRowToDataType($row);
+            $genres[] = $genre;
+        }
+        return $genres;
+    }
 }
