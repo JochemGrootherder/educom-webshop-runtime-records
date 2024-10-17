@@ -166,8 +166,8 @@ Class PageController
                 $_SESSION['shopping_cart_id'] = $shoppingCart->GetId();
 
                 updateAllowedPages();
-                //header("Location: index.php?page=HomePage");
-                 $this->currentPage = new HomePage();
+                header("Location: index.php?page=HomePage");
+                //$this->currentPage = new HomePage();
             }
             else
             {
