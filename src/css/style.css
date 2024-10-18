@@ -1,17 +1,27 @@
+@font-face
+{
+    font-family: rouna-regular;
+    src: url(rouna/rouna-regular-webfont.woff);
+}
+
+@font-face
+{
+    font-family: rouna-bold;
+    src: url(rouna/rouna-bold-webfont.woff);
+    font-weight: bold;
+}
+
 :root
 {
     /* fonts */
-    --regular-font: "Arial, Helvetica, sans-serif";
+    --regular-font: rouna-regular;
+    --title-font: rouna-bold;
     
-    --font-size-extra-large: 32px;
-    --font-size-large:24px;
-    --font-size-medium:18px;
-    --font-size-small:12px;
-
-    /* sizes */
-    --window-width: 1000px;
-
-    --content-block-size: 200px;
+    --font-size-extra-large: 42px;
+    --font-size-large:32px;
+    --font-size-medium:22px;
+    --font-size-small:18px;
+    --font-size-extra-small:14px;
 
     --default-margin: 20px;
     --default-icon-size: 40px;
@@ -23,104 +33,115 @@
 
 html, body
 {
-    width: var(--window-width);
     margin: auto;
+    max-width: 1100px;
     text-align: left;
     background-color: var(--white);
+    font-family: var(--regular-font) !important;
+}
+
+.logo
+{
+    text-decoration: none !important;
+    color: black !important;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    font-family: var(--title-font) !important;
+}
+
+h1
+{
+    font-size: var(--font-size-extra-large) !important;
+}
+h2
+{
+    font-size: var(--font-size-large) !important;
+}
+h3
+{
+    color: black !important;
+    margin: 0px !important;
+    font-size: var(--font-size-medium) !important;
+}
+h4
+{
+    color: gray !important;
+    margin: 0px !important;
+    font-size: var(--font-size-small) !important;
 }
 
 header
 {
     min-height: 48px;
     display:flex;
-    justify-content: center;
+    padding-bottom: 50px;
+}
+
+header .logo
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.header-logo
+{
+    width: 50px;
+    height: 50px;
 }
 
 footer
 {
+    margin-top: 50px;
+    padding-top: 100px;
     background-color: var(--black);
     color:var(--white);
     font-size: 10px;
-    text-align: right;
+    text-align: left;
 }
 
 p
 {
-    color: darkslategray;
-    font-size: 12px;
+    color: black;
+    font-size: var(--font-size-extra-small);
 }
 
-.nav-menu
+footer h3
 {
+    color: white !important;
+    margin-bottom: 10px !important;
+}
+
+footer p
+{
+    color: gray;
+}
+
+footer ul
+{
+    padding: 0;
     list-style-type: none;
     overflow: hidden;
 }
 
-.nav-menu-item
+.footer-images
+{
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.footer-image
+{
+    max-width: 35%;
+    max-height: 35%;
+}
+
+.contact-method
 {
     float: left;
-}
-
-.nav-menu-item .menu-link
-{
-    display: block;
-    padding:16px;
-    text-align:center;
-    text-decoration: none;
-    background-color: lightblue;
-    color: var(--white);
-}
-
-.menu-link:hover
-{ 
-    background-color: rgba(173, 216, 230, 0.541);
-}
-
-
-.dropdown-menu-trigger {
-    background-color: lightblue;
-    margin-top: 16px;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    z-index: 5000 !important;
-}
-
-.dropdown-menu-trigger:hover .dropdown {
-    top: 0px;
-}
-
-.dropdown-menu
-{
-    margin: 0px;
-    padding: 0px;
-    left:-100px;
-    list-style-type: none;
-}
-
-.dropdown {
-    position: absolute;
-    top: -400px;
-    height: auto;
-    margin-top: 66px;
-    width: auto;
-}
-
-.dropdown-item .menu-link
-{
-    color: white;
-    text-decoration: none;
-    padding: 16px;
-    background-color: lightblue;
-}
-.dropdown-item:hover .menu-link:hover
-{ 
-    background-color: rgba(173, 216, 230, 0.541);
-}
-
-.dropdown-item{
-    padding: 16px;
 }
 
 .form-group
@@ -145,3 +166,47 @@ p
     color: red;
     max-width: 340px;
 }
+
+.dropbtn {
+    background-image: url("../Images/List.svg");
+    width: 48px;
+    height: 48px;
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    background-color: white;
+    background-position: center center;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    position: absolute !important;
+    right: 0px !important;
+  }
+  
+  .dropdown {
+    position: absolute !important;
+    right: 0px;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: relative;
+    background-color: #f1f1f1;
+    
+    min-width: 180px;
+    margin-top: 48px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 100;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown a:hover {background-color: #ddd;}
+  
+  .show {display: block;}

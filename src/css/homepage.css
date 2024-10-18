@@ -1,21 +1,7 @@
+
 .itemImage
 {
     max-width: 100%;
-    object-fit: contain;
-}
-
-.itemImageContainer
-{
-    max-width: 100%;
-    height: 25%;
-
-}
-
-.itemContainer
-{
-    vertical-align: top;
-    display: inline-block;
-    width: 25%;
 }
 
 .subtext
@@ -26,9 +12,47 @@
 
 .itemCatalog
 {
+    margin: auto;
+    width: 90% !important;
+}
+
+.item-container
+{
+    position: relative;
+}
+
+.price-container
+{
+    float: right;
+    position: absolute;
+    right: 40px;
+    background-color: #E84E0F;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    transition: all 0.4s ease;
+}
+
+.price-container:hover
+{
+    background-color: white;
+    color: #E84E0F
+}
+
+.price-upper
+{
+    font-size: 14px !important;
+    font-weight: bold;
+}
+
+.price-lower
+{
+    font-size: 10px !important;
+    font-weight: bold;
+    margin-top: -5px;
 }

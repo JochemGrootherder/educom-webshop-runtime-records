@@ -63,34 +63,38 @@ class HomePage extends Page
 
     private function ShowItemCatalog()
     {
-        echo "<div class='itemCatalog'>";
+        echo "
+        <div class='row'>
+        <div class='itemCatalog col-md-12'>
+        <div class='row'>";
         foreach($this->GetContainerItems() as $item)
         {
             echo "
-            <a href='?page=ItemDetailsPage/".$item['id']."' class='itemContainer'>
-                <div class='price-container'>
-                    <div class='price-upper'>
-                        " . $item['priceUpper'] . "
-                    </div>
+                <a href='?page=ItemDetailsPage/".$item['id']."' class='item-container col-lg-3 col-md-4 col-sm-6 col-12'>
+                    <div class='price-container'>
+                        <div class='price-upper'>
+                            " . $item['priceUpper'] . "
+                        </div>
+                        <div class='price-lower'>
                         ." . $item['priceLower'] . "
-                    <div class='price-lower'>
+                        </div>
                     </div>
-                </div>
-                <div class='itemImageContainer'>
-                    <img class= 'itemImage' src='data:image/jpeg;base64,".base64_encode($item['image'])."'/>
-                </div>
-                <div class='subtext'>
-                    <div class='itemTitle'>"
-                        . $item['title'] . "
+                        <img class= 'itemImage' src='data:image/jpeg;base64,".base64_encode($item['image'])."'/>
+                    <div class='subtext'>
+                        <h3>"
+                            . $item['title'] . "
+                        </h3>
+                        <h4> "
+                            . $item['artists'] . " 
+                        </h4>
                     </div>
-                    <div class='itemArtists'> "
-                        . $item['artists'] . " 
-                    </div>
-                </div>
-            </a>
+                </a>
             ";   
         }
-        echo "</div>";  
+        echo "
+            </div>
+            </div>
+        </div>";  
     }
 
     private function ShowAdminPanel()
