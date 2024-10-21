@@ -72,14 +72,15 @@ h4
     font-size: var(--font-size-small) !important;
 }
 
-header
+.navigation-bar
 {
     min-height: 48px;
     display:flex;
     padding-bottom: 50px;
+    position: relative;
 }
 
-header .logo
+.navigation-bar .logo
 {
     display: flex;
     flex-direction: row;
@@ -186,6 +187,7 @@ footer ul
   .dropdown {
     position: absolute !important;
     right: 0px;
+    min-width: 100%;
   }
   
   .dropdown-content {
@@ -193,7 +195,7 @@ footer ul
     position: relative;
     background-color: #f1f1f1;
     
-    min-width: 180px;
+    min-width: fit-content;
     margin-top: 48px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);

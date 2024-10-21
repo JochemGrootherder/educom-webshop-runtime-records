@@ -18,27 +18,29 @@ abstract class Page
     {
         echo'
         <header>
-        <a class="logo" href="index.php?page=HomePage">
-            <img src="Images/logo.png" class="header-logo">
-            <h1 class="header-title">runtime-records</h1>
-        </a>
-        <div class="dropdown">
-            <button onclick="myFunction()" class="dropbtn"></button>
-            <div id="myDropdown" class="dropdown-content">
-                <a href="index.php?page=HomePage">HOME</a>
-                <a href="index.php?page=ShoppingCartPage">SHOPPING CART</a>
-            ';
-            if(empty($_SESSION['user_name'])){
-                echo'
-                <a href="index.php?page=LoginPage">LOGIN</a>
-                <a href="index.php?page=RegisterPage">REGISTER</a>';
-            }else
-            {
-                echo'
-                    <a href="index.php?page=ProfilePage">PROFILE</a>
-                    <a href="index.php?page=LogoutPage">LOG OUT</a>';
-            }
-            echo '
+        <div class="navigation-bar">
+            <a class="logo" href="index.php?page=HomePage">
+                <img src="Images/logo.png" class="header-logo"/>
+                <h1 class="header-title">runtime-records</h1>
+            </a>
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn"></button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="index.php?page=HomePage">HOME</a>
+                    <a href="index.php?page=ShoppingCartPage">SHOPPING CART</a>
+                ';
+                if(empty($_SESSION['user_name'])){
+                    echo'
+                    <a href="index.php?page=LoginPage">LOGIN</a>
+                    <a href="index.php?page=RegisterPage">REGISTER</a>';
+                }else
+                {
+                    echo'
+                        <a href="index.php?page=ProfilePage">PROFILE</a>
+                        <a href="index.php?page=LogoutPage">LOG OUT</a>';
+                }
+                echo '
+                </div>
             </div>
         </div>
         ';
