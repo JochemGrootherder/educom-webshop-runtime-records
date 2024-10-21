@@ -11,6 +11,10 @@ class HomePage extends Page
     }
     function showBody()
     {
+        echo '
+        <head>
+            <link rel="stylesheet" href="./css/Homepage.css">
+        </head>';
         if(!empty($_SESSION['user_admin']) && $_SESSION['user_admin']==true)
         {
             $this->ShowAdminPanel();
@@ -64,7 +68,6 @@ class HomePage extends Page
     private function ShowItemCatalog()
     {
         echo "
-        <div class='row'>
         <div class='itemCatalog col-md-12'>
         <div class='row'>";
         foreach($this->GetContainerItems() as $item)
@@ -92,7 +95,6 @@ class HomePage extends Page
             ";   
         }
         echo "
-            </div>
             </div>
         </div>";  
     }

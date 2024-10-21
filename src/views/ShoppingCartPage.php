@@ -16,6 +16,10 @@ class ShoppingCartPage extends Page
 
     public function showBody()
     {
+        echo '
+        <head>
+            <link rel="stylesheet" href="./css/ShoppingCart.css">
+        </head>';
         $this->showContent();
     }
 

@@ -10,8 +10,6 @@ abstract class Page
             <title>My Webshop</title>
         
             <link rel="stylesheet" href="./css/Style.css">
-            <link rel="stylesheet" href="./css/Homepage.css">
-            <link rel="stylesheet" href="./css/ShoppingCart.css">
             <link rel="stylesheet" href="css/bootstrap.min.css" />
         </head>';
     }

@@ -35,6 +35,10 @@ class ItemDetailsPage extends FormPage
     }
     public function showBody()
     {
+        echo '
+        <head>
+            <link rel="stylesheet" href="./css/ItemDetailsPage.css">
+        </head>';
         $this->ShowAddToCart();
         $this->ShowItemDetails();
     }
@@ -89,26 +93,28 @@ class ItemDetailsPage extends FormPage
     {
         $elements = $this->GetBodyElements();
         echo "
-        <div class='item-details'>
         <h1>
-            STOCK: ".$elements['stock']."
+        STOCK: ".$elements['stock']."
         </h1>
-            <div class='price-container'>
-                <div class='price-upper'>
-                    " . $elements['priceUpper'] . "
+        <div class='item-details col-12'>
+            <div class='row'>
+                <div class='image-container col-lg-6 col-md-6 col-sm-12'>
+                    <div class='price-container'>
+                        <div class='price-upper'>
+                            " . $elements['priceUpper'] . "
+                        </div>
+                        <div class='price-lower'>
+                            ." . $elements['priceLower'] . "
+                        </div>
+                    </div>
+                    <img class= 'itemImage' src='data:image/jpeg;base64,".base64_encode($elements['images'][0]->GetImage())."'/>
                 </div>
-                    ." . $elements['priceLower'] . "
-                <div class='price-lower'>
+                <div class='description-container col-lg-6 col-md-6 col-sm-12'>
+                    <h2>" . $elements['title'] . "</h2>
+                    <h3>" . $elements['artistText'] . "</h3>
+                    <h4>" . $elements['genreText'] . "</h4>
+                    <p>" . $elements['description'] . "</p>
                 </div>
-            </div>
-            <div class='image-container'>
-                <img class= 'itemImage' src='data:image/jpeg;base64,".base64_encode($elements['images'][0]->GetImage())."'/>
-            <div>
-            <div class='description-container'>
-                <h2>" . $elements['title'] . "</h2>
-                <h3>" . $elements['artistText'] . "</h3>
-                <h4>" . $elements['genreText'] . "</h4>
-                <p>" . $elements['description'] . "</p>
             </div>
         </div>";
     }
